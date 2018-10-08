@@ -18,6 +18,8 @@ package com.android.example.comesanews;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,7 +31,8 @@ import java.net.URL;
 
 public class LatestNewsActivity extends AppCompatActivity {
 
-    private TextView mLatestNewsListTextView;
+    private RecyclerView mRecyclerView;
+    private LatestNewsAdapter mLatestNewsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
@@ -38,8 +41,8 @@ public class LatestNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_latest_news);
 
-        // Using findViewById, we get a reference to our TextView from xml.
-        mLatestNewsListTextView = (TextView) findViewById(R.id.tv_latest_news);
+        // Using findViewById, we get a reference to our RecyclerView from xml.
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_policy);
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
@@ -50,6 +53,29 @@ public class LatestNewsActivity extends AppCompatActivity {
          *
          */
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
+        // LinearLayoutManager can support HORIZONTAL or VERTICAL orientations.
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        /*
+         * Use setHasFixedSize(true) on mRecyclerView to designate that all items in the list
+         * will have the same size.
+         */
+        mRecyclerView.setHasFixedSize(true);
+
+        /*
+         * The NewsAdapter is responsible for linking our news data with the Views that will end up
+         * displaying our news data.
+         */
+        mLatestNewsAdapter = new LatestNewsAdapter();
+
+        /*
+         * Use mRecyclerView.setAdapter and pass in mNewsAdapter.
+         * Setting the adapter attaches it to the RecyclerView in our layout.
+         */
+        mRecyclerView.setAdapter(mLatestNewsAdapter);
 
         /* Once all of our views are setup, we can load the latest news data. */
         loadLatestNewsData();
@@ -67,7 +93,7 @@ public class LatestNewsActivity extends AppCompatActivity {
      */
     private void showLatestNewsDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        mLatestNewsListTextView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -75,11 +101,11 @@ public class LatestNewsActivity extends AppCompatActivity {
      * View.
      */
     private void showErrorMessage() {
-        mLatestNewsListTextView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
-    public class FetchLatestNewsTask extends AsyncTask<String, Void, String> {
+    public class FetchLatestNewsTask extends AsyncTask<String, Void, String[]> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -87,12 +113,12 @@ public class LatestNewsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
             URL latestNewsRequestUrl = NetworkUtils.buildLatestNewsUrl();
             try {
                 String jsonLatestNewsResponse = NetworkUtils
                         .getResponseFromHttpUrl(latestNewsRequestUrl);
-                String simpleJsonLatestNewsData = LatestNewsJSONUtils
+                String[] simpleJsonLatestNewsData = LatestNewsJSONUtils
                         .getSimpleNewsStringsFromJson(LatestNewsActivity.this, jsonLatestNewsResponse);
                 return simpleJsonLatestNewsData;
             } catch (Exception e) {
@@ -102,11 +128,11 @@ public class LatestNewsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String latestNewsData) {
+        protected void onPostExecute(String[] latestNewsData) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (latestNewsData != null) {
                 showLatestNewsDataView();
-                mLatestNewsListTextView.append((latestNewsData) + "\n\n\n");
+                mLatestNewsAdapter.setLatestNewsData(latestNewsData);
             } else {
                 showErrorMessage();
             }

@@ -28,4 +28,7 @@ dependencies {
 
     // JSoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.11.3'
+
+    // RecyclerView dependency
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }

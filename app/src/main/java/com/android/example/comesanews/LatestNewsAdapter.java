@@ -11,6 +11,26 @@ public class LatestNewsAdapter extends RecyclerView.Adapter<LatestNewsAdapter.La
 
     private String[] mLatestNewsData;
 
+    /*
+     * An on-click handler that we've defined to make it easy for an Activity to interface with
+     * our RecyclerView
+     */
+    private final LatestNewsAdapterOnClickHandler mClickHandler;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface LatestNewsAdapterOnClickHandler {
+        void onClick(String latestNewsItem);
+    }
+
+    /**
+     * Creates a NewsAdapter.
+     */
+    public LatestNewsAdapter(LatestNewsAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+    }
+
     // This gets called when each new ViewHolder is created.
     @Override
     public LatestNewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -21,7 +41,7 @@ public class LatestNewsAdapter extends RecyclerView.Adapter<LatestNewsAdapter.La
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
-        // Return a new PolicyAdapterViewHolder with the above view passed in as a parameter
+        // Return a new LatestNewsAdapterViewHolder with the above view passed in as a parameter
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         return new LatestNewsAdapterViewHolder(view);
     }
@@ -33,7 +53,7 @@ public class LatestNewsAdapter extends RecyclerView.Adapter<LatestNewsAdapter.La
     @Override
     public void onBindViewHolder(LatestNewsAdapterViewHolder latestNewsAdapterViewHolder, int position) {
 
-        // Set the text of the TextView to the policy for this list item's position
+        // Set the text of the TextView to the latest news for this list item's position
         String latestNewsItem = mLatestNewsData[position];
         latestNewsAdapterViewHolder.mLatestNewsTextView.setText(latestNewsItem);
 
@@ -47,18 +67,26 @@ public class LatestNewsAdapter extends RecyclerView.Adapter<LatestNewsAdapter.La
     }
 
     // Cache of the children views for a latest news list item.
-    public class LatestNewsAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class LatestNewsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mLatestNewsTextView;
 
         public LatestNewsAdapterViewHolder(View view) {
             super(view);
             mLatestNewsTextView = (TextView) view.findViewById(R.id.tv_latest_news_data);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            String latestNewsItem = mLatestNewsData[adapterPosition];
+            mClickHandler.onClick(latestNewsItem);
         }
     }
 
     /**
-     * This method is used to set the news on a PolicyAdapter if we've already created one.
+     * This method is used to set the news on a LatestNewsAdapter if we've already created one.
      */
     public void setLatestNewsData(String[] latestNewsData) {
         mLatestNewsData = latestNewsData;

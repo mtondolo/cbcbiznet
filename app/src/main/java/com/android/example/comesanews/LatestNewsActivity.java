@@ -15,6 +15,7 @@
  */
 package com.android.example.comesanews;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,13 +24,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.example.comesanews.utils.LatestNewsJSONUtils;
 import com.android.example.comesanews.utils.NetworkUtils;
 
 import java.net.URL;
 
-public class LatestNewsActivity extends AppCompatActivity {
+public class LatestNewsActivity extends AppCompatActivity implements LatestNewsAdapter.LatestNewsAdapterOnClickHandler {
 
     private RecyclerView mRecyclerView;
     private LatestNewsAdapter mLatestNewsAdapter;
@@ -69,7 +71,7 @@ public class LatestNewsActivity extends AppCompatActivity {
          * The NewsAdapter is responsible for linking our news data with the Views that will end up
          * displaying our news data.
          */
-        mLatestNewsAdapter = new LatestNewsAdapter();
+        mLatestNewsAdapter = new LatestNewsAdapter(this);
 
         /*
          * Use mRecyclerView.setAdapter and pass in mNewsAdapter.
@@ -103,6 +105,14 @@ public class LatestNewsActivity extends AppCompatActivity {
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    }
+
+    // This method handles RecyclerView item clicks.
+    @Override
+    public void onClick(String latestNewsItem) {
+        Context context = this;
+        Toast.makeText(context, latestNewsItem, Toast.LENGTH_SHORT)
+                .show();
     }
 
     public class FetchLatestNewsTask extends AsyncTask<String, Void, String[]> {

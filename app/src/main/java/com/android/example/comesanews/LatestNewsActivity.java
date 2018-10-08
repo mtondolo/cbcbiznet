@@ -15,8 +15,10 @@
  */
 package com.android.example.comesanews;
 
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,12 +33,15 @@ import com.android.example.comesanews.utils.NetworkUtils;
 
 import java.net.URL;
 
-public class LatestNewsActivity extends AppCompatActivity implements LatestNewsAdapter.LatestNewsAdapterOnClickHandler {
+public class LatestNewsActivity extends AppCompatActivity implements
+        LatestNewsAdapter.LatestNewsAdapterOnClickHandler,
+        LoaderCallbacks<String[]> {
 
     private RecyclerView mRecyclerView;
     private LatestNewsAdapter mLatestNewsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+    private static final int LATEST_NEWS_LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class LatestNewsActivity extends AppCompatActivity implements LatestNewsA
         setContentView(R.layout.activity_latest_news);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_policy);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_latest_news);
 
         /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
@@ -79,14 +84,21 @@ public class LatestNewsActivity extends AppCompatActivity implements LatestNewsA
          */
         mRecyclerView.setAdapter(mLatestNewsAdapter);
 
-        /* Once all of our views are setup, we can load the latest news data. */
-        loadLatestNewsData();
-    }
+        // This ID will uniquely identify the Loader.
+        int loaderId = LATEST_NEWS_LOADER_ID;
 
-    // This method will tell some background method to get the latest news data in the background.
-    private void loadLatestNewsData() {
-        showLatestNewsDataView();
-        new FetchLatestNewsTask().execute();
+        /*
+         * From LastestNewsActivity, we have implemented the LoaderCallbacks interface with the type of
+         * String array.
+         */
+        android.support.v4.app.LoaderManager.LoaderCallbacks<String[]> callback = LatestNewsActivity.this;
+
+        // The second parameter of the initLoader method below is a Bundle.
+        Bundle bundleForLoader = null;
+
+        // Ensures a loader is initialized and active.
+        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
+
     }
 
     /**
@@ -115,38 +127,76 @@ public class LatestNewsActivity extends AppCompatActivity implements LatestNewsA
                 .show();
     }
 
-    public class FetchLatestNewsTask extends AsyncTask<String, Void, String[]> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     */
+    @Override
+    public Loader<String[]> onCreateLoader(int id, Bundle loaderArgs) {
 
-        @Override
-        protected String[] doInBackground(String... params) {
-            URL latestNewsRequestUrl = NetworkUtils.buildLatestNewsUrl();
-            try {
-                String jsonLatestNewsResponse = NetworkUtils
-                        .getResponseFromHttpUrl(latestNewsRequestUrl);
-                String[] simpleJsonLatestNewsData = LatestNewsJSONUtils
-                        .getSimpleNewsStringsFromJson(LatestNewsActivity.this, jsonLatestNewsResponse);
-                return simpleJsonLatestNewsData;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
+        return new AsyncTaskLoader<String[]>(this) {
 
-        @Override
-        protected void onPostExecute(String[] latestNewsData) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (latestNewsData != null) {
-                showLatestNewsDataView();
-                mLatestNewsAdapter.setLatestNewsData(latestNewsData);
-            } else {
-                showErrorMessage();
+            /* This String array will hold and help cache our latest news data */
+            String[] mLatestNewsData = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (mLatestNewsData != null) {
+                    deliverResult(mLatestNewsData);
+                } else {
+                    mLoadingIndicator.setVisibility(View.VISIBLE);
+                    forceLoad();
+                }
             }
-        }
+
+            @Override
+            public String[] loadInBackground() {
+                URL latestNewsRequestUrl = NetworkUtils.buildLatestNewsUrl();
+                try {
+                    String jsonLatestNewsResponse = NetworkUtils
+                            .getResponseFromHttpUrl(latestNewsRequestUrl);
+                    String[] simpleJsonLatestNewsData = LatestNewsJSONUtils
+                            .getSimpleNewsStringsFromJson(LatestNewsActivity.this, jsonLatestNewsResponse);
+                    return simpleJsonLatestNewsData;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(String[] data) {
+                mLatestNewsData = data;
+                super.deliverResult(data);
+            }
+        };
     }
+
+    /**
+     * Called when a previously created loader has finished its load.
+     */
+    @Override
+    public void onLoadFinished(Loader<String[]> loader, String[] data) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mLatestNewsAdapter.setLatestNewsData(data);
+        if (null == data) {
+            showErrorMessage();
+        } else {
+            showLatestNewsDataView();
+        }
+
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.
+     */
+    @Override
+    public void onLoaderReset(Loader<String[]> loader) {
+        /*
+         * We aren't using this method at the moment, but we are required to Override
+         * it to implement the LoaderCallbacks<String> interface
+         */
+    }
+
 }
 

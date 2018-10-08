@@ -19,6 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Our ContentProvider -->
+        <provider
+            android:name=".data.NewsProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false" />
     </application>
 
 </manifest>

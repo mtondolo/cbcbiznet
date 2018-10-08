@@ -15,8 +15,9 @@
  */
 package com.android.example.comesanews;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -28,20 +29,40 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.example.comesanews.utils.LatestNewsJSONUtils;
-import com.android.example.comesanews.utils.NetworkUtils;
-
-import java.net.URL;
+import com.android.example.comesanews.data.NewsContract;
 
 public class LatestNewsActivity extends AppCompatActivity implements
         LatestNewsAdapter.LatestNewsAdapterOnClickHandler,
-        LoaderCallbacks<String[]> {
+        LoaderCallbacks<Cursor> {
+
+    /*
+     * The columns of data that we are interested in displaying within our MainActivity's list of
+     * news data.
+     */
+    public static final String[] MAIN_NEWS_PROJECTION = {
+            NewsContract.LatestNewsEntry.COLUMN_TITLE,
+            NewsContract.LatestNewsEntry.COLUMN_DATE,
+            NewsContract.LatestNewsEntry.COLUMN_AUTHOR,
+    };
+
+    /*
+     * We store the indices of the values in the array of Strings above to more quickly be able to
+     * access the data from our query. If the order of the Strings above changes, these indices
+     * must be adjusted to match the order of the Strings.
+     */
+    public static final int INDEX_TITLE = 0;
+    public static final int INDEX_DATE = 1;
+    public static final int INDEX_AUTHOR = 2;
+
+    // This ID will be used to identify the Loader responsible for loading our policies.
+    private static final int ID_NEWS_LOADER = 44;
 
     private RecyclerView mRecyclerView;
     private LatestNewsAdapter mLatestNewsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
-    private static final int LATEST_NEWS_LOADER_ID = 0;
+
+    private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +97,7 @@ public class LatestNewsActivity extends AppCompatActivity implements
          * The NewsAdapter is responsible for linking our news data with the Views that will end up
          * displaying our news data.
          */
-        mLatestNewsAdapter = new LatestNewsAdapter(this);
+        mLatestNewsAdapter = new LatestNewsAdapter(this, this);
 
         /*
          * Use mRecyclerView.setAdapter and pass in mNewsAdapter.
@@ -84,20 +105,10 @@ public class LatestNewsActivity extends AppCompatActivity implements
          */
         mRecyclerView.setAdapter(mLatestNewsAdapter);
 
-        // This ID will uniquely identify the Loader.
-        int loaderId = LATEST_NEWS_LOADER_ID;
-
-        /*
-         * From LastestNewsActivity, we have implemented the LoaderCallbacks interface with the type of
-         * String array.
-         */
-        android.support.v4.app.LoaderManager.LoaderCallbacks<String[]> callback = LatestNewsActivity.this;
-
-        // The second parameter of the initLoader method below is a Bundle.
-        Bundle bundleForLoader = null;
+        showLoading();
 
         // Ensures a loader is initialized and active.
-        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
+        getSupportLoaderManager().initLoader(ID_NEWS_LOADER, null, this);
 
     }
 
@@ -111,12 +122,12 @@ public class LatestNewsActivity extends AppCompatActivity implements
     }
 
     /**
-     * This method will make the error message visible and hide the news
-     * View.
+     * This method will make the loading indicator visible and hide the news View and error
+     * message.
      */
-    private void showErrorMessage() {
+    private void showLoading() {
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
     // This method handles RecyclerView item clicks.
@@ -131,71 +142,39 @@ public class LatestNewsActivity extends AppCompatActivity implements
      * Instantiate and return a new Loader for the given ID.
      */
     @Override
-    public Loader<String[]> onCreateLoader(int id, Bundle loaderArgs) {
-
-        return new AsyncTaskLoader<String[]>(this) {
-
-            /* This String array will hold and help cache our latest news data */
-            String[] mLatestNewsData = null;
-
-            @Override
-            protected void onStartLoading() {
-                if (mLatestNewsData != null) {
-                    deliverResult(mLatestNewsData);
-                } else {
-                    mLoadingIndicator.setVisibility(View.VISIBLE);
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public String[] loadInBackground() {
-                URL latestNewsRequestUrl = NetworkUtils.buildLatestNewsUrl();
-                try {
-                    String jsonLatestNewsResponse = NetworkUtils
-                            .getResponseFromHttpUrl(latestNewsRequestUrl);
-                    String[] simpleJsonLatestNewsData = LatestNewsJSONUtils
-                            .getSimpleNewsStringsFromJson(LatestNewsActivity.this, jsonLatestNewsResponse);
-                    return simpleJsonLatestNewsData;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            public void deliverResult(String[] data) {
-                mLatestNewsData = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    /**
-     * Called when a previously created loader has finished its load.
-     */
-    @Override
-    public void onLoadFinished(Loader<String[]> loader, String[] data) {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-        mLatestNewsAdapter.setLatestNewsData(data);
-        if (null == data) {
-            showErrorMessage();
-        } else {
-            showLatestNewsDataView();
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
+        switch (loaderId) {
+            case ID_NEWS_LOADER:
+                Uri newsQueryUri = NewsContract.LatestNewsEntry.CONTENT_URI;
+                return new android.support.v4.content.CursorLoader(this,
+                        newsQueryUri,
+                        MAIN_NEWS_PROJECTION,
+                        null,
+                        null,
+                        null
+                );
+            default:
+                throw new RuntimeException("Loader Not Implemented: " + loaderId);
         }
-
     }
 
-    /**
-     * Called when a previously created loader is being reset, and thus
-     * making its data unavailable.
-     */
+    // Called when a previously created loader has finished its load.
     @Override
-    public void onLoaderReset(Loader<String[]> loader) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mLatestNewsAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+        if (data.getCount() != 0) showLatestNewsDataView();
+    }
+
+    // Called when a previously created loader is being reset, and thus making its data unavailable.
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
         /*
-         * We aren't using this method at the moment, but we are required to Override
-         * it to implement the LoaderCallbacks<String> interface
+         * Since this Loader's data is now invalid, we need to clear the Adapter that is
+         * displaying the data.
          */
+        mLatestNewsAdapter.swapCursor(null);
     }
 
 }

@@ -11,8 +11,6 @@ import android.widget.TextView;
 public class LatestNewsAdapter extends
         RecyclerView.Adapter<LatestNewsAdapter.LatestNewsAdapterViewHolder> {
 
-    private String[] mLatestNewsData;
-
     /* The context we use to utility methods, app resources and layout inflaters */
     private final Context mContext;
 
@@ -64,18 +62,13 @@ public class LatestNewsAdapter extends
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        /*******************
-         * News Item *
-         *******************/
-
-        // Read numdays, yellowCardNumber, vehicleRegistrationNumber and name from the cursor
+        // Read title, date and author from the cursor
         String title = mCursor.getString(LatestNewsActivity.INDEX_TITLE);
         String date = mCursor.getString(LatestNewsActivity.INDEX_DATE);
         String author = mCursor.getString(LatestNewsActivity.INDEX_AUTHOR);
 
         // Display the summary that we created above
-        String newsItem = title + " - " + date + " - " + author;
-
+        String newsItem = title + date + author;
         latestNewsAdapterViewHolder.mLatestNewsTextView.setText(newsItem);
 
     }
@@ -94,7 +87,8 @@ public class LatestNewsAdapter extends
     }
 
     // Cache of the children views for a latest news list item.
-    public class LatestNewsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class LatestNewsAdapterViewHolder extends
+            RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView mLatestNewsTextView;
 
@@ -106,8 +100,7 @@ public class LatestNewsAdapter extends
 
         @Override
         public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            String latestNewsItem = mLatestNewsData[adapterPosition];
+            String latestNewsItem = mLatestNewsTextView.getText().toString();
             mClickHandler.onClick(latestNewsItem);
         }
     }

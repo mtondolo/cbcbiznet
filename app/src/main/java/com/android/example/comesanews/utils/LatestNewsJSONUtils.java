@@ -1,55 +1,75 @@
 package com.android.example.comesanews.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils;
+
+import com.android.example.comesanews.data.NewsContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class LatestNewsJSONUtils {
 
     // This method parses JSON from a web response and returns an array of Strings
-    public static String[] getSimpleNewsStringsFromJson(Context context, String newsJsonStr)
+    public static ContentValues[] getSimpleNewsStringsFromJson(Context context, String newsJsonStr)
             throws JSONException {
+
+        // JSON variables
+        final String JSON_QUERY = "query";
+        final String JSON_RESULTS = "results";
+        final String JSON_RESULT = "result";
+
+
+        // JSoup variables
+        final String JSoup_LIST = "li";
+        final String JSoup_TITLE = "post-title";
+        final String JSoup_DATE = "date";
+        final String JSoup_AUTHOR = "post-footer-author";
 
         Html.fromHtml(newsJsonStr).toString();
 
-
-        String[] parsedNewsData = null;
-
         JSONObject newsJson = new JSONObject(newsJsonStr);
-        JSONObject query = newsJson.getJSONObject("query");
-        JSONObject results = query.getJSONObject("results");
+        JSONObject query = newsJson.getJSONObject(JSON_QUERY);
+        JSONObject results = query.getJSONObject(JSON_RESULTS);
 
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(newsJsonStr)) {
             return null;
         }
 
-        String result = results.getString("result");
+        String result = results.getString(JSON_RESULT);
         Document document = Jsoup.parse(result);
-        Elements li = document.select("li");
+        Elements li = document.select(JSoup_LIST);
 
-        parsedNewsData = new String[li.size()];
+        ContentValues[] newsContentValues = new ContentValues[li.size()];
 
         for (int i = 0; i < li.size(); i++) {
-            String title = li.get(i).getElementsByClass("post-title").text();
-            String date = li.get(i).getElementsByClass("date").text();
-            String author = li.get(i).getElementsByClass("post-footer-author").text();
-            parsedNewsData[i] = title + date + author;
+
+            /* These are the values that will be collected */
+            String title;
+            String date;
+            String author;
+
+            // Extract the value for the keys called "post-title", "date" and "post-footer-author"
+            title = li.get(i).getElementsByClass(JSoup_TITLE).text();
+            date = li.get(i).getElementsByClass(JSoup_DATE).text();
+            author = li.get(i).getElementsByClass(JSoup_AUTHOR).text();
+
+            ContentValues newsValues = new ContentValues();
+            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_TITLE, title);
+            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_DATE, date);
+            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_AUTHOR, author);
+
+            newsContentValues[i] = newsValues;
+
         }
 
-        return parsedNewsData;
+        return newsContentValues;
     }
 }
 

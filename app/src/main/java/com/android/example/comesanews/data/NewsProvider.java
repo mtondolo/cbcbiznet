@@ -6,6 +6,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 /**
  * This class serves as the ContentProvider for all of News's data. This class allows us to
@@ -37,7 +38,7 @@ public class NewsProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Cursor cursor;
 
@@ -80,12 +81,13 @@ public class NewsProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+
         return null;
     }
 
     // Handles requests to insert a set of new rows.
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         switch (sUriMatcher.match(uri)) {
             case CODE_NEWS:
@@ -142,4 +144,5 @@ public class NewsProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new RuntimeException("We will implement the update method!");
     }
+
 }

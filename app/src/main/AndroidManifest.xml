@@ -25,6 +25,10 @@
             android:name=".data.NewsProvider"
             android:authorities="@string/content_authority"
             android:exported="false" />
+
+        <service
+            android:name=".sync.NewsSyncIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

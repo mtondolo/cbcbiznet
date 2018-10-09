@@ -26,10 +26,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.example.comesanews.data.NewsContract;
+import com.android.example.comesanews.sync.NewsSyncUtils;
 
 public class LatestNewsActivity extends AppCompatActivity implements
         LatestNewsAdapter.LatestNewsAdapterOnClickHandler,
@@ -54,12 +54,11 @@ public class LatestNewsActivity extends AppCompatActivity implements
     public static final int INDEX_DATE = 1;
     public static final int INDEX_AUTHOR = 2;
 
-    // This ID will be used to identify the Loader responsible for loading our policies.
+    // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;
 
     private RecyclerView mRecyclerView;
     private LatestNewsAdapter mLatestNewsAdapter;
-    private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
     private int mPosition = RecyclerView.NO_POSITION;
@@ -71,9 +70,6 @@ public class LatestNewsActivity extends AppCompatActivity implements
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_latest_news);
-
-        /* This TextView is used to display errors and will be hidden if there are no errors */
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
 
         /*
          * The ProgressBar that will indicate to the user that we are loading data. It will be
@@ -110,6 +106,7 @@ public class LatestNewsActivity extends AppCompatActivity implements
         // Ensures a loader is initialized and active.
         getSupportLoaderManager().initLoader(ID_NEWS_LOADER, null, this);
 
+        NewsSyncUtils.startImmediateSync(this);
     }
 
     /**
@@ -117,7 +114,7 @@ public class LatestNewsActivity extends AppCompatActivity implements
      * hide the error message.
      */
     private void showLatestNewsDataView() {
-        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 

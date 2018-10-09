@@ -31,4 +31,7 @@ dependencies {
 
     // RecyclerView dependency
     implementation 'com.android.support:recyclerview-v7:27.1.1'
+
+    // FirebaseJobDispatcher dependency
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 }

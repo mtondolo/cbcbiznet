@@ -62,13 +62,15 @@ public class LatestNewsAdapter extends
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        // Read title, date and author from the cursor
+        // Read title, date, image and web urls from the cursor
         String title = mCursor.getString(LatestNewsActivity.INDEX_TITLE);
         String date = mCursor.getString(LatestNewsActivity.INDEX_DATE);
         String author = mCursor.getString(LatestNewsActivity.INDEX_AUTHOR);
+        String imageUrl = mCursor.getString(LatestNewsActivity.INDEX_IMAGE);
+        String webUrl = mCursor.getString(LatestNewsActivity.INDEX_WEB);
 
         // Display the summary that we created above
-        String newsItem = title + date + author;
+        String newsItem = title + date + author + imageUrl + webUrl;
         latestNewsAdapterViewHolder.mLatestNewsTextView.setText(newsItem);
 
     }

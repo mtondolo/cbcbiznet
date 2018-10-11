@@ -43,6 +43,8 @@ public class LatestNewsActivity extends AppCompatActivity implements
             NewsContract.LatestNewsEntry.COLUMN_TITLE,
             NewsContract.LatestNewsEntry.COLUMN_DATE,
             NewsContract.LatestNewsEntry.COLUMN_AUTHOR,
+            NewsContract.LatestNewsEntry.COLUMN_IMAGE,
+            NewsContract.LatestNewsEntry.COLUMN_WEB,
     };
 
     /*
@@ -53,6 +55,8 @@ public class LatestNewsActivity extends AppCompatActivity implements
     public static final int INDEX_TITLE = 0;
     public static final int INDEX_DATE = 1;
     public static final int INDEX_AUTHOR = 2;
+    public static final int INDEX_IMAGE = 3;
+    public static final int INDEX_WEB = 4;
 
     // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;

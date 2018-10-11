@@ -14,7 +14,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public NewsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,10 +25,12 @@ public class NewsDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_LATEST_NEWS_TABLE =
                 "CREATE TABLE " + NewsContract.LatestNewsEntry.TABLE_NAME + " (" +
-                        NewsContract.LatestNewsEntry._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                        NewsContract.LatestNewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         NewsContract.LatestNewsEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                        NewsContract.LatestNewsEntry.COLUMN_DATE + " TEXT NOT NULL, " +
-                        NewsContract.LatestNewsEntry.COLUMN_AUTHOR + " TEXT NOT NULL, " +
+                        NewsContract.LatestNewsEntry.COLUMN_DATE + " TEXT, " +
+                        NewsContract.LatestNewsEntry.COLUMN_AUTHOR + " TEXT, " +
+                        NewsContract.LatestNewsEntry.COLUMN_IMAGE + " TEXT, " +
+                        NewsContract.LatestNewsEntry.COLUMN_WEB + " TEXT, " +
 
                         // To ensure this table can only contain one title  per row.
                         " UNIQUE (" + NewsContract.LatestNewsEntry.COLUMN_TITLE + ") ON CONFLICT REPLACE);";

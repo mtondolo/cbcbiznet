@@ -30,6 +30,10 @@ public class LatestNewsJSONUtils {
         final String JSoup_TITLE = "post-title";
         final String JSoup_DATE = "date";
         final String JSoup_AUTHOR = "post-footer-author";
+        final String JSoup_IMAGE_TAG = "img";
+        final String JSoup_IMAGE_KEY = "abs:src";
+        final String JSoup_WEB_TAG = "a";
+        final String JSoup_WEB= "abs:href";
 
         Html.fromHtml(newsJsonStr).toString();
 
@@ -54,16 +58,23 @@ public class LatestNewsJSONUtils {
             String title;
             String date;
             String author;
+            String imageUrl;
+            String webUrl;
 
-            // Extract the value for the keys called "post-title", "date" and "post-footer-author"
+            // Extract the value for the keys called "post-title", "date", "post-footer-author",
+            // "img", "abs:src", "a" and "href".
             title = li.get(i).getElementsByClass(JSoup_TITLE).text();
             date = li.get(i).getElementsByClass(JSoup_DATE).text();
             author = li.get(i).getElementsByClass(JSoup_AUTHOR).text();
+            imageUrl = li.get(i).getElementsByTag(JSoup_IMAGE_TAG).attr(JSoup_IMAGE_KEY);
+            webUrl = li.get(i).getElementsByTag(JSoup_WEB_TAG).attr(JSoup_WEB);
 
             ContentValues newsValues = new ContentValues();
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_TITLE, title);
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_DATE, date);
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_AUTHOR, author);
+            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_IMAGE, imageUrl);
+            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_WEB, webUrl);
 
             newsContentValues[i] = newsValues;
 

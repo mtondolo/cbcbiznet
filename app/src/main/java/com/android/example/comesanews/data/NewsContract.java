@@ -34,14 +34,13 @@ public class NewsContract {
         /* Used internally as the name of our latest news table. */
         public static final String TABLE_NAME = "latest_news";
 
-        /* title is stored as string representing latest news head line */
+        /* title, date, author, imageUrl and webUrl are
+        stored as string representing latest news head line */
         public static final String COLUMN_TITLE = "title";
-
-        /* date is stored as a string representing the date published*/
         public static final String COLUMN_DATE = "date";
-
-        /* author is stored as a string representing the author */
         public static final String COLUMN_AUTHOR = "author";
+        public static final String COLUMN_IMAGE = "imageUrl";
+        public static final String COLUMN_WEB = "webUrl";
 
     }
 }

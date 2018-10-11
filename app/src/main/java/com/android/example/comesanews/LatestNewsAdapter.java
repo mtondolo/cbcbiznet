@@ -6,7 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class LatestNewsAdapter extends
         RecyclerView.Adapter<LatestNewsAdapter.LatestNewsAdapterViewHolder> {
@@ -62,16 +65,34 @@ public class LatestNewsAdapter extends
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        // Read title, date, image and web urls from the cursor
-        String title = mCursor.getString(LatestNewsActivity.INDEX_TITLE);
-        String date = mCursor.getString(LatestNewsActivity.INDEX_DATE);
-        String author = mCursor.getString(LatestNewsActivity.INDEX_AUTHOR);
+        /* Get image, title, name, date and web page from the cursor and display the values*/
         String imageUrl = mCursor.getString(LatestNewsActivity.INDEX_IMAGE);
-        String webUrl = mCursor.getString(LatestNewsActivity.INDEX_WEB);
 
-        // Display the summary that we created above
-        String newsItem = title + date + author + imageUrl + webUrl;
-        latestNewsAdapterViewHolder.mLatestNewsTextView.setText(newsItem);
+        if (imageUrl.isEmpty()) {//url.isEmpty()
+            Picasso.get()
+                    .load(R.mipmap.ic_launcher_placeholder)
+                    .placeholder(R.mipmap.ic_launcher_placeholder)
+                    .error(R.mipmap.ic_launcher_placeholder)
+                    .resize(176, 128)
+                    .centerCrop()
+                    .into(latestNewsAdapterViewHolder.imageView);
+        } else {
+            Picasso.get()
+                    .load(imageUrl)
+                    .placeholder(R.mipmap.ic_launcher_placeholder)
+                    .resize(176, 128)
+                    .centerCrop()
+                    .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView
+        }
+
+        String title = mCursor.getString(LatestNewsActivity.INDEX_TITLE);
+        latestNewsAdapterViewHolder.titleView.setText(title);
+
+        String author = mCursor.getString(LatestNewsActivity.INDEX_AUTHOR);
+        latestNewsAdapterViewHolder.authorView.setText(author);
+
+        String date = mCursor.getString(LatestNewsActivity.INDEX_DATE);
+        latestNewsAdapterViewHolder.dateView.setText(date);
 
     }
 
@@ -92,18 +113,29 @@ public class LatestNewsAdapter extends
     public class LatestNewsAdapterViewHolder extends
             RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final TextView mLatestNewsTextView;
+        final ImageView imageView;
+        final TextView titleView;
+        final TextView dateView;
+        final TextView authorView;
 
         public LatestNewsAdapterViewHolder(View view) {
             super(view);
-            mLatestNewsTextView = (TextView) view.findViewById(R.id.tv_latest_news_data);
+
+            imageView = (ImageView) view.findViewById(R.id.image);
+            titleView = (TextView) view.findViewById(R.id.title);
+            dateView = (TextView) view.findViewById(R.id.date);
+            authorView = (TextView) view.findViewById(R.id.author);
+
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            String latestNewsItem = mLatestNewsTextView.getText().toString();
-            mClickHandler.onClick(latestNewsItem);
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            String url = mCursor.getString(LatestNewsActivity.INDEX_WEB);
+            mClickHandler.onClick(url);
+
         }
     }
 }

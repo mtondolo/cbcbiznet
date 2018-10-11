@@ -131,12 +131,11 @@ public class LatestNewsActivity extends AppCompatActivity implements
         mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
+
     // This method handles RecyclerView item clicks.
     @Override
-    public void onClick(String latestNewsItem) {
-        Context context = this;
-        Toast.makeText(context, latestNewsItem, Toast.LENGTH_SHORT)
-                .show();
+    public void onClick(String url) {
+        openWebPage(url);
     }
 
     /**
@@ -178,5 +177,12 @@ public class LatestNewsActivity extends AppCompatActivity implements
         mLatestNewsAdapter.swapCursor(null);
     }
 
+    public void openWebPage(String url) {
+        Uri webPage = Uri.parse(url);
+        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, webPage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
 }
 

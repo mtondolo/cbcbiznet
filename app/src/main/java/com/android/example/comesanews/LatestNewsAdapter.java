@@ -84,16 +84,16 @@ public class LatestNewsAdapter extends
 
         if (imageUrl.isEmpty()) {//url.isEmpty()
             Picasso.get()
-                    .load(R.mipmap.ic_launcher_placeholder)
-                    .placeholder(R.mipmap.ic_launcher_placeholder)
-                    .error(R.mipmap.ic_launcher_placeholder)
+                    .load(R.mipmap.ic_place_holder)
+                    .placeholder(R.mipmap.ic_place_holder)
+                    .error(R.mipmap.ic_place_holder)
                     .resize(176, 128)
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);
         } else {
             Picasso.get()
                     .load(imageUrl)
-                    .placeholder(R.mipmap.ic_launcher_placeholder)
+                    .placeholder(R.mipmap.ic_place_holder)
                     .resize(176, 128)
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView

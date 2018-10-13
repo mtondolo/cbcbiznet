@@ -29,7 +29,6 @@ public class LatestNewsJSONUtils {
         final String JSoup_LIST = "li";
         final String JSoup_TITLE = "post-title";
         final String JSoup_DATE = "date";
-        final String JSoup_AUTHOR = "post-footer-author";
         final String JSoup_IMAGE_TAG = "img";
         final String JSoup_IMAGE_KEY = "abs:src";
         final String JSoup_WEB_TAG = "a";
@@ -57,7 +56,6 @@ public class LatestNewsJSONUtils {
             /* These are the values that will be collected */
             String title;
             String date;
-            String author;
             String imageUrl;
             String webUrl;
 
@@ -65,14 +63,12 @@ public class LatestNewsJSONUtils {
             // "img", "abs:src", "a" and "href".
             title = li.get(i).getElementsByClass(JSoup_TITLE).text();
             date = li.get(i).getElementsByClass(JSoup_DATE).text();
-            author = li.get(i).getElementsByClass(JSoup_AUTHOR).text();
             imageUrl = li.get(i).getElementsByTag(JSoup_IMAGE_TAG).attr(JSoup_IMAGE_KEY);
             webUrl = li.get(i).getElementsByTag(JSoup_WEB_TAG).attr(JSoup_WEB);
 
             ContentValues newsValues = new ContentValues();
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_TITLE, title);
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_DATE, date);
-            newsValues.put(NewsContract.LatestNewsEntry.COLUMN_AUTHOR, author);
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_IMAGE, imageUrl);
             newsValues.put(NewsContract.LatestNewsEntry.COLUMN_WEB, webUrl);
 

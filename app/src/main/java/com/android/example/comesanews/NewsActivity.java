@@ -18,7 +18,6 @@ package com.android.example.comesanews;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,13 +25,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.example.comesanews.data.NewsContract;
 import com.android.example.comesanews.sync.NewsSyncUtils;
 
-public class LatestNewsActivity extends AppCompatActivity implements
-        LatestNewsAdapter.LatestNewsAdapterOnClickHandler,
+public class NewsActivity extends AppCompatActivity implements
+        NewsAdapter.LatestNewsAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
 
     /*
@@ -42,7 +40,6 @@ public class LatestNewsActivity extends AppCompatActivity implements
     public static final String[] MAIN_NEWS_PROJECTION = {
             NewsContract.LatestNewsEntry.COLUMN_TITLE,
             NewsContract.LatestNewsEntry.COLUMN_DATE,
-            NewsContract.LatestNewsEntry.COLUMN_AUTHOR,
             NewsContract.LatestNewsEntry.COLUMN_IMAGE,
             NewsContract.LatestNewsEntry.COLUMN_WEB,
     };
@@ -54,15 +51,14 @@ public class LatestNewsActivity extends AppCompatActivity implements
      */
     public static final int INDEX_TITLE = 0;
     public static final int INDEX_DATE = 1;
-    public static final int INDEX_AUTHOR = 2;
-    public static final int INDEX_IMAGE = 3;
-    public static final int INDEX_WEB = 4;
+    public static final int INDEX_IMAGE = 2;
+    public static final int INDEX_WEB = 3;
 
     // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;
 
     private RecyclerView mRecyclerView;
-    private LatestNewsAdapter mLatestNewsAdapter;
+    private NewsAdapter mNewsAdapter;
     private ProgressBar mLoadingIndicator;
 
     private int mPosition = RecyclerView.NO_POSITION;
@@ -70,10 +66,10 @@ public class LatestNewsActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_latest_news);
+        setContentView(R.layout.activity_news);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_latest_news);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_news);
 
         /*
          * The ProgressBar that will indicate to the user that we are loading data. It will be
@@ -97,13 +93,13 @@ public class LatestNewsActivity extends AppCompatActivity implements
          * The NewsAdapter is responsible for linking our news data with the Views that will end up
          * displaying our news data.
          */
-        mLatestNewsAdapter = new LatestNewsAdapter(this, this);
+        mNewsAdapter = new NewsAdapter(this, this);
 
         /*
          * Use mRecyclerView.setAdapter and pass in mNewsAdapter.
          * Setting the adapter attaches it to the RecyclerView in our layout.
          */
-        mRecyclerView.setAdapter(mLatestNewsAdapter);
+        mRecyclerView.setAdapter(mNewsAdapter);
 
         showLoading();
 
@@ -161,7 +157,7 @@ public class LatestNewsActivity extends AppCompatActivity implements
     // Called when a previously created loader has finished its load.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mLatestNewsAdapter.swapCursor(data);
+        mNewsAdapter.swapCursor(data);
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         mRecyclerView.smoothScrollToPosition(mPosition);
         if (data.getCount() != 0) showLatestNewsDataView();
@@ -174,7 +170,7 @@ public class LatestNewsActivity extends AppCompatActivity implements
          * Since this Loader's data is now invalid, we need to clear the Adapter that is
          * displaying the data.
          */
-        mLatestNewsAdapter.swapCursor(null);
+        mNewsAdapter.swapCursor(null);
     }
 
     public void openWebPage(String url) {

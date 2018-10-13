@@ -38,7 +38,6 @@ public class NewsContract {
         stored as string representing latest news head line */
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_AUTHOR = "author";
         public static final String COLUMN_IMAGE = "imageUrl";
         public static final String COLUMN_WEB = "webUrl";
 

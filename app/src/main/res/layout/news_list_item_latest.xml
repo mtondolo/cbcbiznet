@@ -21,7 +21,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
         tools:text="Title" />
 
@@ -35,7 +35,6 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             tools:text="Date" />
 

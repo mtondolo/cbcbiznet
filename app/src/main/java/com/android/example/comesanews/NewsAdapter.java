@@ -87,14 +87,14 @@ public class NewsAdapter extends
                     .load(R.mipmap.ic_place_holder)
                     .placeholder(R.mipmap.ic_place_holder)
                     .error(R.mipmap.ic_place_holder)
-                    .resize(126, 78)
+                    .fit()
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);
         } else {
             Picasso.get()
                     .load(imageUrl)
                     .placeholder(R.mipmap.ic_place_holder)
-                    .resize(126, 78)
+                    .fit()
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView
         }

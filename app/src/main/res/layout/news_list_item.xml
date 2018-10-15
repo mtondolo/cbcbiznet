@@ -14,15 +14,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_height="88dp"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="6dp"
+    android:background="@drawable/background_rect"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="126dp"
-        android:layout_height="78dp"
+        android:layout_height="88dp"
         android:layout_marginRight="8dp"
+        android:background="@drawable/background_rect"
         android:scaleType="centerCrop"
         tools:src="@drawable/ic_launcher_background" />
 
@@ -47,9 +52,9 @@
 
             <TextView
                 android:id="@+id/date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginBottom="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="Date" />
 

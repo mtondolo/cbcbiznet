@@ -92,6 +92,7 @@ public class NewsAdapter extends
         } else {
             Picasso.get()
                     .load(imageUrl)
+                    .placeholder(R.color.holder_color)
                     .fit()
                     .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView
         }

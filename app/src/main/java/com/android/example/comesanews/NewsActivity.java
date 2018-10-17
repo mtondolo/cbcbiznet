@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -67,6 +68,9 @@ public class NewsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+
+        Toolbar topToolbar = (Toolbar) findViewById(R.id.top_toolbar);
+        setSupportActionBar(topToolbar);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_news);

@@ -10,7 +10,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +18,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="6dp"
-    android:background="@drawable/holder_layout"
+    android:background="@drawable/touch_selector"
     android:orientation="horizontal">
 
     <ImageView
@@ -27,7 +26,7 @@
         android:layout_width="126dp"
         android:layout_height="88dp"
         android:layout_marginRight="8dp"
-        android:background="@drawable/holder_layout"
+        android:background="@drawable/place_holder"
         android:scaleType="centerCrop"
         tools:src="@drawable/ic_launcher_background" />
 
@@ -41,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
+            android:layout_marginRight="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textStyle="bold"
             tools:text="Title" />

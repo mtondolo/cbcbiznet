@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">COMESA News</string>
-    <string name="error_message">
-        No internet connection. Check your mobile data or WI-FI.
-    </string>
+    <string name="error_message">No internet connection. Check your mobile data or WI-FI.</string>
     <string name="content_authority">com.android.example.comesanews</string>
+    <!--Used in overflow menu to contact us-->
+    <string name="action_contact_us">Contact Us</string>
 </resources>

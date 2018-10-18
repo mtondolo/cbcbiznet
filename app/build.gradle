@@ -34,7 +34,6 @@ dependencies {
 
     // Displaying images
     implementation 'com.squareup.picasso:picasso:2.71828'
-
     implementation 'com.android.support:animated-vector-drawable:27.1.1'
     implementation 'com.android.support:exifinterface:27.1.1'
 }

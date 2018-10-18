@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -111,6 +113,8 @@ public class NewsActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(ID_NEWS_LOADER, null, this);
 
         NewsSyncUtils.startImmediateSync(this);
+
+
     }
 
     /**
@@ -183,6 +187,14 @@ public class NewsActivity extends AppCompatActivity implements
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    // Inflate the menu for this Activity
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.news, menu);
+        return true;
     }
 }
 

@@ -29,6 +29,6 @@
 
     <!-- Default, "just hanging' out" state.  This is part of
          ActionBarCompat -->
-    <item android:drawable="@color/background_material_light" />
+    <item android:drawable="@color/list_item" />
 
 </selector>

@@ -4,10 +4,8 @@
     <color name="colorPrimaryDark">#0d47a1</color>
     <color name="colorAccent">#03A9F4</color>
     <color name="colorPrimaryLight">#C5CAE9</color>
-
     <color name="grey">#bdbdbd</color>
-
+    <color name="list_item">#f5f5f5</color>
     <color name="white">#FFFFFF</color>
-
     <color name="activated">#E0E0E0</color>
 </resources>

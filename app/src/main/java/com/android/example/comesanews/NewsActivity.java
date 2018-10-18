@@ -189,7 +189,7 @@ public class NewsActivity extends AppCompatActivity implements
         }
     }
 
-    // Inflate the menu for this Activity
+    // inflate the menu for this Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

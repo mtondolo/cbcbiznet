@@ -15,6 +15,7 @@
  */
 package com.android.example.comesanews;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -26,6 +27,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -189,12 +191,34 @@ public class NewsActivity extends AppCompatActivity implements
         }
     }
 
-    // inflate the menu for this Activity
+    // Inflate the menu for this Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.news, menu);
         return true;
+    }
+
+    // Handle clicks for this menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_contact_us) {
+            composeEmail();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Use an intent to launch an email app.
+    public void composeEmail() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] { "mtondolo@gmail.com" });
+        intent.putExtra(Intent.EXTRA_SUBJECT, "COMESA News feedback");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
 

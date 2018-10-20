@@ -53,11 +53,11 @@ public class NewsAdapter extends
         int layoutId;
         switch (viewType) {
             case VIEW_TYPE_LATEST: {
-                layoutId = R.layout.news_list_item_latest;
+                layoutId = R.layout.latest_list_item;
                 break;
             }
             case VIEW_TYPE_PAST: {
-                layoutId = R.layout.news_list_item;
+                layoutId = R.layout.list_item;
                 break;
             }
             default:
@@ -84,13 +84,15 @@ public class NewsAdapter extends
 
         if (imageUrl.isEmpty()) {//url.isEmpty()
             Picasso.get()
-                    .load(R.drawable.place_holder)
+                    .load(R.color.grey)
+                    .placeholder(R.color.grey)
                     .resize(126, 78)
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);
         } else {
             Picasso.get()
                     .load(imageUrl)
+                    .error(R.color.grey)
                     .fit()
                     .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView
         }

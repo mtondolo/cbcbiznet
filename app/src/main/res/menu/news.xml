@@ -12,8 +12,9 @@
 --><!-- The menu found in the main multi-day forecast  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://scheas.android.com/tools"
     tools:context=".NewsActivity">
+
     <item
         android:id="@+id/action_contact_us"
         android:orderInCategory="1"

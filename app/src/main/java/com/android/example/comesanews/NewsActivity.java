@@ -114,8 +114,8 @@ public class NewsActivity extends AppCompatActivity implements
         // Ensures a loader is initialized and active.
         getSupportLoaderManager().initLoader(ID_NEWS_LOADER, null, this);
 
-        NewsSyncUtils.startImmediateSync(this);
-
+        // NewsSyncUtils's initialize method instead of startImmediateSync
+        NewsSyncUtils.initialize(this);
 
     }
 

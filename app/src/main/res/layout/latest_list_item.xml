@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="286dp"
-    android:layout_marginBottom="4dp"
+    android:layout_height="336dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginTop="58dp"
-    android:background="@drawable/latest_list_item_touch_selector"
-    android:orientation="vertical">
+    android:background="@drawable/latest_list_item_touch_selector">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="193dp"
+        android:layout_height="236dp"
+        android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         tools:src="@drawable/ic_launcher_background" />
 
@@ -19,9 +19,10 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/date"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
         android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
@@ -29,15 +30,16 @@
 
     <TextView
         android:id="@+id/date"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="16dp"
         android:fontFamily="sans-serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/grey"
         android:textStyle="bold"
         tools:text="Date" />
 
-</LinearLayout>
+</RelativeLayout>

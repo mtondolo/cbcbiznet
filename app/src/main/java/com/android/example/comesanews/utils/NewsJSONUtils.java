@@ -13,10 +13,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class LatestNewsJSONUtils {
+public class NewsJSONUtils {
 
     // This method parses JSON from a web response and returns an array of Strings
-    public static ContentValues[] getSimpleNewsStringsFromJson(Context context, String newsJsonStr)
+    public static ContentValues[] getSimpleNewsStringsFromJson(String newsJsonStr)
             throws JSONException {
 
         // JSON variables
@@ -32,7 +32,7 @@ public class LatestNewsJSONUtils {
         final String JSoup_IMAGE_TAG = "img";
         final String JSoup_IMAGE_KEY = "abs:src";
         final String JSoup_WEB_TAG = "a";
-        final String JSoup_WEB= "abs:href";
+        final String JSoup_WEB = "abs:href";
 
         Html.fromHtml(newsJsonStr).toString();
 

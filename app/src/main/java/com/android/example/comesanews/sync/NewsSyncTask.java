@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.android.example.comesanews.data.NewsContract;
-import com.android.example.comesanews.utils.LatestNewsJSONUtils;
+import com.android.example.comesanews.utils.NewsJSONUtils;
 import com.android.example.comesanews.utils.NetworkUtils;
 
 import java.net.URL;
@@ -31,7 +31,7 @@ public class NewsSyncTask {
             String jsonNewsResponse = NetworkUtils.getResponseFromHttpUrl(newsRequestUrl);
 
             /* Parse the JSON into a list of policy values */
-            ContentValues[] newsValues = LatestNewsJSONUtils.getSimpleNewsStringsFromJson(context, jsonNewsResponse);
+            ContentValues[] newsValues = NewsJSONUtils.getSimpleNewsStringsFromJson(jsonNewsResponse);
 
             /*
              * In cases where our JSON contained an error code, getSimpleYCPolicyStringFromJson

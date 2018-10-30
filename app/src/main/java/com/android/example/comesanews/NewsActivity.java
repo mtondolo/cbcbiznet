@@ -16,12 +16,14 @@
 package com.android.example.comesanews;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.example.comesanews.data.NewsContract;
 import com.android.example.comesanews.sync.NewsSyncUtils;
@@ -68,6 +71,8 @@ public class NewsActivity extends AppCompatActivity implements
 
     private int mPosition = RecyclerView.NO_POSITION;
 
+    private final static int NUM_GRIDS = 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,9 +91,22 @@ public class NewsActivity extends AppCompatActivity implements
          */
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-        // LinearLayoutManager can support HORIZONTAL or VERTICAL orientations.
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        // Get the orientation of the screen
+        final int orientation = this.getResources().getConfiguration().orientation;
+
+        // Set out the layout
+        GridLayoutManager layoutManager
+                = new GridLayoutManager(this, NUM_GRIDS);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    return position == 0 ? 4 : 4;
+                } else
+                    return position == 0 ? 4 : 2;
+            }
+        });
+
         mRecyclerView.setLayoutManager(layoutManager);
 
         /*
@@ -214,7 +232,7 @@ public class NewsActivity extends AppCompatActivity implements
     public void composeEmail() {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] { "mtondolo@gmail.com" });
+        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "COMESA News feedback");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);

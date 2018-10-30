@@ -49,7 +49,6 @@ public class NewsAdapter extends
     // This gets called when each new ViewHolder is created.
     @Override
     public LatestNewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
         int layoutId;
         switch (viewType) {
             case VIEW_TYPE_LATEST: {
@@ -102,7 +101,6 @@ public class NewsAdapter extends
 
         String date = mCursor.getString(NewsActivity.INDEX_DATE);
         latestNewsAdapterViewHolder.dateView.setText(date);
-
     }
 
     // This method simply returns the number of items to display.
@@ -155,7 +153,6 @@ public class NewsAdapter extends
             mCursor.moveToPosition(adapterPosition);
             String url = mCursor.getString(NewsActivity.INDEX_WEB);
             mClickHandler.onClick(url);
-
         }
     }
 }

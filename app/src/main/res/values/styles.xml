@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#1565c0</item>
-        <item name="colorPrimaryDark">#1565c0</item>
+        <item name="colorPrimaryDark">#0064b7</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>

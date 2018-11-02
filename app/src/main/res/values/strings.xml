@@ -4,5 +4,5 @@
     <string name="content_authority">com.android.example.comesanews</string>
     <!--Used in overflow menu to contact us-->
     <string name="action_contact_us">Contact us</string>
-    <string name="activity_name">Top Stories</string>
+    <string name="activity_name">TOP STORIES</string>
 </resources>

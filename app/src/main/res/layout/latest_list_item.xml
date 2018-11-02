@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="336dp"
     android:layout_marginBottom="4dp"
-    android:layout_marginTop="96dp"
+    android:layout_marginTop="90dp"
     android:background="@drawable/latest_list_item_touch_selector">
 
     <ImageView
@@ -37,10 +37,10 @@
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="sans-serif"
         android:fontFeatureSettings="smcp"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/grey"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         tools:text="Date" />
 

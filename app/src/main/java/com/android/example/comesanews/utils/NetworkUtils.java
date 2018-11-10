@@ -28,11 +28,11 @@ import java.util.Scanner;
 public class NetworkUtils {
     final static String COMESA_BASE_URL =
             "https://query.yahooapis.com/v1/public/yql?q=env%20'store%3A%2F%2Fdatatables." +
-                    "org%2Falltableswithkeys'%3Bselect%20*%20from%20htmlstring%20where%20u" +
-                    "rl%3D%22http%3A%2F%2Fwww.comesa.int%2F%22%20and%20xpath%3D'%2F%2Fhtml" +
-                    "%2Fbody%2Fdiv%5B2%5D%2Fdiv%5B2%5D%2Fdiv%5B2%5D%2Fdiv%5B1%5D%2Fdiv%5B2%5" +
-                    "D%2Fdiv%5B1%5D'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltables" +
-                    "withkeys";
+                    "org%2Falltableswithkeys'%3Bselect%20*%20from%20htmlstring%20where%" +
+                    "20url%3D%22http%3A%2F%2Fwww.comesa.int%2Fcategory%2Fmedia-centre%2" +
+                    "Flatest-news%2F%22%20and%20xpath%3D'%2F%2F*%5B%40id%3D%22main%22%5D" +
+                    "%2Fdiv%5B2%5D'&format=json&env=store%3A%2F%2Fdatatables.org%2Fallta" +
+                    "bleswithkeys";
 
     // Builds the URL used to query the COMESA Website for latest news.
     public static URL buildLatestNewsUrl() {

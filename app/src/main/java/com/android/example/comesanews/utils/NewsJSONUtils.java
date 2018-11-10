@@ -27,8 +27,8 @@ public class NewsJSONUtils {
 
         // JSoup variables
         final String JSoup_LIST = "li";
-        final String JSoup_TITLE = "post-title";
-        final String JSoup_DATE = "date";
+        final String JSoup_TITLE = "stripe_2";
+        final String JSoup_DATE = "post_date";
         final String JSoup_IMAGE_TAG = "img";
         final String JSoup_IMAGE_KEY = "abs:src";
         final String JSoup_WEB_TAG = "a";

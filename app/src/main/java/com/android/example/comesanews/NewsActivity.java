@@ -15,7 +15,6 @@
  */
 package com.android.example.comesanews;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -203,13 +202,11 @@ public class NewsActivity extends AppCompatActivity implements
     }
 
     public void openWebPage(String url) {
-        Context context = this;
-
-        // Launch the NewsDetailActivity using an explicit Intent
-        Class destinationClass = NewsDetailActivity.class;
-        Intent intentToStartNewsDetailActivity = new Intent(context, destinationClass);
-        intentToStartNewsDetailActivity.putExtra(Intent.EXTRA_TEXT, url);
-        startActivity(intentToStartNewsDetailActivity);
+        Uri webPage = Uri.parse(url);
+        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, webPage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     // Inflate the menu for this Activity

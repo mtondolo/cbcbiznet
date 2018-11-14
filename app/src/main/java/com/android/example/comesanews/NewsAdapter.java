@@ -83,15 +83,15 @@ public class NewsAdapter extends
 
         if (imageUrl.isEmpty()) {//url.isEmpty()
             Picasso.get()
-                    .load(R.color.grey)
-                    .placeholder(R.color.grey)
+                    .load(R.color.colorPrimary)
+                    .placeholder(R.color.colorPrimary)
                     .resize(126, 78)
                     .centerCrop()
                     .into(latestNewsAdapterViewHolder.imageView);
         } else {
             Picasso.get()
                     .load(imageUrl)
-                    .error(R.color.grey)
+                    .error(R.color.colorPrimary)
                     .fit()
                     .into(latestNewsAdapterViewHolder.imageView);//this is our ImageView
         }

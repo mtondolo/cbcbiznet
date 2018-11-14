@@ -107,7 +107,9 @@ public class NewsAdapter extends
     @Override
     public int getItemCount() {
         if (null == mCursor) return 0;
-        return mCursor.getCount();
+
+        // Remove redundant item at the end of list
+        return mCursor.getCount() - 1;
     }
 
     /**

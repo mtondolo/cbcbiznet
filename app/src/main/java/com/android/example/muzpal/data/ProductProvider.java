@@ -1,4 +1,4 @@
-package com.android.example.comesanews.data;
+package com.android.example.muzpal.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,32 +8,29 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-/**
- * This class serves as the ContentProvider for all of News's data. This class allows us to
- * insert data, query data, and delete data.
- */
-public class NewsProvider extends ContentProvider {
+// This class serves as the ContentProvider for all of Product's data. This class allows us to insert data, query data, and delete data.
+public class ProductProvider extends ContentProvider {
 
     // These constant will be used to match URIs with the data they are looking for.
-    public static final int CODE_NEWS = 100;
+    public static final int CODE_PRODUCT = 100;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    private NewsDBHelper mOpenHelper;
+    private ProductDBHelper mOpenHelper;
 
-    // Creates the UriMatcher that will match each URI to the CODE_NEWS constant defined above.
+    // Creates the UriMatcher that will match each URI to the CODE_PRODUCT constant defined above.
     public static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = NewsContract.CONTENT_AUTHORITY;
-        matcher.addURI(authority, NewsContract.PATH_NEWS, CODE_NEWS);
+        final String authority = ProductContract.CONTENT_AUTHORITY;
+        matcher.addURI(authority, ProductContract.PATH_PRODUCT, CODE_PRODUCT);
         return matcher;
     }
 
     //In onCreate, we initialize our content provider on startup.
     @Override
     public boolean onCreate() {
-        mOpenHelper = new NewsDBHelper(getContext());
+        mOpenHelper = new ProductDBHelper(getContext());
         return true;
     }
 
@@ -47,9 +44,9 @@ public class NewsProvider extends ContentProvider {
          * accordingly.
          */
         switch (sUriMatcher.match(uri)) {
-            case CODE_NEWS: {
+            case CODE_PRODUCT: {
                 cursor = mOpenHelper.getReadableDatabase().query(
-                        NewsContract.LatestNewsEntry.TABLE_NAME,
+                        ProductContract.ProductEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -66,19 +63,13 @@ public class NewsProvider extends ContentProvider {
         return cursor;
     }
 
-    /**
-     * We aren't going to do anything with this method. However, we are required to override it as
-     * WeatherProvider extends ContentProvider.
-     */
+    // We aren't going to do anything with this method. However, we are required to override it as WeatherProvider extends ContentProvider.
     @Override
     public String getType(Uri uri) {
         throw new RuntimeException("We are not implementing getType.");
     }
 
-    /**
-     * We aren't going to do anything with this method. However, we are required to
-     * override it as NewsProvider extends ContentProvider.
-     */
+    // We aren't going to do anything with this method. However, we are required to override it as ProductProvider extends ContentProvider.
     @Override
     public Uri insert(Uri uri, ContentValues values) {
 
@@ -90,12 +81,12 @@ public class NewsProvider extends ContentProvider {
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         switch (sUriMatcher.match(uri)) {
-            case CODE_NEWS:
+            case CODE_PRODUCT:
                 db.beginTransaction();
                 int rowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(NewsContract.LatestNewsEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(ProductContract.ProductEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -112,7 +103,7 @@ public class NewsProvider extends ContentProvider {
                 // Return the number of rows inserted from our implementation of bulkInsert
                 return rowsInserted;
 
-            // If the URI does match match CODE_NEWS, return the super implementation of bulkInsert
+            // If the URI does match match CODE_PRODUCT, return the super implementation of bulkInsert
             default:
                 return super.bulkInsert(uri, values);
         }
@@ -125,9 +116,9 @@ public class NewsProvider extends ContentProvider {
         int numRowsDeleted;
         if (null == selection) selection = "1";
         switch (sUriMatcher.match(uri)) {
-            case CODE_NEWS:
+            case CODE_PRODUCT:
                 numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
-                        NewsContract.LatestNewsEntry.TABLE_NAME,
+                        ProductContract.ProductEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;

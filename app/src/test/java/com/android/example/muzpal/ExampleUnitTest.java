@@ -1,4 +1,4 @@
-package com.android.example.comesanews;
+package com.android.example.muzpal;
 
 import org.junit.Test;
 

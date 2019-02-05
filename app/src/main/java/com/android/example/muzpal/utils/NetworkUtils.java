@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.comesanews.utils;
+package com.android.example.muzpal.utils;
 
 import android.net.Uri;
 
@@ -26,34 +26,34 @@ import java.util.Scanner;
 
 // These utilities will be used to communicate with the network.
 public class NetworkUtils {
-    final static String COMESA_BASE_URL =
-            "https://query.yahooapis.com/v1/public/yql?q=env%20'store%3A%2F%2Fdatatables." +
-                    "org%2Falltableswithkeys'%3Bselect%20*%20from%20htmlstring%20where%20u" +
-                    "rl%3D%22http%3A%2F%2Fwww.comesa.int%2F%22%20and%20xpath%3D'%2F%2Fhtml" +
-                    "%2Fbody%2Fdiv%5B2%5D%2Fdiv%5B2%5D%2Fdiv%5B2%5D%2Fdiv%5B1%5D%2Fdiv%5B2%5" +
-                    "D%2Fdiv%5B1%5D'&format=json&env=store%3A%2F%2Fdatatables.org%2Falltables" +
-                    "withkeys";
 
-    // Builds the URL used to query the COMESA Website for latest news.
-    public static URL buildLatestNewsUrl() {
-        Uri builtUri = Uri.parse(COMESA_BASE_URL).buildUpon()
+    final static String PRODUCT_ITEMS_URL =
+            "https://beznet-api.herokuapp.com/api/products";
+
+    // Builds the URL used to query GitHub.
+    public static URL buildUrl() {
+        Uri builtUri = Uri.parse(PRODUCT_ITEMS_URL).buildUpon()
                 .build();
+
         URL url = null;
         try {
             url = new URL(builtUri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
         return url;
     }
 
-    // This method returns the entire result from the HTTP response.
+    // This method returns the entire result from the HTTP response
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
+
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
+
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
                 return scanner.next();

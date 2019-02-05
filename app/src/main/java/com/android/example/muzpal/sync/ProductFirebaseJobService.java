@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.comesanews.sync;
+package com.android.example.muzpal.sync;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -23,44 +23,37 @@ import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.firebase.jobdispatcher.RetryStrategy;
 
-public class NewsFirebaseJobService extends JobService {
+public class ProductFirebaseJobService extends JobService {
 
-    private AsyncTask<Void, Void, Void> mFetchNewsTask;
+    private AsyncTask<Void, Void, Void> mFetchProductTask;
 
     // The entry point to our Job.
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        mFetchNewsTask = new AsyncTask<Void, Void, Void>() {
+        mFetchProductTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
                 Context context = getApplicationContext();
-                NewsSyncTask.syncNews(context);
+                ProductSyncTask.syncProduct(context);
                 return null;
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
 
-                // Once the news data is sync'd, call jobFinished with the appropriate arguments
+                // Once the product data is sync'd, call jobFinished with the appropriate arguments
                 jobFinished(jobParameters, false);
             }
         };
-        mFetchNewsTask.execute();
+        mFetchProductTask.execute();
         return true;
     }
 
-    /**
-     * Called when the scheduling engine has decided to interrupt the execution of a running job,
-     * most likely because the runtime constraints associated with the job are no longer satisfied.
-     *
-     * @return whether the job should be retried
-     * @see Job.Builder#setRetryStrategy(RetryStrategy)
-     * @see RetryStrategy
-     */
+    // Called when the scheduling engine has decided to interrupt the execution of a running job
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        if (mFetchNewsTask != null) {
-            mFetchNewsTask.cancel(true);
+        if (mFetchProductTask != null) {
+            mFetchProductTask.cancel(true);
         }
         return true;
     }

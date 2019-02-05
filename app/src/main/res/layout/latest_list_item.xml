@@ -16,7 +16,7 @@
         tools:src="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/company"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
@@ -27,10 +27,10 @@
         android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
-        tools:text="Title" />
+        tools:text="Company" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -42,6 +42,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        tools:text="Date" />
+        tools:text="Description" />
 
 </RelativeLayout>

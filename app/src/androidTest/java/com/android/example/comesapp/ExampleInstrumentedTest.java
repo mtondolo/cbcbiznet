@@ -1,4 +1,4 @@
-package com.android.example.muzpal;
+package com.android.example.comesapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

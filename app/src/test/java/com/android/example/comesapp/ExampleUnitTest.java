@@ -1,4 +1,4 @@
-package com.android.example.muzpal;
+package com.android.example.comesapp;
 
 import org.junit.Test;
 

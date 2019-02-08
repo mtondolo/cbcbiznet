@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.example.muzpal">
+    package="com.android.example.comesapp">
 
     <!-- This permission is necessary in order to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ProductActivity"
+            android:name=".NewsActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,17 +22,17 @@
 
         <!-- Our ContentProvider -->
         <provider
-            android:name=".data.ProductProvider"
+            android:name=".data.NewsProvider"
             android:authorities="@string/content_authority"
             android:exported="false" />
 
         <service
-            android:name=".sync.ProductSyncIntentService"
+            android:name=".sync.NewsSyncIntentService"
             android:exported="false" />
 
         <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service
-            android:name=".sync.ProductFirebaseJobService"
+            android:name=".sync.NewsFirebaseJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

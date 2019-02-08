@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">MuzPal</string>
+    <string name="app_name">COMESApp</string>
     <string name="error_message">No internet connection. Check your mobile data or WI-FI.</string>
-    <string name="content_authority">com.android.example.muzpal</string>
+    <string name="content_authority">com.android.example.comesapp</string>
     <!--Used in overflow menu to contact us-->
     <string name="action_contact_us">Contact us</string>
-    <string name="activity_name">Products</string>
+    <string name="activity_name">COMESA News</string>
 </resources>

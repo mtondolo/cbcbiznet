@@ -1,4 +1,4 @@
-package com.android.example.muzpal.sync;
+package com.android.example.comesapp.sync;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.android.example.muzpal.data.ProductContract;
+import com.android.example.comesapp.data.NewsContract;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -17,9 +17,9 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.util.concurrent.TimeUnit;
 
-public class ProductSyncUtils {
+public class NewsSyncUtils {
 
-    // Interval at which to sync with the product. This interval is just for test purposes.
+    // Interval at which to sync with the news. This interval is just for test purposes.
     private static final int REMINDER_INTERVAL_MINUTES = 1;
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
@@ -27,18 +27,18 @@ public class ProductSyncUtils {
     private static boolean sInitialized;
 
     //  Sync tag to identify our sync job
-    private static final String PRODUCT_SYNC_TAG = "product-sync";
+    private static final String NEWS_SYNC_TAG = "news-sync";
 
-    // Schedules a repeating sync of product data using FirebaseJobDispatcher.
+    // Schedules a repeating sync of news data using FirebaseJobDispatcher.
     static void scheduleFirebaseJobDispatcherSync(@NonNull final Context context) {
 
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        /* Create the Job to periodically sync Product */
-        Job syncProductJob = dispatcher.newJobBuilder()
-                .setService(ProductFirebaseJobService.class)
-                .setTag(PRODUCT_SYNC_TAG)
+        /* Create the Job to periodically sync News */
+        Job syncNewsJob = dispatcher.newJobBuilder()
+                .setService(NewsFirebaseJobService.class)
+                .setTag(NEWS_SYNC_TAG)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
@@ -49,7 +49,7 @@ public class ProductSyncUtils {
                 .build();
 
         // Schedule the Job with the dispatcher
-        dispatcher.schedule(syncProductJob);
+        dispatcher.schedule(syncNewsJob);
     }
 
     // Creates periodic sync tasks and checks to see if an immediate sync is required.
@@ -61,17 +61,17 @@ public class ProductSyncUtils {
         // If the method body is executed, set sInitialized to true
         sInitialized = true;
 
-        // This method call triggers Product to create its task to synchronize product data periodically.
+        // This method call triggers News to create its task to synchronize news data periodically.
         scheduleFirebaseJobDispatcherSync(context);
 
-        // We need to check to see if our ContentProvider has data to display in our product list.
+        // We need to check to see if our ContentProvider has data to display in our news list.
         Thread checkForEmpty = new Thread(new Runnable() {
             @Override
             public void run() {
-                Uri productQueryUri = ProductContract.ProductEntry.CONTENT_URI;
-                String[] projectionColumns = {ProductContract.ProductEntry._ID};
+                Uri newsQueryUri = NewsContract.NewsEntry.CONTENT_URI;
+                String[] projectionColumns = {NewsContract.NewsEntry._ID};
                 Cursor cursor = context.getContentResolver().query(
-                        productQueryUri,
+                        newsQueryUri,
                         projectionColumns,
                         null,
                         null,
@@ -90,7 +90,7 @@ public class ProductSyncUtils {
     }
 
     public static void startImmediateSync(@NonNull final Context context) {
-        Intent intentToSyncImmediately = new Intent(context, ProductSyncIntentService.class);
+        Intent intentToSyncImmediately = new Intent(context, NewsSyncIntentService.class);
         context.startService(intentToSyncImmediately);
     }
 }

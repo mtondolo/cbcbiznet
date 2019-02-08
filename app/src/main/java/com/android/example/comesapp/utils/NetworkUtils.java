@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.example.muzpal.utils;
+package com.android.example.comesapp.utils;
 
 import android.net.Uri;
 
@@ -27,12 +27,12 @@ import java.util.Scanner;
 // These utilities will be used to communicate with the network.
 public class NetworkUtils {
 
-    final static String PRODUCT_ITEMS_URL =
-            "https://beznet-api.herokuapp.com/api/products";
+    final static String NEWS_URL =
+            "https://beznet-api.herokuapp.com/api/newsitems";
 
     // Builds the URL used to query GitHub.
     public static URL buildUrl() {
-        Uri builtUri = Uri.parse(PRODUCT_ITEMS_URL).buildUpon()
+        Uri builtUri = Uri.parse(NEWS_URL).buildUpon()
                 .build();
 
         URL url = null;

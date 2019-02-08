@@ -1,4 +1,4 @@
-package com.android.example.muzpal;
+package com.android.example.comesapp;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,33 +11,33 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class ProductAdapter extends
-        RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder> {
+public class NewsAdapter extends
+        RecyclerView.Adapter<NewsAdapter.NewsAdapterViewHolder> {
 
     // The context we use to utility methods, app resources and layout inflaters
     private final Context mContext;
 
     // An on-click handler that we've defined to make it easy for an Activity to interface with our RecyclerView
-    private final ProductAdapterOnClickHandler mClickHandler;
+    private final NewsAdapterOnClickHandler mClickHandler;
 
     // The interface that receives onClick messages.
-    public interface ProductAdapterOnClickHandler {
-        void onClick(String product);
+    public interface NewsAdapterOnClickHandler {
+        void onClick(String news);
     }
 
     private Cursor mCursor;
 
     /**
-     * Creates a ProductAdapter.
+     * Creates a NewsAdapter.
      */
-    public ProductAdapter(Context context, ProductAdapterOnClickHandler clickHandler) {
+    public NewsAdapter(Context context, NewsAdapterOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
     }
 
     // This gets called when each new ViewHolder is created.
     @Override
-    public ProductAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public NewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Inflate the list item xml into a view
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.list_item;
@@ -46,18 +46,18 @@ public class ProductAdapter extends
 
         // Return a new LatestNewsAdapterViewHolder with the above view passed in as a parameter
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
-        return new ProductAdapterViewHolder(view);
+        return new NewsAdapterViewHolder(view);
     }
 
     // OnBindViewHolder is called by the RecyclerView to display the data at the specified position.
     @Override
-    public void onBindViewHolder(ProductAdapterViewHolder productAdapterViewHolder, int position) {
+    public void onBindViewHolder(NewsAdapterViewHolder newsAdapterViewHolder, int position) {
 
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        /* Get image, company, name, description and web page from the cursor and display the values*/
-        String image = mCursor.getString(ProductActivity.INDEX_IMAGE);
+        /* Get image, headline, name, date and web page from the cursor and display the values*/
+        String image = mCursor.getString(NewsActivity.INDEX_IMAGE);
 
         if (image.isEmpty()) {//url.isEmpty()
             Picasso.get()
@@ -65,20 +65,20 @@ public class ProductAdapter extends
                     .placeholder(R.color.colorPrimary)
                     .resize(126, 78)
                     .centerCrop()
-                    .into(productAdapterViewHolder.imageView);
+                    .into(newsAdapterViewHolder.imageView);
         } else {
             Picasso.get()
                     .load(image)
                     .error(R.color.colorPrimary)
                     .fit()
-                    .into(productAdapterViewHolder.imageView);//this is our ImageView
+                    .into(newsAdapterViewHolder.imageView);//this is our ImageView
         }
 
-        String company = mCursor.getString(ProductActivity.INDEX_COMPANY);
-        productAdapterViewHolder.companyView.setText(company);
+        String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
+        newsAdapterViewHolder.headlineView.setText(headline);
 
-        String description = mCursor.getString(ProductActivity.INDEX_DESCRIPTION);
-        productAdapterViewHolder.descriptionView.setText(description);
+        String date = mCursor.getString(NewsActivity.INDEX_DATE);
+        newsAdapterViewHolder.dateView.setText(date);
     }
 
     // This method simply returns the number of items to display.
@@ -88,26 +88,26 @@ public class ProductAdapter extends
         return mCursor.getCount();
     }
 
-    // Swaps the cursor used by the ProductAdapter for its product data.
+    // Swaps the cursor used by the NewsAdapter for its news data.
     void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }
 
-    // Cache of the children views for a product.
-    public class ProductAdapterViewHolder extends
+    // Cache of the children views for a news.
+    public class NewsAdapterViewHolder extends
             RecyclerView.ViewHolder implements View.OnClickListener {
 
+        final TextView headlineView;
+        final TextView dateView;
         final ImageView imageView;
-        final TextView companyView;
-        final TextView descriptionView;
 
-        public ProductAdapterViewHolder(View view) {
+        public NewsAdapterViewHolder(View view) {
             super(view);
 
+            headlineView = (TextView) view.findViewById(R.id.headline);
+            dateView = (TextView) view.findViewById(R.id.date);
             imageView = (ImageView) view.findViewById(R.id.image);
-            companyView = (TextView) view.findViewById(R.id.company);
-            descriptionView = (TextView) view.findViewById(R.id.description);
 
             view.setOnClickListener(this);
         }

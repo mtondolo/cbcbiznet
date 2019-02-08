@@ -90,7 +90,7 @@ public class NewsActivity extends AppCompatActivity implements
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     return position == 0 ? 4 : 4;
                 } else
-                    return position == 0 ? 2 : 2;
+                    return position == 0 ? 4 : 2;
             }
         });
 

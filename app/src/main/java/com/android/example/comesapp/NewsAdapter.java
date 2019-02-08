@@ -14,6 +14,10 @@ import com.squareup.picasso.Picasso;
 public class NewsAdapter extends
         RecyclerView.Adapter<NewsAdapter.NewsAdapterViewHolder> {
 
+    // Constant IDs for the ViewType for latest and for past news
+    private static final int VIEW_TYPE_LATEST = 0;
+    private static final int VIEW_TYPE_PAST = 1;
+
     // The context we use to utility methods, app resources and layout inflaters
     private final Context mContext;
 
@@ -25,6 +29,7 @@ public class NewsAdapter extends
         void onClick(String news);
     }
 
+    private boolean mUseLatestLayout;
     private Cursor mCursor;
 
     /**
@@ -33,19 +38,28 @@ public class NewsAdapter extends
     public NewsAdapter(Context context, NewsAdapterOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
+        mUseLatestLayout = mContext.getResources().getBoolean(R.bool.use_latest_layout);
     }
 
     // This gets called when each new ViewHolder is created.
     @Override
     public NewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Inflate the list item xml into a view
-        Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.list_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
+        int layoutId;
+        switch (viewType) {
+            case VIEW_TYPE_LATEST: {
+                layoutId = R.layout.latest_list_item;
+                break;
+            }
+            case VIEW_TYPE_PAST: {
+                layoutId = R.layout.list_item;
+                break;
+            }
+            default:
+                throw new IllegalArgumentException("Invalid view type, value of " + viewType);
+        }
 
-        // Return a new LatestNewsAdapterViewHolder with the above view passed in as a parameter
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
+        View view = LayoutInflater.from(mContext).inflate(layoutId, viewGroup, false);
+        view.setFocusable(true);
         return new NewsAdapterViewHolder(view);
     }
 
@@ -86,6 +100,16 @@ public class NewsAdapter extends
     public int getItemCount() {
         if (null == mCursor) return 0;
         return mCursor.getCount();
+    }
+
+    // Returns an integer code related to the type of View we want the ViewHolder to be at a given position.
+    @Override
+    public int getItemViewType(int position) {
+        if (mUseLatestLayout && position == 0) {
+            return VIEW_TYPE_LATEST;
+        } else {
+            return VIEW_TYPE_PAST;
+        }
     }
 
     // Swaps the cursor used by the NewsAdapter for its news data.

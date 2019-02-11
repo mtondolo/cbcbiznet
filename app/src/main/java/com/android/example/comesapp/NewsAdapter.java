@@ -138,7 +138,10 @@ public class NewsAdapter extends
 
         @Override
         public void onClick(View v) {
-            // To be implemented later.
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            String url = mCursor.getString(NewsActivity.INDEX_STORY_URL);
+            mClickHandler.onClick(url);
         }
     }
 }

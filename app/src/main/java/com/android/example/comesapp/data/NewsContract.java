@@ -34,11 +34,11 @@ public class NewsContract {
         /* Used internally as the name of our news table. */
         public static final String TABLE_NAME = "news";
 
-        // company, description and image are stored as string representing news
+        // headline, storyUrl, date  and imageUrl are stored as string representing news
         public static final String COLUMN_HEADLINE = "headline";
-        public static final String COLUMN_STORY = "story";
+        public static final String COLUMN_STORY_URL = "storyUrl";
         public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_IMAGE = "image";
+        public static final String COLUMN_IMAGE_URL = "imageUrl";
 
     }
 }

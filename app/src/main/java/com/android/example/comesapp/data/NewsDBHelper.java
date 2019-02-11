@@ -27,9 +27,9 @@ public class NewsDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + NewsContract.NewsEntry.TABLE_NAME + " (" +
                         NewsContract.NewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         NewsContract.NewsEntry.COLUMN_HEADLINE + " TEXT NOT NULL, " +
-                        NewsContract.NewsEntry.COLUMN_STORY + " TEXT NOT NULL, " +
+                        NewsContract.NewsEntry.COLUMN_STORY_URL + " TEXT NOT NULL, " +
                         NewsContract.NewsEntry.COLUMN_DATE + " TEXT NOT NULL, " +
-                        NewsContract.NewsEntry.COLUMN_IMAGE + " TEXT NOT NULL, " +
+                        NewsContract.NewsEntry.COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
 
                         // To ensure this table can only contain one headline per row.
                         " UNIQUE (" + NewsContract.NewsEntry.COLUMN_HEADLINE + ") ON CONFLICT REPLACE);";

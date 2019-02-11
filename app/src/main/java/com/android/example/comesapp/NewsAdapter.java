@@ -71,7 +71,7 @@ public class NewsAdapter extends
         mCursor.moveToPosition(position);
 
         /* Get image, headline, name, date and web page from the cursor and display the values*/
-        String image = mCursor.getString(NewsActivity.INDEX_IMAGE);
+        String image = mCursor.getString(NewsActivity.INDEX_IMAGE_URL);
 
         if (image.isEmpty()) {//url.isEmpty()
             Picasso.get()

@@ -133,8 +133,8 @@ public class NewsActivity extends AppCompatActivity implements
 
     // This method handles RecyclerView item clicks.
     @Override
-    public void onClick(String news) {
-        // To be implemented later.
+    public void onClick(String url) {
+        openWebPage(url);
     }
 
     // Instantiate and return a new Loader for the given ID.
@@ -197,6 +197,14 @@ public class NewsActivity extends AppCompatActivity implements
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "MuzPal feedback");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void openWebPage(String url) {
+        Uri webPage = Uri.parse(url);
+        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, webPage);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }

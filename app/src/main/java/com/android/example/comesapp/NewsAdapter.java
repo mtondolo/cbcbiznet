@@ -26,7 +26,7 @@ public class NewsAdapter extends
 
     // The interface that receives onClick messages.
     public interface NewsAdapterOnClickHandler {
-        void onClick(String news);
+        void onClick(String headline);
     }
 
     private boolean mUseLatestLayout;
@@ -140,8 +140,8 @@ public class NewsAdapter extends
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            String url = mCursor.getString(NewsActivity.INDEX_STORY_URL);
-            mClickHandler.onClick(url);
+            String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
+            mClickHandler.onClick(headline);
         }
     }
 }

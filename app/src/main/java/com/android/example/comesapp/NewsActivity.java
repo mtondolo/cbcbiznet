@@ -49,7 +49,7 @@ public class NewsActivity extends AppCompatActivity implements
 
     // We store the indices of the values in the array of Strings above to more quickly be able to access the data from our query.
     public static final int INDEX_HEADLINE = 0;
-    public static final int INDEX_STORY_URL = 1;
+    public static final int INDEX_STORY = 1;
     public static final int INDEX_DATE = 2;
     public static final int INDEX_IMAGE_URL = 3;
 
@@ -133,8 +133,11 @@ public class NewsActivity extends AppCompatActivity implements
 
     // This method handles RecyclerView item clicks.
     @Override
-    public void onClick(String url) {
-        openWebPage(url);
+    public void onClick(String headline) {
+        Intent newsDetailIntent = new Intent(NewsActivity.this, DetailNewsActivity.class);
+        Uri uriForHeadlineClicked = NewsContract.NewsEntry.buildWeatherUriWithHeadline(headline);
+        newsDetailIntent.setData(uriForHeadlineClicked);
+        startActivity(newsDetailIntent);
     }
 
     // Instantiate and return a new Loader for the given ID.
@@ -197,14 +200,6 @@ public class NewsActivity extends AppCompatActivity implements
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "MuzPal feedback");
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }
-
-    public void openWebPage(String url) {
-        Uri webPage = Uri.parse(url);
-        android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, webPage);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }

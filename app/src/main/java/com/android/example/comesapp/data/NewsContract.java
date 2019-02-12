@@ -40,5 +40,12 @@ public class NewsContract {
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
 
+        // Builds a URI that adds the weather date to the end of the forecast content URI path.
+        public static Uri buildWeatherUriWithHeadline(String headline) {
+            return CONTENT_URI.buildUpon()
+                    .appendPath(headline)
+                    .build();
+        }
+
     }
 }

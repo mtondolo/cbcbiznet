@@ -13,6 +13,7 @@ public class NewsProvider extends ContentProvider {
 
     // These constant will be used to match URIs with the data they are looking for.
     public static final int CODE_NEWS = 100;
+    public static final int CODE_NEWS_WITH_HEADLINE = 101;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -21,9 +22,16 @@ public class NewsProvider extends ContentProvider {
 
     // Creates the UriMatcher that will match each URI to the CODE_NEWS constant defined above.
     public static UriMatcher buildUriMatcher() {
+
+        // All paths added to the UriMatcher have a corresponding code to return when a match is found.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = NewsContract.CONTENT_AUTHORITY;
+
+        // This URI is content://com.android.example.comesapp/news
         matcher.addURI(authority, NewsContract.PATH_NEWS, CODE_NEWS);
+
+        // This URI would look something like content://com.android.example.comesapp/news/1472214172
+        matcher.addURI(authority, NewsContract.PATH_NEWS + "/*", CODE_NEWS_WITH_HEADLINE);
         return matcher;
     }
 
@@ -39,11 +47,37 @@ public class NewsProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Cursor cursor;
 
-        /*
-         * Given a URI, will determine what kind of request is being made and query the database
-         * accordingly.
-         */
+        // Given a URI, will determine what kind of request is being made and query the database accordingly.
         switch (sUriMatcher.match(uri)) {
+
+            // We want to return a cursor that contains one row of weather data for a particular date.
+            case CODE_NEWS_WITH_HEADLINE: {
+
+                // In order to determine the date associated with this URI, we look at the last path segment.
+                String headlineString = uri.getLastPathSegment();
+
+                // The query method accepts a string array of arguments.
+                String[] selectionArguments = new String[]{headlineString};
+
+                cursor = mOpenHelper.getReadableDatabase().query(
+
+                        // Table we are going to query
+                        NewsContract.NewsEntry.TABLE_NAME,
+
+                        //A projection designates the columns we want returned in our Cursor.
+                        projection,
+
+                        // The URI that matches CODE_NEWS_WITH_HEADLINE contains a headline at the end of it.
+                        NewsContract.NewsEntry.COLUMN_HEADLINE + " = ? ",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder);
+
+                break;
+            }
+
+            // we want to return a cursor that contains every row of news data in our news table
             case CODE_NEWS: {
                 cursor = mOpenHelper.getReadableDatabase().query(
                         NewsContract.NewsEntry.TABLE_NAME,
@@ -135,5 +169,4 @@ public class NewsProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         throw new RuntimeException("We will implement the update method!");
     }
-
 }

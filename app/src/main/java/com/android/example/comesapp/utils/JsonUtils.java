@@ -18,7 +18,7 @@ public class JsonUtils {
 
         // headline, storyUrl, date and imageUrl are keys for the news item
         final String KEY_HEADLINE = "headline";
-        final String KEY_STORY_URL = "storyUrl";
+        final String KEY_STORY = "story";
         final String KEY_DATE = "date";
         final String KEY_IMAGE_URL = "imageUrl";
 
@@ -35,22 +35,22 @@ public class JsonUtils {
 
             /* These are the values that will be collected */
             String headline;
-            String storyUrl;
+            String story;
             String date;
             String imageUrl;
 
             /* Get the JSON object representing the news item */
             JSONObject news = newsArray.getJSONObject(i);
 
-            // Extract the value for the key called "headline", "storyUrl", "date" and "imageUrl"
+            // Extract the value for the key called "headline", "story", "date" and "imageUrl"
             headline = news.getString(KEY_HEADLINE);
-            storyUrl = news.getString(KEY_STORY_URL);
+            story = news.getString(KEY_STORY);
             date = news.getString(KEY_DATE);
             imageUrl = news.getString(KEY_IMAGE_URL);
 
             ContentValues newsValues = new ContentValues();
             newsValues.put(NewsContract.NewsEntry.COLUMN_HEADLINE, headline);
-            newsValues.put(NewsContract.NewsEntry.COLUMN_STORY_URL, storyUrl);
+            newsValues.put(NewsContract.NewsEntry.COLUMN_STORY, story);
             newsValues.put(NewsContract.NewsEntry.COLUMN_DATE, date);
             newsValues.put(NewsContract.NewsEntry.COLUMN_IMAGE_URL, imageUrl);
 

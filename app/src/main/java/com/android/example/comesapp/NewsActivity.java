@@ -42,7 +42,7 @@ public class NewsActivity extends AppCompatActivity implements
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
             NewsContract.NewsEntry.COLUMN_HEADLINE,
-            NewsContract.NewsEntry.COLUMN_STORY_URL,
+            NewsContract.NewsEntry.COLUMN_STORY,
             NewsContract.NewsEntry.COLUMN_DATE,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL,
     };

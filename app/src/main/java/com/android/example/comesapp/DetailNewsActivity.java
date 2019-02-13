@@ -1,6 +1,5 @@
 package com.android.example.comesapp;
 
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +7,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+
 import com.android.example.comesapp.data.NewsContract;
 
 public class DetailNewsActivity extends AppCompatActivity implements
@@ -34,6 +35,9 @@ public class DetailNewsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_news);
+
+        Toolbar topToolbar = (Toolbar) findViewById(R.id.detail_news_toolbar);
+        setSupportActionBar(topToolbar);
 
         mStoryView = (TextView) findViewById(R.id.tv_story);
 
@@ -66,31 +70,25 @@ public class DetailNewsActivity extends AppCompatActivity implements
     // Runs on the main thread when a load is complete.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
         // we need to check the cursor to make sure we have the results that we are expecting.
         boolean cursorHasValidData = false;
         if (data != null && data.moveToFirst()) {
-
             // We have valid data, continue on to bind the data to the UI
             cursorHasValidData = true;
         }
 
         if (!cursorHasValidData) {
-
             // No data to display, simply return and do nothing
             return;
         }
 
         // Read the story from the cursor
         String story = data.getString(INDEX_STORY);
-
         //Set the text
         mStoryView.setText(story);
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }

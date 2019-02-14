@@ -7,4 +7,6 @@
     <string name="activity_name">COMESA News</string>
     <!-- Title of the DetailNewsActivity -->
     <string name="title_activity_detail">COMESA News</string>
+    <!-- Copyright text view content-->
+    <string name="detail_copyright">Copyright © 2019 COMESA</string>
 </resources>

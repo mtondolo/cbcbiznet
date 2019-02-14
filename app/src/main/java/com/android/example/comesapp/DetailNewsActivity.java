@@ -9,19 +9,28 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.android.example.comesapp.data.NewsContract;
+
+import com.squareup.picasso.Picasso;
 
 public class DetailNewsActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     // The columns of data that we are interested in displaying within our DetailNewsActivity
     public static final String[] NEWS_DETAIL_PROJECTION = {
+            NewsContract.NewsEntry.COLUMN_IMAGE_URL,
+            NewsContract.NewsEntry.COLUMN_HEADLINE,
+            NewsContract.NewsEntry.COLUMN_DATE,
             NewsContract.NewsEntry.COLUMN_STORY
     };
 
     // We store the indices of the values in the array of Strings above to quickly access the data from our query.
-    public static final int INDEX_STORY = 0;
+    public static final int INDEX_IMAGE_URL = 0;
+    public static final int INDEX_HEADLINE = 1;
+    public static final int INDEX_DATE = 2;
+    public static final int INDEX_STORY = 3;
 
     // This ID will be used to identify the Loader responsible for loading the story
     private static final int ID_DETAIL_LOADER = 353;
@@ -29,7 +38,11 @@ public class DetailNewsActivity extends AppCompatActivity implements
     // The URI that is used to access the news details
     private Uri mUri;
 
-    private TextView mStoryView;
+    private ImageView mDetailImageView;
+    private TextView mDetailHeadlineView;
+    private TextView mDetailDateView;
+    private TextView mDetailStoryView;
+    private TextView mDetailCopyrightView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +52,11 @@ public class DetailNewsActivity extends AppCompatActivity implements
         Toolbar topToolbar = (Toolbar) findViewById(R.id.detail_news_toolbar);
         setSupportActionBar(topToolbar);
 
-        mStoryView = (TextView) findViewById(R.id.tv_story);
+        mDetailHeadlineView = (TextView) findViewById(R.id.detail_headline);
+        mDetailDateView = (TextView) findViewById(R.id.detail_date);
+        mDetailStoryView = (TextView) findViewById(R.id.detail_story);
+        mDetailCopyrightView = (TextView) findViewById(R.id.detail_copyright);
+        mDetailImageView = (ImageView) findViewById(R.id.detail_image);
 
         mUri = getIntent().getData();
         if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
@@ -82,13 +99,39 @@ public class DetailNewsActivity extends AppCompatActivity implements
             return;
         }
 
-        // Read the story from the cursor
-        String story = data.getString(INDEX_STORY);
-        //Set the text
-        mStoryView.setText(story);
+        // Read the headline, date, story and image url from the cursor
+        String detailHeadline = data.getString(INDEX_HEADLINE);
+        String detailDate = data.getString(INDEX_DATE);
+        String detailStory = data.getString(INDEX_STORY);
+        String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
+
+        // Load the image using the given url
+        if (detailImage.isEmpty()) {//url.isEmpty()
+            Picasso.get()
+                    .load(R.color.colorPrimary)
+                    .placeholder(R.color.colorPrimary)
+                    .resize(126, 78)
+                    .centerCrop()
+                    .into(mDetailImageView);
+        } else {
+            Picasso.get()
+                    .load(detailImage)
+                    .error(R.color.colorPrimary)
+                    .fit()
+                    .into(mDetailImageView);//this is our ImageView
+           }
+
+        //Set the text to the views
+        mDetailHeadlineView.setText(detailHeadline);
+        mDetailDateView.setText(detailDate);
+        mDetailStoryView.setText(detailStory);
+        mDetailCopyrightView.setText(getString(R.string.detail_copyright));
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
+
 }
+
+

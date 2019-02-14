@@ -29,13 +29,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_image"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-black"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 tools:text="Detail Headline" />
 
             <TextView
@@ -43,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_headline"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="sans-serif"
@@ -62,7 +61,9 @@
                 android:layout_marginRight="16dp"
                 android:lineSpacingExtra="@dimen/line_spacing"
                 android:padding="@dimen/padding_regular"
-                android:text="Detail Story" />
+                android:text="Detail Story"
+                android:textColor="#000000"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/detail_copyright"
@@ -72,7 +73,7 @@
                 android:layout_gravity="center"
                 android:paddingBottom="8dp"
                 android:text="Detail Copyright"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>

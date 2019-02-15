@@ -102,8 +102,8 @@ public class DetailNewsActivity extends AppCompatActivity implements
         // Read the headline, date, story and image url from the cursor
         String detailHeadline = data.getString(INDEX_HEADLINE);
         String detailDate = data.getString(INDEX_DATE);
-        String detailStory = data.getString(INDEX_STORY);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
+        String detailStory = data.getString(INDEX_STORY);
 
         // Load the image using the given url
         if (detailImage.isEmpty()) {//url.isEmpty()
@@ -119,12 +119,21 @@ public class DetailNewsActivity extends AppCompatActivity implements
                     .error(R.color.colorPrimary)
                     .fit()
                     .into(mDetailImageView);//this is our ImageView
-           }
+        }
+
+        // Format the story string from the database
+        String formattedDetailStory = detailStory.replace("[", "");
+        formattedDetailStory = formattedDetailStory.replace("]", "");
+        formattedDetailStory = formattedDetailStory.replace("\"", "");
+        formattedDetailStory = formattedDetailStory.replace("\'", "\"");
+        formattedDetailStory = formattedDetailStory.replace(",", "");
+        formattedDetailStory = formattedDetailStory.replace("^", ",");
+        formattedDetailStory = formattedDetailStory.replace("\\n", System.getProperty("line.separator"));
 
         //Set the text to the views
         mDetailHeadlineView.setText(detailHeadline);
         mDetailDateView.setText(detailDate);
-        mDetailStoryView.setText(detailStory);
+        mDetailStoryView.setText(formattedDetailStory);
         mDetailCopyrightView.setText(getString(R.string.detail_copyright));
     }
 

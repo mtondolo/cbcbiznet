@@ -1,5 +1,7 @@
 package com.android.example.comesapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -9,6 +11,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.databinding.ActivityDetailNewsBinding;
@@ -38,14 +42,17 @@ public class DetailNewsActivity extends AppCompatActivity implements
     // The URI that is used to access the news details
     private Uri mUri;
 
+    ImageView backArrow;
+
     // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
     private ActivityDetailNewsBinding mActivityDetailNewsBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail_news);
 
-        Toolbar topToolbar = (Toolbar) findViewById(R.id.detail_news_toolbar);
+        Toolbar topToolbar = findViewById(R.id.detail_news_toolbar);
         setSupportActionBar(topToolbar);
 
         // Instantiate mActivityDetailNewsBinding using DataBindingUtil
@@ -56,6 +63,15 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
         // This connects our Activity into the loader lifecycle.
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
+
+        // Set up a listener for the back button in the tool-bar
+        backArrow = findViewById(R.id.icon_arrow_back);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     // Creates and returns a CursorLoader that loads the data for our URI and stores it in a Cursor.

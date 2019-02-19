@@ -1,6 +1,7 @@
 package com.android.example.comesapp;
 
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -8,10 +9,9 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
-import android.widget.ImageView;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.databinding.ActivityDetailNewsBinding;
 
 import com.squareup.picasso.Picasso;
 
@@ -38,25 +38,18 @@ public class DetailNewsActivity extends AppCompatActivity implements
     // The URI that is used to access the news details
     private Uri mUri;
 
-    private ImageView mDetailImageView;
-    private TextView mDetailHeadlineView;
-    private TextView mDetailDateView;
-    private TextView mDetailStoryView;
-    private TextView mDetailCopyrightView;
+    // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
+    private ActivityDetailNewsBinding mActivityDetailNewsBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_news);
 
         Toolbar topToolbar = (Toolbar) findViewById(R.id.detail_news_toolbar);
         setSupportActionBar(topToolbar);
 
-        mDetailHeadlineView = (TextView) findViewById(R.id.detail_headline);
-        mDetailDateView = (TextView) findViewById(R.id.detail_date);
-        mDetailStoryView = (TextView) findViewById(R.id.detail_story);
-        mDetailCopyrightView = (TextView) findViewById(R.id.detail_copyright);
-        mDetailImageView = (ImageView) findViewById(R.id.detail_image);
+        // Instantiate mActivityDetailNewsBinding using DataBindingUtil
+        mActivityDetailNewsBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_news);
 
         mUri = getIntent().getData();
         if (mUri == null) throw new NullPointerException("URI for DetailActivity cannot be null");
@@ -112,13 +105,13 @@ public class DetailNewsActivity extends AppCompatActivity implements
                     .placeholder(R.color.colorPrimary)
                     .resize(126, 78)
                     .centerCrop()
-                    .into(mDetailImageView);
+                    .into(mActivityDetailNewsBinding.detailImage);
         } else {
             Picasso.get()
                     .load(detailImage)
                     .error(R.color.colorPrimary)
                     .fit()
-                    .into(mDetailImageView);//this is our ImageView
+                    .into(mActivityDetailNewsBinding.detailImage);//this is our ImageView
         }
 
         // Format the story string from the database
@@ -130,11 +123,11 @@ public class DetailNewsActivity extends AppCompatActivity implements
         formattedDetailStory = formattedDetailStory.replace("^", ",");
         formattedDetailStory = formattedDetailStory.replace("\\n", System.getProperty("line.separator"));
 
-        //Set the text to the views
-        mDetailHeadlineView.setText(detailHeadline);
-        mDetailDateView.setText(detailDate);
-        mDetailStoryView.setText(formattedDetailStory);
-        mDetailCopyrightView.setText(getString(R.string.detail_copyright));
+        // Use mActivityDetailNewsBinding to display the data
+        mActivityDetailNewsBinding.detailHeadline.setText(detailHeadline);
+        mActivityDetailNewsBinding.detailDate.setText(detailDate);
+        mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
+        mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));
     }
 
     @Override

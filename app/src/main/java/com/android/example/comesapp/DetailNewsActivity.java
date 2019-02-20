@@ -1,6 +1,5 @@
 package com.android.example.comesapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -43,6 +42,8 @@ public class DetailNewsActivity extends AppCompatActivity implements
     private Uri mUri;
 
     ImageView backArrow;
+    ImageView shareIcon;
+    private String detailHeadline;
 
     // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
     private ActivityDetailNewsBinding mActivityDetailNewsBinding;
@@ -70,6 +71,20 @@ public class DetailNewsActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        // Set up a listener for the share icon in the tool-bar
+        shareIcon = findViewById(R.id.icon_share);
+        shareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        getString(R.string.activity_name) + " - " + detailHeadline + "\n" + "");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
     }
@@ -109,7 +124,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
         }
 
         // Read the headline, date, story and image url from the cursor
-        String detailHeadline = data.getString(INDEX_HEADLINE);
+        detailHeadline = data.getString(INDEX_HEADLINE);
         String detailDate = data.getString(INDEX_DATE);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
         String detailStory = data.getString(INDEX_STORY);

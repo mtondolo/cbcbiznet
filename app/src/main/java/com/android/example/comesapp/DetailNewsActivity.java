@@ -23,17 +23,20 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
     // The columns of data that we are interested in displaying within our DetailNewsActivity
     public static final String[] NEWS_DETAIL_PROJECTION = {
-            NewsContract.NewsEntry.COLUMN_IMAGE_URL,
             NewsContract.NewsEntry.COLUMN_HEADLINE,
+            NewsContract.NewsEntry.COLUMN_STORY,
+            NewsContract.NewsEntry.COLUMN_STORY_URL,
             NewsContract.NewsEntry.COLUMN_DATE,
-            NewsContract.NewsEntry.COLUMN_STORY
+            NewsContract.NewsEntry.COLUMN_IMAGE_URL
     };
 
     // We store the indices of the values in the array of Strings above to quickly access the data from our query.
-    public static final int INDEX_IMAGE_URL = 0;
-    public static final int INDEX_HEADLINE = 1;
-    public static final int INDEX_DATE = 2;
-    public static final int INDEX_STORY = 3;
+    public static final int INDEX_HEADLINE = 0;
+    public static final int INDEX_STORY = 1;
+    public static final int INDEX_STORY_URL = 2;
+    public static final int INDEX_DATE = 3;
+    public static final int INDEX_IMAGE_URL = 4;
+
 
     // This ID will be used to identify the Loader responsible for loading the story
     private static final int ID_DETAIL_LOADER = 353;
@@ -44,6 +47,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
     ImageView backArrow;
     ImageView shareIcon;
     private String detailHeadline;
+    private String detailStoryUrl;
 
     // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
     private ActivityDetailNewsBinding mActivityDetailNewsBinding;
@@ -82,7 +86,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.activity_name) + " - " + detailHeadline + "\n" + "");
+                        getString(R.string.activity_name) + " - " + detailHeadline + "\n" + detailStoryUrl);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
@@ -123,11 +127,13 @@ public class DetailNewsActivity extends AppCompatActivity implements
             return;
         }
 
-        // Read the headline, date, story and image url from the cursor
+        // Read the headline, story, storyUrl, date and image url from the cursor
         detailHeadline = data.getString(INDEX_HEADLINE);
+        String detailStory = data.getString(INDEX_STORY);
+        detailStoryUrl = data.getString(INDEX_STORY_URL);
         String detailDate = data.getString(INDEX_DATE);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
-        String detailStory = data.getString(INDEX_STORY);
+
 
         // Load the image using the given url
         if (detailImage.isEmpty()) {//url.isEmpty()

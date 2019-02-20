@@ -42,16 +42,14 @@ public class NewsActivity extends AppCompatActivity implements
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
             NewsContract.NewsEntry.COLUMN_HEADLINE,
-            NewsContract.NewsEntry.COLUMN_STORY,
             NewsContract.NewsEntry.COLUMN_DATE,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to access the data from our query.
     public static final int INDEX_HEADLINE = 0;
-    public static final int INDEX_STORY = 1;
-    public static final int INDEX_DATE = 2;
-    public static final int INDEX_IMAGE_URL = 3;
+    public static final int INDEX_DATE = 1;
+    public static final int INDEX_IMAGE_URL = 2;
 
     // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;
@@ -69,14 +67,14 @@ public class NewsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        Toolbar topToolbar = (Toolbar) findViewById(R.id.top_toolbar);
+        Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
+        mRecyclerView = findViewById(R.id.recyclerview_news);
 
         // The ProgressBar that will indicate to the user that we are loading data.
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
         // Get the orientation of the screen
         final int orientation = this.getResources().getConfiguration().orientation;

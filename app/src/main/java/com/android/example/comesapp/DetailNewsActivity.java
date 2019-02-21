@@ -83,12 +83,13 @@ public class DetailNewsActivity extends AppCompatActivity implements
         shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_SUBJECT, detailHeadline);
+                intent.putExtra(Intent.EXTRA_TEXT,
                         getString(R.string.activity_name) + " - " + detailHeadline + "\n" + detailStoryUrl);
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share with"));
             }
         });
     }

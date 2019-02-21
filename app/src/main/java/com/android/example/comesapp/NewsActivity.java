@@ -54,11 +54,15 @@ public class NewsActivity extends AppCompatActivity implements
     // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;
 
+    // Recyclerview constants and variables
     private RecyclerView mRecyclerView;
+    private final String RECYCLER_POSITION_KEY = "recycler_position";
+    GridLayoutManager mLayoutManager;
+    private static Bundle mBundleState;
+    private int mPosition = RecyclerView.NO_POSITION;
+
     private NewsAdapter mNewsAdapter;
     private ProgressBar mLoadingIndicator;
-
-    private int mPosition = RecyclerView.NO_POSITION;
 
     private final static int NUM_GRIDS = 4;
 
@@ -80,9 +84,9 @@ public class NewsActivity extends AppCompatActivity implements
         final int orientation = this.getResources().getConfiguration().orientation;
 
         // Set out the layout
-        GridLayoutManager layoutManager
+        mLayoutManager
                 = new GridLayoutManager(this, NUM_GRIDS);
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -92,7 +96,7 @@ public class NewsActivity extends AppCompatActivity implements
             }
         });
 
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         /*
          * Use setHasFixedSize(true) on mRecyclerView to designate that all items in the list
@@ -116,6 +120,51 @@ public class NewsActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Save RecyclerView state
+        mBundleState = new Bundle();
+        mPosition = mLayoutManager.findFirstCompletelyVisibleItemPosition();
+        mBundleState.putInt(RECYCLER_POSITION_KEY, mPosition);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Restore RecyclerView state
+        if (mBundleState != null) {
+            mPosition = mBundleState.getInt(RECYCLER_POSITION_KEY);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+
+            // Scroll the RecyclerView to mPosition
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY, mLayoutManager.findFirstCompletelyVisibleItemPosition());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore RecyclerView state
+        if (savedInstanceState.containsKey(RECYCLER_POSITION_KEY)) {
+            mPosition = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            // Scroll the RecyclerView to mPosition
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
     // This method will make the View for the latest news data visible and hide the error message.
     private void showNewsDataView() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
@@ -127,7 +176,6 @@ public class NewsActivity extends AppCompatActivity implements
         mRecyclerView.setVisibility(View.INVISIBLE);
         mLoadingIndicator.setVisibility(View.VISIBLE);
     }
-
 
     // This method handles RecyclerView item clicks.
     @Override

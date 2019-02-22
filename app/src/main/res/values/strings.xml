@@ -4,7 +4,7 @@
     <string name="content_authority">com.android.example.comesapp</string>
     <!--Used in overflow menu to contact us-->
     <string name="action_contact_us">Contact us</string>
-    <string name="activity_name">COMESA News</string>
+    <string name="activity_name">Latest News</string>
     <!-- Title of the DetailNewsActivity -->
     <string name="title_activity_detail">COMESA News</string>
     <!-- Copyright text view content-->

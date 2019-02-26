@@ -20,7 +20,7 @@ public class JsonUtils {
         final String KEY_HEADLINE = "headline";
         final String KEY_STORY = "story";
         final String KEY_STORY_URL = "storyUrl";
-        final String KEY_DATE = "date";
+        final String KEY_CREATED_AT = "created_At";
         final String KEY_IMAGE_URL = "imageUrl";
 
         // If the JSON string is empty or null, then return early.
@@ -38,24 +38,24 @@ public class JsonUtils {
             String headline;
             String story;
             String storyUrl;
-            String date;
+            String created_At;
             String imageUrl;
 
             /* Get the JSON object representing the news item */
             JSONObject news = newsArray.getJSONObject(i);
 
-            // Extract the value for the key called "headline", "story", "storyUrl, "date" and "imageUrl"
+            // Extract the value for the key called "headline", "story", "storyUrl, "created_At" and "imageUrl"
             headline = news.getString(KEY_HEADLINE);
             story = news.getString(KEY_STORY);
             storyUrl = news.getString(KEY_STORY_URL);
-            date = news.getString(KEY_DATE);
+            created_At = news.getString(KEY_CREATED_AT);
             imageUrl = news.getString(KEY_IMAGE_URL);
 
             ContentValues newsValues = new ContentValues();
             newsValues.put(NewsContract.NewsEntry.COLUMN_HEADLINE, headline);
             newsValues.put(NewsContract.NewsEntry.COLUMN_STORY, story);
             newsValues.put(NewsContract.NewsEntry.COLUMN_STORY_URL, storyUrl);
-            newsValues.put(NewsContract.NewsEntry.COLUMN_DATE, date);
+            newsValues.put(NewsContract.NewsEntry.COLUMN_CREATED_AT, created_At);
             newsValues.put(NewsContract.NewsEntry.COLUMN_IMAGE_URL, imageUrl);
 
             newsContentValues[i] = newsValues;

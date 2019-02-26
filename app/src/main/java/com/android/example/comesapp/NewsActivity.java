@@ -42,13 +42,13 @@ public class NewsActivity extends AppCompatActivity implements
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
             NewsContract.NewsEntry.COLUMN_HEADLINE,
-            NewsContract.NewsEntry.COLUMN_DATE,
+            NewsContract.NewsEntry.COLUMN_CREATED_AT,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to access the data from our query.
     public static final int INDEX_HEADLINE = 0;
-    public static final int INDEX_DATE = 1;
+    public static final int INDEX_CREATED_AT = 1;
     public static final int INDEX_IMAGE_URL = 2;
 
     // This ID will be used to identify the Loader responsible for loading our news.

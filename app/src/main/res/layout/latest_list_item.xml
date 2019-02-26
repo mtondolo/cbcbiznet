@@ -27,10 +27,10 @@
         android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
-        tools:text="Company" />
+        tools:text="Headline" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/created_At"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -42,6 +42,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        tools:text="Description" />
+        tools:text="CreatedAt" />
 
 </RelativeLayout>

@@ -26,7 +26,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
             NewsContract.NewsEntry.COLUMN_HEADLINE,
             NewsContract.NewsEntry.COLUMN_STORY,
             NewsContract.NewsEntry.COLUMN_STORY_URL,
-            NewsContract.NewsEntry.COLUMN_DATE,
+            NewsContract.NewsEntry.COLUMN_CREATED_AT,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL
     };
 
@@ -34,7 +34,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
     public static final int INDEX_HEADLINE = 0;
     public static final int INDEX_STORY = 1;
     public static final int INDEX_STORY_URL = 2;
-    public static final int INDEX_DATE = 3;
+    public static final int INDEX_CREATED_AT = 3;
     public static final int INDEX_IMAGE_URL = 4;
 
 
@@ -132,7 +132,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
         detailHeadline = data.getString(INDEX_HEADLINE);
         String detailStory = data.getString(INDEX_STORY);
         detailStoryUrl = data.getString(INDEX_STORY_URL);
-        String detailDate = data.getString(INDEX_DATE);
+        String detailCreated_At = data.getString(INDEX_CREATED_AT);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
 
 
@@ -163,7 +163,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
         // Use mActivityDetailNewsBinding to display the data
         mActivityDetailNewsBinding.detailHeadline.setText(detailHeadline);
-        mActivityDetailNewsBinding.detailDate.setText(detailDate);
+        mActivityDetailNewsBinding.detailCreatedAt.setText(detailCreated_At);
         mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
         mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));
     }

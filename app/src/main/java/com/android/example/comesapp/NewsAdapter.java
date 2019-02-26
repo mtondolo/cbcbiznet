@@ -70,7 +70,7 @@ public class NewsAdapter extends
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        /* Get image, headline, name, date and web page from the cursor and display the values*/
+        /* Get image, headline, name, created_At and web page from the cursor and display the values*/
         String image = mCursor.getString(NewsActivity.INDEX_IMAGE_URL);
 
         if (image.isEmpty()) {//url.isEmpty()
@@ -91,8 +91,8 @@ public class NewsAdapter extends
         String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
         newsAdapterViewHolder.headlineView.setText(headline);
 
-        String date = mCursor.getString(NewsActivity.INDEX_DATE);
-        newsAdapterViewHolder.dateView.setText(date);
+        String created_At = mCursor.getString(NewsActivity.INDEX_CREATED_AT);
+        newsAdapterViewHolder.created_AtView.setText(created_At);
     }
 
     // This method simply returns the number of items to display.
@@ -123,14 +123,14 @@ public class NewsAdapter extends
             RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView headlineView;
-        final TextView dateView;
+        final TextView created_AtView;
         final ImageView imageView;
 
         public NewsAdapterViewHolder(View view) {
             super(view);
 
             headlineView = (TextView) view.findViewById(R.id.headline);
-            dateView = (TextView) view.findViewById(R.id.date);
+            created_AtView = (TextView) view.findViewById(R.id.created_At);
             imageView = (ImageView) view.findViewById(R.id.image);
 
             view.setOnClickListener(this);

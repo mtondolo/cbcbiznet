@@ -38,7 +38,7 @@ public class NewsContract {
         public static final String COLUMN_HEADLINE = "headline";
         public static final String COLUMN_STORY = "story";
         public static final String COLUMN_STORY_URL = "storyUrl";
-        public static final String COLUMN_DATE = "date";
+        public static final String COLUMN_CREATED_AT = "created_At";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
 
         // Builds a URI that adds the weather date to the end of the forecast content URI path.

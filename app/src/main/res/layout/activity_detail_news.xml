@@ -41,7 +41,7 @@
                     tools:text="Detail Headline" />
 
                 <TextView
-                    android:id="@+id/detail_date"
+                    android:id="@+id/detail_created_At"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/detail_headline"
@@ -53,13 +53,13 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
-                    tools:text="Detail Date" />
+                    tools:text="CreatedAt" />
 
                 <TextView
                     android:id="@+id/detail_story"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/detail_date"
+                    android:layout_below="@+id/detail_created_At"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:lineSpacingExtra="@dimen/line_spacing"

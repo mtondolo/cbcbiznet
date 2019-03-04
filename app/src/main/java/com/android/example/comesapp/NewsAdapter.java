@@ -3,6 +3,7 @@ package com.android.example.comesapp;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +92,17 @@ public class NewsAdapter extends
         String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
         newsAdapterViewHolder.headlineView.setText(headline);
 
-        String created_At = mCursor.getString(NewsActivity.INDEX_CREATED_AT);
-        newsAdapterViewHolder.created_AtView.setText(created_At);
+        // Get given time in milliseconds
+        long created_At = mCursor.getLong(NewsActivity.INDEX_CREATED_AT);
+
+        // Get current time in milliseconds
+        long currentDateLong = System.currentTimeMillis();
+
+        // Convert time to relative time and add it to text view
+        CharSequence relativeDate = DateUtils.getRelativeTimeSpanString(created_At, currentDateLong,
+                0L, DateUtils.FORMAT_ABBREV_ALL);
+
+        newsAdapterViewHolder.created_AtView.setText(relativeDate);
     }
 
     // This method simply returns the number of items to display.

@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -132,7 +133,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
         detailHeadline = data.getString(INDEX_HEADLINE);
         String detailStory = data.getString(INDEX_STORY);
         detailStoryUrl = data.getString(INDEX_STORY_URL);
-        String detailCreated_At = data.getString(INDEX_CREATED_AT);
+        long detailCreated_At = data.getLong(INDEX_CREATED_AT);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
 
 
@@ -163,7 +164,16 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
         // Use mActivityDetailNewsBinding to display the data
         mActivityDetailNewsBinding.detailHeadline.setText(detailHeadline);
-        mActivityDetailNewsBinding.detailCreatedAt.setText(detailCreated_At);
+
+
+        // Get current time in milliseconds
+        long currentDetailsDateLong = System.currentTimeMillis();
+
+        // Convert time to relative time and add it to text view
+        CharSequence relativeDetailDate = DateUtils.getRelativeTimeSpanString(detailCreated_At, currentDetailsDateLong,
+                0L, DateUtils.FORMAT_ABBREV_ALL);
+        mActivityDetailNewsBinding.detailCreatedAt.setText(relativeDetailDate);
+
         mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
         mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));
     }

@@ -38,7 +38,7 @@ public class JsonUtils {
             String headline;
             String story;
             String storyUrl;
-            String created_At;
+            long created_At;
             String imageUrl;
 
             /* Get the JSON object representing the news item */
@@ -48,7 +48,7 @@ public class JsonUtils {
             headline = news.getString(KEY_HEADLINE);
             story = news.getString(KEY_STORY);
             storyUrl = news.getString(KEY_STORY_URL);
-            created_At = news.getString(KEY_CREATED_AT);
+            created_At = news.getLong(KEY_CREATED_AT);
             imageUrl = news.getString(KEY_IMAGE_URL);
 
             ContentValues newsValues = new ContentValues();

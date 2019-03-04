@@ -29,7 +29,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
                         NewsContract.NewsEntry.COLUMN_HEADLINE + " TEXT NOT NULL, " +
                         NewsContract.NewsEntry.COLUMN_STORY + " TEXT NOT NULL, " +
                         NewsContract.NewsEntry.COLUMN_STORY_URL + " TEXT NOT NULL, " +
-                        NewsContract.NewsEntry.COLUMN_CREATED_AT + " TEXT NOT NULL, " +
+                        NewsContract.NewsEntry.COLUMN_CREATED_AT + " INTEGER NOT NULL, " +
                         NewsContract.NewsEntry.COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
 
                         // To ensure this table can only contain one headline per row.

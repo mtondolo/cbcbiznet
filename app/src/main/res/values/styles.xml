@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">#0064b7</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+        <!-- Theme for the preference -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="DotsDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow">

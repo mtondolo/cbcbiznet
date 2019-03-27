@@ -13,11 +13,10 @@ public class NewsProvider extends ContentProvider {
 
     // These constant will be used to match URIs with the data they are looking for.
     public static final int CODE_NEWS = 100;
-    public static final int CODE_NEWS_WITH_HEADLINE = 101;
+    public static final int CODE_NEWS_WITH_DATE = 101;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-
     private NewsDBHelper mOpenHelper;
 
     // Creates the UriMatcher that will match each URI to the CODE_NEWS constant defined above.
@@ -31,7 +30,7 @@ public class NewsProvider extends ContentProvider {
         matcher.addURI(authority, NewsContract.PATH_NEWS, CODE_NEWS);
 
         // This URI would look something like content://com.android.example.comesapp/news/1472214172
-        matcher.addURI(authority, NewsContract.PATH_NEWS + "/*", CODE_NEWS_WITH_HEADLINE);
+        matcher.addURI(authority, NewsContract.PATH_NEWS + "/#", CODE_NEWS_WITH_DATE);
         return matcher;
     }
 
@@ -40,74 +39,6 @@ public class NewsProvider extends ContentProvider {
     public boolean onCreate() {
         mOpenHelper = new NewsDBHelper(getContext());
         return true;
-    }
-
-    @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
-        Cursor cursor;
-
-        // Given a URI, will determine what kind of request is being made and query the database accordingly.
-        switch (sUriMatcher.match(uri)) {
-
-            // We want to return a cursor that contains one row of weather data for a particular date.
-            case CODE_NEWS_WITH_HEADLINE: {
-
-                // In order to determine the date associated with this URI, we look at the last path segment.
-                String headlineString = uri.getLastPathSegment();
-
-                // The query method accepts a string array of arguments.
-                String[] selectionArguments = new String[]{headlineString};
-
-                cursor = mOpenHelper.getReadableDatabase().query(
-
-                        // Table we are going to query
-                        NewsContract.NewsEntry.TABLE_NAME,
-
-                        //A projection designates the columns we want returned in our Cursor.
-                        projection,
-
-                        // The URI that matches CODE_NEWS_WITH_HEADLINE contains a headline at the end of it.
-                        NewsContract.NewsEntry.COLUMN_HEADLINE + " = ? ",
-                        selectionArguments,
-                        null,
-                        null,
-                        sortOrder);
-
-                break;
-            }
-
-            // we want to return a cursor that contains every row of news data in our news table
-            case CODE_NEWS: {
-                cursor = mOpenHelper.getReadableDatabase().query(
-                        NewsContract.NewsEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;
-            }
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return cursor;
-    }
-
-    // We aren't going to do anything with this method. However, we are required to override it as WeatherProvider extends ContentProvider.
-    @Override
-    public String getType(Uri uri) {
-        throw new RuntimeException("We are not implementing getType.");
-    }
-
-    // We aren't going to do anything with this method. However, we are required to override it as NewsProvider extends ContentProvider.
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-
-        return null;
     }
 
     // Handles requests to insert a set of new rows.
@@ -143,6 +74,60 @@ public class NewsProvider extends ContentProvider {
         }
     }
 
+    @Override
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder) {
+        Cursor cursor;
+        // Given a URI, will determine what kind of request is being made and query the database accordingly.
+        switch (sUriMatcher.match(uri)) {
+
+            // we want to return a cursor that contains every row of news data in our news table
+            case CODE_NEWS: {
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        NewsContract.NewsEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+
+            // We want to return a cursor that contains one row of weather data for a particular date.
+            case CODE_NEWS_WITH_DATE: {
+
+                String dateString = uri.getLastPathSegment();
+
+                //The query method accepts a string array of arguments, as there may be more than one "?" in the selection statement.
+                String[] selectionArguments = new String[]{String.valueOf(dateString)};
+
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        /* Table we are going to query */
+                        NewsContract.NewsEntry.TABLE_NAME,
+
+                        //A projection designates the columns we want returned in our Cursor.
+                        projection,
+
+                        // The URI that matches CODE_NEWS_WITH_DATE contains a date at the end of it.
+                        NewsContract.NewsEntry.COLUMN_DATE + " = ? ",
+                        selectionArguments,
+                        null,
+                        null,
+                        sortOrder);
+
+
+                break;
+            }
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
+    }
+
     // Deletes data at a given URI with optional arguments for more fine tuned deletions.
     @Override
     public int delete(Uri uri, String selection,
@@ -163,6 +148,19 @@ public class NewsProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return numRowsDeleted;
+    }
+
+    // We aren't going to do anything with this method. However, we are required to override it as WeatherProvider extends ContentProvider.
+    @Override
+    public String getType(Uri uri) {
+        throw new RuntimeException("We are not implementing getType.");
+    }
+
+    // We aren't going to do anything with this method. However, we are required to override it as NewsProvider extends ContentProvider.
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+
+        return null;
     }
 
     @Override

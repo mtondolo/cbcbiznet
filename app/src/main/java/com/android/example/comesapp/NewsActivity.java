@@ -41,20 +41,20 @@ public class NewsActivity extends AppCompatActivity implements
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
+            NewsContract.NewsEntry.COLUMN_DATE,
             NewsContract.NewsEntry.COLUMN_HEADLINE,
-            NewsContract.NewsEntry.COLUMN_CREATED_AT,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to access the data from our query.
-    public static final int INDEX_HEADLINE = 0;
-    public static final int INDEX_CREATED_AT = 1;
+    public static final int INDEX_DATE = 0;
+    public static final int INDEX_HEADLINE = 1;
     public static final int INDEX_IMAGE_URL = 2;
 
     // This ID will be used to identify the Loader responsible for loading our news.
     private static final int ID_NEWS_LOADER = 44;
 
-    // Recyclerview constants and variables
+    // RecyclerView constants and variables
     private RecyclerView mRecyclerView;
     private final String RECYCLER_POSITION_KEY = "recycler_position";
     GridLayoutManager mLayoutManager;
@@ -117,7 +117,6 @@ public class NewsActivity extends AppCompatActivity implements
 
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
-
     }
 
     @Override
@@ -179,10 +178,10 @@ public class NewsActivity extends AppCompatActivity implements
 
     // This method handles RecyclerView item clicks.
     @Override
-    public void onClick(String headline) {
+    public void onClick(long dateTimeInMillis) {
         Intent newsDetailIntent = new Intent(NewsActivity.this, DetailNewsActivity.class);
-        Uri uriForHeadlineClicked = NewsContract.NewsEntry.buildWeatherUriWithHeadline(headline);
-        newsDetailIntent.setData(uriForHeadlineClicked);
+        Uri uriForDateTimeInMillisClicked = NewsContract.NewsEntry.buildNewsUriWithDate(dateTimeInMillis);
+        newsDetailIntent.setData(uriForDateTimeInMillisClicked);
         startActivity(newsDetailIntent);
     }
 
@@ -258,4 +257,6 @@ public class NewsActivity extends AppCompatActivity implements
         }
     }
 }
+
+
 

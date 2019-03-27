@@ -24,18 +24,18 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
     // The columns of data that we are interested in displaying within our DetailNewsActivity
     public static final String[] NEWS_DETAIL_PROJECTION = {
+            NewsContract.NewsEntry.COLUMN_DATE,
             NewsContract.NewsEntry.COLUMN_HEADLINE,
             NewsContract.NewsEntry.COLUMN_STORY,
             NewsContract.NewsEntry.COLUMN_STORY_URL,
-            NewsContract.NewsEntry.COLUMN_CREATED_AT,
             NewsContract.NewsEntry.COLUMN_IMAGE_URL
     };
 
     // We store the indices of the values in the array of Strings above to quickly access the data from our query.
-    public static final int INDEX_HEADLINE = 0;
-    public static final int INDEX_STORY = 1;
-    public static final int INDEX_STORY_URL = 2;
-    public static final int INDEX_CREATED_AT = 3;
+    public static final int INDEX_DATE = 0;
+    public static final int INDEX_HEADLINE = 1;
+    public static final int INDEX_STORY = 2;
+    public static final int INDEX_STORY_URL = 3;
     public static final int INDEX_IMAGE_URL = 4;
 
 
@@ -130,10 +130,10 @@ public class DetailNewsActivity extends AppCompatActivity implements
         }
 
         // Read the headline, story, storyUrl, date and image url from the cursor
+        long detailDateTimeInMillis = data.getLong(INDEX_DATE);
         detailHeadline = data.getString(INDEX_HEADLINE);
         String detailStory = data.getString(INDEX_STORY);
         detailStoryUrl = data.getString(INDEX_STORY_URL);
-        long detailCreated_At = data.getLong(INDEX_CREATED_AT);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
 
 
@@ -170,9 +170,9 @@ public class DetailNewsActivity extends AppCompatActivity implements
         long currentDetailsDateLong = System.currentTimeMillis();
 
         // Convert time to relative time and add it to text view
-        CharSequence relativeDetailDate = DateUtils.getRelativeTimeSpanString(detailCreated_At, currentDetailsDateLong,
+        CharSequence relativeDetailDate = DateUtils.getRelativeTimeSpanString(detailDateTimeInMillis, currentDetailsDateLong,
                 0L, DateUtils.FORMAT_ABBREV_ALL);
-        mActivityDetailNewsBinding.detailCreatedAt.setText(relativeDetailDate);
+        mActivityDetailNewsBinding.detailDate.setText(relativeDetailDate);
 
         mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
         mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));

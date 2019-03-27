@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">COMESApp</string>
     <string name="error_message">No internet connection. Check your mobile data or WI-FI.</string>
     <string name="content_authority">com.android.example.comesapp</string>
@@ -19,4 +19,7 @@
     <string name="pref_enable_notifications_false">Not Enabled</string>
 
     <string name="pref_last_notification">last_notification</string>
+
+    <string name="notification_channel_name">News Notification</string>
+    <string name="notification_channel_description">Notification from COMESA News</string>
 </resources>

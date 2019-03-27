@@ -15,6 +15,7 @@
  */
 package com.android.example.comesapp.utils;
 
+import android.content.Context;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class NetworkUtils {
             "https://beznet-api.herokuapp.com/api/newsitems";
 
     // Builds the URL used to query GitHub.
-    public static URL buildUrl() {
+    public static URL buildUrl(Context context) {
         Uri builtUri = Uri.parse(NEWS_URL).buildUpon()
                 .build();
 

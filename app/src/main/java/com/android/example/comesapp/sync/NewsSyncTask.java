@@ -7,6 +7,8 @@ import android.content.Context;
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.utils.JsonUtils;
 import com.android.example.comesapp.utils.NetworkUtils;
+import com.android.example.comesapp.utils.NotificationUtils;
+
 
 import java.net.URL;
 
@@ -18,7 +20,7 @@ public class NewsSyncTask {
         try {
 
             // The getUrl method will return the URL that we need to get the JSON for the news.
-            URL newsRequestUrl = NetworkUtils.buildUrl();
+            URL newsRequestUrl = NetworkUtils.buildUrl(context);
 
             // Use the URL to retrieve the JSON
             String jsonNewsResponse = NetworkUtils.getResponseFromHttpUrl(newsRequestUrl);
@@ -42,11 +44,12 @@ public class NewsSyncTask {
                 newsContentResolver.bulkInsert(
                         NewsContract.NewsEntry.CONTENT_URI,
                         newsValues);
-            }
 
+                // Show the notification
+                NotificationUtils.notifyUserOfLatestNews(context);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

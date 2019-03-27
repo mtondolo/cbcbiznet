@@ -35,18 +35,17 @@ public class NewsContract {
         public static final String TABLE_NAME = "news";
 
         // headline, storyUrl, date  and imageUrl are stored as string representing news
+        public static final String COLUMN_DATE = "date";
         public static final String COLUMN_HEADLINE = "headline";
         public static final String COLUMN_STORY = "story";
         public static final String COLUMN_STORY_URL = "storyUrl";
-        public static final String COLUMN_CREATED_AT = "created_At";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
 
-        // Builds a URI that adds the weather date to the end of the forecast content URI path.
-        public static Uri buildWeatherUriWithHeadline(String headline) {
+        // Builds a URI that adds the news date to the end of the news content URI path.
+        public static Uri buildNewsUriWithDate(long date) {
             return CONTENT_URI.buildUpon()
-                    .appendPath(headline)
+                    .appendPath(Long.toString(date))
                     .build();
         }
-
     }
 }

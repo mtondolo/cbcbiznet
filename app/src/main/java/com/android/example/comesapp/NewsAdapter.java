@@ -27,7 +27,7 @@ public class NewsAdapter extends
 
     // The interface that receives onClick messages.
     public interface NewsAdapterOnClickHandler {
-        void onClick(String headline);
+        void onClick(long dateTimeInMillis);
     }
 
     private boolean mUseLatestLayout;
@@ -71,7 +71,7 @@ public class NewsAdapter extends
         // Move the cursor to the appropriate position
         mCursor.moveToPosition(position);
 
-        /* Get image, headline, name, created_At and web page from the cursor and display the values*/
+        /* Get image, headline, name, dateTimeInMillis and web page from the cursor and display the values*/
         String image = mCursor.getString(NewsActivity.INDEX_IMAGE_URL);
 
         if (image.isEmpty()) {//url.isEmpty()
@@ -93,16 +93,16 @@ public class NewsAdapter extends
         newsAdapterViewHolder.headlineView.setText(headline);
 
         // Get given time in milliseconds
-        long created_At = mCursor.getLong(NewsActivity.INDEX_CREATED_AT);
+        long dateTimeInMillis = mCursor.getLong(NewsActivity.INDEX_DATE);
 
         // Get current time in milliseconds
         long currentDateLong = System.currentTimeMillis();
 
         // Convert time to relative time and add it to text view
-        CharSequence relativeDate = DateUtils.getRelativeTimeSpanString(created_At, currentDateLong,
+        CharSequence relativeDate = DateUtils.getRelativeTimeSpanString(dateTimeInMillis, currentDateLong,
                 0L, DateUtils.FORMAT_ABBREV_ALL);
 
-        newsAdapterViewHolder.created_AtView.setText(relativeDate);
+        newsAdapterViewHolder.dateView.setText(relativeDate);
     }
 
     // This method simply returns the number of items to display.
@@ -132,15 +132,15 @@ public class NewsAdapter extends
     public class NewsAdapterViewHolder extends
             RecyclerView.ViewHolder implements View.OnClickListener {
 
+        final TextView dateView;
         final TextView headlineView;
-        final TextView created_AtView;
         final ImageView imageView;
 
         public NewsAdapterViewHolder(View view) {
             super(view);
 
+            dateView = (TextView) view.findViewById(R.id.date);
             headlineView = (TextView) view.findViewById(R.id.headline);
-            created_AtView = (TextView) view.findViewById(R.id.created_At);
             imageView = (ImageView) view.findViewById(R.id.image);
 
             view.setOnClickListener(this);
@@ -150,8 +150,8 @@ public class NewsAdapter extends
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
-            mClickHandler.onClick(headline);
+            long dateTimeInMillis = mCursor.getLong(NewsActivity.INDEX_DATE);
+            mClickHandler.onClick(dateTimeInMillis);
         }
     }
 }

@@ -33,6 +33,7 @@ public class NewsFirebaseJobService extends JobService {
             protected Void doInBackground(Void... voids) {
                 Context context = getApplicationContext();
                 NewsSyncTask.syncNews(context);
+                jobFinished(jobParameters, false);
                 return null;
             }
 

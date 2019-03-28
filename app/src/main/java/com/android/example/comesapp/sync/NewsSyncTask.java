@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.data.NewsPreferences;
 import com.android.example.comesapp.utils.JsonUtils;
 import com.android.example.comesapp.utils.NetworkUtils;
 import com.android.example.comesapp.utils.NotificationUtils;
@@ -45,8 +46,14 @@ public class NewsSyncTask {
                         NewsContract.NewsEntry.CONTENT_URI,
                         newsValues);
 
-                // Show the notification
-                NotificationUtils.notifyUserOfLatestNews(context);
+                // Determine whether to notify the user that the news has been refreshed.
+                boolean notificationsEnabled = NewsPreferences.areNotificationsEnabled(context);
+
+                // Show the notification if the user wants them shown
+                if (notificationsEnabled) {
+                    NotificationUtils.notifyUserOfLatestNews(context);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

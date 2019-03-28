@@ -3,11 +3,15 @@ package com.android.example.comesapp.utils;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.android.example.comesapp.DetailNewsActivity;
 import com.android.example.comesapp.R;
 import com.android.example.comesapp.data.NewsContract;
 
@@ -80,6 +84,17 @@ public class NotificationUtils {
 
                     // Removes the notification when the user taps it
                     .setAutoCancel(true);
+
+            // Open COMESApp DetailNewsActivity to display the newly updated news.
+            Intent detailIntentForLatestNews = new Intent(context, DetailNewsActivity.class);
+            detailIntentForLatestNews.setData(latestNewsUri);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
+            taskStackBuilder.addNextIntentWithParentStack(detailIntentForLatestNews);
+            PendingIntent resultPendingIntent = taskStackBuilder
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            notifyBuilder.setContentIntent(resultPendingIntent);
 
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());

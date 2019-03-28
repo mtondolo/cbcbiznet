@@ -1,22 +1,16 @@
 package com.android.example.comesapp.utils;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.net.Uri;;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.android.example.comesapp.R;
 import com.android.example.comesapp.data.NewsContract;
 
-import java.util.Date;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -78,7 +72,11 @@ public class NotificationUtils {
             NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(headline)
-                    .setSmallIcon(R.drawable.ic_android);
+                    .setSmallIcon(R.drawable.ic_android)
+
+                    // Notify user with default sound
+                    .setDefaults(Notification.DEFAULT_SOUND)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
 
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());

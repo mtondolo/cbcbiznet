@@ -5,7 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.android.example.comesapp.R;
@@ -76,7 +76,10 @@ public class NotificationUtils {
 
                     // Notify user with default sound
                     .setDefaults(Notification.DEFAULT_SOUND)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+                    // Removes the notification when the user taps it
+                    .setAutoCancel(true);
 
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());

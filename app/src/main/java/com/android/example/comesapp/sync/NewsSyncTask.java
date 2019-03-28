@@ -3,6 +3,7 @@ package com.android.example.comesapp.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.text.format.DateUtils;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.data.NewsPreferences;
@@ -49,11 +50,21 @@ public class NewsSyncTask {
                 // Determine whether to notify the user that the news has been refreshed.
                 boolean notificationsEnabled = NewsPreferences.areNotificationsEnabled(context);
 
-                // Show the notification if the user wants them shown
-                if (notificationsEnabled) {
+                // If last notification is more than 1 day, send another notification to the user.
+                long timeSinceLastNotification = NewsPreferences
+                        .getEllapsedTimeSinceLastNotification(context);
+                boolean oneDayPassedSinceLastNotification = false;
+                if (timeSinceLastNotification >= DateUtils.DAY_IN_MILLIS) {
+                    oneDayPassedSinceLastNotification = true;
+                }
+
+                // Show the notification if the user wants them shown and
+                // we haven't shown a notification in the past day.
+                if (notificationsEnabled && oneDayPassedSinceLastNotification) {
                     NotificationUtils.notifyUserOfLatestNews(context);
                 }
 
+                // If the code reaches this point, we have successfully performed our sync.
             }
         } catch (Exception e) {
             e.printStackTrace();

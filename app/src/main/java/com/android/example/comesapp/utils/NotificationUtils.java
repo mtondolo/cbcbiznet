@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import com.android.example.comesapp.DetailNewsActivity;
 import com.android.example.comesapp.R;
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.data.NewsPreferences;
 
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -98,6 +99,10 @@ public class NotificationUtils {
 
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
+
+            // Save the current time of the notification so we can check
+            // next time the news is refreshed if we should show another notification.
+            NewsPreferences.saveLastNotificationTime(context, System.currentTimeMillis());
         }
 
         // Close the cursor to avoid wasting resources.

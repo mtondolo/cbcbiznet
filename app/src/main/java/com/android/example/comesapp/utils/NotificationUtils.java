@@ -85,7 +85,7 @@ public class NotificationUtils {
                     // Removes the notification when the user taps it
                     .setAutoCancel(true);
 
-            // Open COMESApp DetailNewsActivity to display the newly updated news.
+            // Open DetailNewsActivity to display the latest news.
             Intent detailIntentForLatestNews = new Intent(context, DetailNewsActivity.class);
             detailIntentForLatestNews.setData(latestNewsUri);
 

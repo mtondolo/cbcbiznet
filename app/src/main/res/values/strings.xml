@@ -22,4 +22,5 @@
 
     <string name="notification_channel_name">News Notification</string>
     <string name="notification_channel_description">Notification from COMESA News</string>
+
 </resources>

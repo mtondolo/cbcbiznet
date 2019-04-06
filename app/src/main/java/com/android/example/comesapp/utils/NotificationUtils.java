@@ -1,12 +1,12 @@
 package com.android.example.comesapp.utils;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -15,7 +15,6 @@ import com.android.example.comesapp.DetailNewsActivity;
 import com.android.example.comesapp.R;
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.data.NewsPreferences;
-
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -36,36 +35,39 @@ public class NotificationUtils {
 
     private static NotificationManager mNotifyManager;
 
-    // Constructs and displays a notification for the latest news.
+    // Construct and display a notification for the latest news.
     public static void notifyUserOfLatestNews(Context context) {
 
-        // Build the URI for the our news
-        Uri latestNewsUri = NewsContract.NewsEntry.CONTENT_URI;
-        Cursor latestNewsCursor = context.getContentResolver().query(
-                latestNewsUri,
+        // Build the content URI for the our news
+        Uri contentUri = NewsContract.NewsEntry.CONTENT_URI;
 
-                //This used to limit the columns returned in our cursor.
+        Cursor contentCursor = context.getContentResolver().query(
+                contentUri,
+
+                // This used to limit the columns returned in our cursor.
                 NEWS_NOTIFICATION_PROJECTION,
-
                 null,
                 null,
                 null);
 
-        // If our cursor is not empty, we want to show the notification.
-        if (latestNewsCursor.moveToFirst()) {
+        // Move cursor to first row
+        contentCursor.moveToFirst();
 
-            // News headline as returned by API, used as notification content text.
-            String headline = latestNewsCursor.getString(INDEX_HEADLINE);
+        // News headline as returned by API, used as notification content text.
+        String headline = contentCursor.getString(INDEX_HEADLINE);
 
-            // Create a notification manager object.
-            mNotifyManager = (NotificationManager)
-                    context.getSystemService(NOTIFICATION_SERVICE);
+        //  Get a handle to shared preferences to set the notification flag.
+        SharedPreferences preferences = context.getSharedPreferences("app", 0);
+        String notificationFlag = preferences.getString("notification", "");
 
-            // Notification channels are only available in OREO and higher.
+        // If the headline is not the same as the the one the notification flag
+        // send the notification.
+        if (!notificationFlag.equalsIgnoreCase(headline)) {
+
+            // Create notification channel for OREO and higher.
             if (android.os.Build.VERSION.SDK_INT >=
                     android.os.Build.VERSION_CODES.O) {
 
-                // Create a NotificationChannel
                 NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
                         context.getString(R.string.app_name), NotificationManager
                         .IMPORTANCE_HIGH);
@@ -73,32 +75,36 @@ public class NotificationUtils {
                 mNotifyManager.createNotificationChannel(notificationChannel);
             }
 
-            // Build the notification with all of the parameters.
-            NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                    .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(headline)
-                    .setSmallIcon(R.drawable.ic_android)
-
-                    // Notify user with default sound
-                    .setDefaults(Notification.DEFAULT_SOUND)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-                    // Removes the notification when the user taps it
-                    .setAutoCancel(true);
-
-            // Open DetailNewsActivity to display the latest news.
+            // Intent to open DetailNewsActivity to display the latest news.
             Intent detailIntentForLatestNews = new Intent(context, DetailNewsActivity.class);
-            detailIntentForLatestNews.setData(latestNewsUri);
+            detailIntentForLatestNews.setData(contentUri);
 
             TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
             taskStackBuilder.addNextIntentWithParentStack(detailIntentForLatestNews);
             PendingIntent resultPendingIntent = taskStackBuilder
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            notifyBuilder.setContentIntent(resultPendingIntent);
+            // Build the notification with all of the parameters.
+            NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText(headline)
+                    .setSmallIcon(R.drawable.ic_android)
+                    .setContentIntent(resultPendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setAutoCancel(true);
+
+            // Create a notification manager object.
+            mNotifyManager = (NotificationManager)
+                    context.getSystemService(NOTIFICATION_SERVICE);
 
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
+
+            // Store the headline in the notification flag.
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("notification", headline);
+            editor.commit();
 
             // Save the current time of the notification so we can check
             // next time the news is refreshed if we should show another notification.
@@ -106,9 +112,11 @@ public class NotificationUtils {
         }
 
         // Close the cursor to avoid wasting resources.
-        latestNewsCursor.close();
+        contentCursor.close();
     }
 }
+
+
 
 
 

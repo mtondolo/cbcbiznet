@@ -16,7 +16,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 11;
 
     public NewsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

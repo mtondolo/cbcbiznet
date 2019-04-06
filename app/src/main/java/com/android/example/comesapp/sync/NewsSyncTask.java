@@ -42,7 +42,7 @@ public class NewsSyncTask {
                         null,
                         null);
 
-                /* Insert our new news data into news's ContentProvider */
+                // Insert our new news data into news's ContentProvider.
                 newsContentResolver.bulkInsert(
                         NewsContract.NewsEntry.CONTENT_URI,
                         newsValues);
@@ -50,10 +50,13 @@ public class NewsSyncTask {
                 // Determine whether to notify the user that the news has been refreshed.
                 boolean notificationsEnabled = NewsPreferences.areNotificationsEnabled(context);
 
-                // If last notification is more than 1 day, send another notification to the user.
+                // If last notification is more than 1 day,
+                // Send another notification to the user.
                 long timeSinceLastNotification = NewsPreferences
                         .getEllapsedTimeSinceLastNotification(context);
+
                 boolean oneDayPassedSinceLastNotification = false;
+
                 if (timeSinceLastNotification >= DateUtils.DAY_IN_MILLIS) {
                     oneDayPassedSinceLastNotification = true;
                 }
@@ -64,7 +67,6 @@ public class NewsSyncTask {
                     NotificationUtils.notifyUserOfLatestNews(context);
                 }
 
-                // If the code reaches this point, we have successfully performed our sync.
             }
         } catch (Exception e) {
             e.printStackTrace();

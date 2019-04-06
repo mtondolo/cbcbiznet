@@ -31,6 +31,7 @@ public class NewsProvider extends ContentProvider {
 
         // This URI would look something like content://com.android.example.comesapp/news/1472214172
         matcher.addURI(authority, NewsContract.PATH_NEWS + "/#", CODE_NEWS_WITH_DATE);
+
         return matcher;
     }
 
@@ -44,8 +45,11 @@ public class NewsProvider extends ContentProvider {
     // Handles requests to insert a set of new rows.
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+
         switch (sUriMatcher.match(uri)) {
+
             case CODE_NEWS:
                 db.beginTransaction();
                 int rowsInserted = 0;
@@ -77,30 +81,18 @@ public class NewsProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
         Cursor cursor;
+
         // Given a URI, will determine what kind of request is being made and query the database accordingly.
         switch (sUriMatcher.match(uri)) {
-
-            // we want to return a cursor that contains every row of news data in our news table
-            case CODE_NEWS: {
-                cursor = mOpenHelper.getReadableDatabase().query(
-                        NewsContract.NewsEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;
-            }
 
             // We want to return a cursor that contains one row of weather data for a particular date.
             case CODE_NEWS_WITH_DATE: {
 
                 String dateString = uri.getLastPathSegment();
 
-                //The query method accepts a string array of arguments, as there may be more than one "?" in the selection statement.
-                String[] selectionArguments = new String[]{String.valueOf(dateString)};
+                String[] selectionArguments = new String[]{dateString};
 
                 cursor = mOpenHelper.getReadableDatabase().query(
                         /* Table we are going to query */
@@ -115,8 +107,19 @@ public class NewsProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
+                break;
+            }
 
-
+            // we want to return a cursor that contains every row of news data in our news table
+            case CODE_NEWS: {
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        NewsContract.NewsEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
                 break;
             }
 

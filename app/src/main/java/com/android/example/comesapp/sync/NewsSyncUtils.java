@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 
 public class NewsSyncUtils {
 
-    // Interval at which to sync with the news. This interval is just for test purposes.
-    private static final int REMINDER_INTERVAL_MINUTES = 1;
-    private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
-    private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
+    // Interval at which to sync with the news.
+    private static final int SYNC_INTERVAL_HOURS = 3;
+    private static final int SYNC_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS));
+    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
     private static boolean sInitialized;
 
@@ -35,17 +35,37 @@ public class NewsSyncUtils {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
-        /* Create the Job to periodically sync News */
+        // Create the Job to periodically sync News.
         Job syncNewsJob = dispatcher.newJobBuilder()
+
+                // The Service that will be used to sync news data.
                 .setService(NewsFirebaseJobService.class)
+
+                // Set the UNIQUE tag used to identify this Job
                 .setTag(NEWS_SYNC_TAG)
+
+                // Network constraints on which this Job should run.
+                // We choose to run on any network.
                 .setConstraints(Constraint.ON_ANY_NETWORK)
+
+                // setLifetime sets how long this job should persist.
+                // The options are to keep the Job "forever" or
+                // to have it die the next time the device boots up.
                 .setLifetime(Lifetime.FOREVER)
+
+                //  We want news data to stay up to date, so we tell this Job to recur.
                 .setRecurring(true)
+
+                // We want the news data to be synced every 3 to 4 hours.
                 .setTrigger(Trigger.executionWindow(
-                        REMINDER_INTERVAL_SECONDS,
-                        REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
+                        SYNC_INTERVAL_SECONDS,
+                        SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
+
+                // If a Job with the tag with provided already exists,
+                // this new job will replace the old one.
                 .setReplaceCurrent(true)
+
+                // Once the Job is ready, call the builder's build method to return the Job.
                 .build();
 
         // Schedule the Job with the dispatcher

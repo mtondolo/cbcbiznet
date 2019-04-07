@@ -68,7 +68,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/activity_name"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

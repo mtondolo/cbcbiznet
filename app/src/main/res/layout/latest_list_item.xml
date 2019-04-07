@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="336dp"
+    android:layout_height="392dp"
     android:layout_marginBottom="4dp"
     android:layout_marginTop="90dp"
     android:background="@drawable/latest_list_item_touch_selector">
@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="236dp"
+        android:layout_height="252dp"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
         tools:src="@drawable/ic_launcher_background" />
@@ -20,10 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/image"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textStyle="bold"
@@ -34,14 +34,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:fontFamily="sans-serif"
-        android:fontFeatureSettings="smcp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorPrimaryDark"
-        android:textStyle="bold"
         tools:text="Date" />
 
 </RelativeLayout>

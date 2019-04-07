@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -22,7 +21,7 @@
                 <ImageView
                     android:id="@+id/detail_image"
                     android:layout_width="match_parent"
-                    android:layout_height="236dp"
+                    android:layout_height="248dp"
                     android:layout_alignParentTop="true"
                     android:scaleType="centerCrop"
                     tools:src="@drawable/ic_launcher_background" />
@@ -45,28 +44,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/detail_headline"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif"
-                    android:fontFeatureSettings="smcp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
                     tools:text="Date" />
 
                 <TextView
                     android:id="@+id/detail_story"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/detail_date"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:lineSpacingExtra="@dimen/line_spacing"
                     android:padding="@dimen/padding_regular"
                     android:text="Detail Story"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:fontFamily="sans-serif"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/detail_copyright"
@@ -74,10 +71,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/detail_story"
                     android:layout_gravity="center"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="24dp"
                     android:text="Detail Copyright"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:fontFamily="sans-serif"
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </ScrollView>
@@ -114,7 +112,7 @@
                         android:paddingTop="22dp"
                         android:text="@string/activity_name"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <ImageView

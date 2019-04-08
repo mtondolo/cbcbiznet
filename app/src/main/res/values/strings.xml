@@ -17,7 +17,9 @@
     <string name="pref_enable_notifications_true">Enabled</string>
     <string name="pref_enable_notifications_false">Not Enabled</string>
     <string name="pref_last_notification">last_notification</string>
-    <!--Strings related to some notification parameters-->
+    <!--Strings related to some parameters for the notification builder-->
     <string name="notification_channel_name">News Notification</string>
     <string name="notification_channel_description">Notification from COMESA News</string>
+    <!--Strings related to the notification flag-->
+    <string name="pref_last_notification_flag">last_notification_flag</string>
 </resources>

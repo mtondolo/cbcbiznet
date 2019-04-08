@@ -29,7 +29,7 @@ public class NewsPreferences {
     }
 
     // Returns the elapsed time in milliseconds since the last notification was shown.
-    public static long getEllapsedTimeSinceLastNotification(Context context) {
+    public static long getElapsedTimeSinceLastNotification(Context context) {
         long lastNotificationTimeMillis =
                 NewsPreferences.getLastNotificationTimeInMillis(context);
         long timeSinceLastNotification = System.currentTimeMillis() - lastNotificationTimeMillis;
@@ -44,5 +44,23 @@ public class NewsPreferences {
         editor.putLong(lastNotificationKey, timeOfNotification);
         editor.apply();
     }
+
+    // Returns the headline for the last notification.
+    public static String getLastNotificationHeadline(Context context) {
+        String lastNotificationKey = context.getString(R.string.pref_last_notification_flag);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationHeadline = sp.getString(lastNotificationKey, "");
+        return lastNotificationHeadline;
+    }
+
+    // Saves the headline for the the last notification.
+    public static void saveLastNotificationHeadline(Context context, String lastNotificationHeadline) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        String lastNotificationKey = context.getString(R.string.pref_last_notification_flag);
+        editor.putString(lastNotificationKey, lastNotificationHeadline);
+        editor.apply();
+    }
+
 }
 

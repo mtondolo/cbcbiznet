@@ -54,15 +54,15 @@ public class NotificationUtils {
         contentCursor.moveToFirst();
 
         // News headline as returned by API, used as notification content text.
-        String headline = contentCursor.getString(INDEX_HEADLINE);
+        String currentNotificationHeadline = contentCursor.getString(INDEX_HEADLINE);
 
-        //  Get a handle to shared preferences to set the notification flag.
-        SharedPreferences preferences = context.getSharedPreferences("app", 0);
-        String notificationFlag = preferences.getString("notification", "");
+        // Get the last notification headline from our stored headline in the News Preferences
+        String lastNotificationHeadline = NewsPreferences
+                .getLastNotificationHeadline(context);
 
-        // If the headline is not the same as the the one the notification flag
-        // send the notification.
-        if (!notificationFlag.equalsIgnoreCase(headline)) {
+        // If last notification headline is not the same with current,
+        // Send another notification to the user.
+        if (!lastNotificationHeadline.equalsIgnoreCase(currentNotificationHeadline)) {
 
             // Create notification channel for OREO and higher.
             if (android.os.Build.VERSION.SDK_INT >=
@@ -71,7 +71,7 @@ public class NotificationUtils {
                 NotificationChannel notificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID,
                         context.getString(R.string.app_name), NotificationManager
                         .IMPORTANCE_HIGH);
-                notificationChannel.setDescription(headline);
+                notificationChannel.setDescription(currentNotificationHeadline);
                 mNotifyManager.createNotificationChannel(notificationChannel);
             }
 
@@ -87,7 +87,7 @@ public class NotificationUtils {
             // Build the notification with all of the parameters.
             NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                     .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(headline)
+                    .setContentText(currentNotificationHeadline)
                     .setSmallIcon(R.drawable.ic_android)
                     .setContentIntent(resultPendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -101,10 +101,9 @@ public class NotificationUtils {
             // NotificationId is a unique int for each notification that you must define
             mNotifyManager.notify(NOTIFICATION_ID, notifyBuilder.build());
 
-            // Store the headline in the notification flag.
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("notification", headline);
-            editor.commit();
+            // Save the current notification headline so we can check
+            // next time the news is refreshed if we should show another notification.
+            NewsPreferences.saveLastNotificationHeadline(context, currentNotificationHeadline);
 
             // Save the current time of the notification so we can check
             // next time the news is refreshed if we should show another notification.

@@ -53,7 +53,7 @@ public class NewsSyncTask {
                 // If last notification is more than 1 day,
                 // Send another notification to the user.
                 long timeSinceLastNotification = NewsPreferences
-                        .getEllapsedTimeSinceLastNotification(context);
+                        .getElapsedTimeSinceLastNotification(context);
 
                 boolean oneDayPassedSinceLastNotification = false;
 

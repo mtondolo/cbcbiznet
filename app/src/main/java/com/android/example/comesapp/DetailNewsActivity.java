@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.databinding.ActivityDetailNewsBinding;
@@ -49,6 +50,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
     ImageView shareIcon;
     private String detailHeadline;
     private String detailStoryUrl;
+    ScrollView mScrollView;
 
     // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
     private ActivityDetailNewsBinding mActivityDetailNewsBinding;
@@ -60,6 +62,8 @@ public class DetailNewsActivity extends AppCompatActivity implements
 
         Toolbar topToolbar = findViewById(R.id.detail_news_toolbar);
         setSupportActionBar(topToolbar);
+
+        mScrollView = findViewById(R.id.scroll_view);
 
         // Instantiate mActivityDetailNewsBinding using DataBindingUtil
         mActivityDetailNewsBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail_news);
@@ -93,6 +97,25 @@ public class DetailNewsActivity extends AppCompatActivity implements
                 startActivity(Intent.createChooser(intent, "Share with"));
             }
         });
+    }
+    
+    // Save the current position of scroll view.
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntArray("ARTICLE_SCROLL_POSITION",
+                new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
+    }
+
+    // Restore the position of the scroll view.
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        final int[] position = savedInstanceState.getIntArray("ARTICLE_SCROLL_POSITION");
+        if (position != null)
+            mScrollView.post(new Runnable() {
+                public void run() {
+                    mScrollView.scrollTo(position[0], position[1]);
+                }
+            });
     }
 
     // Creates and returns a CursorLoader that loads the data for our URI and stores it in a Cursor.

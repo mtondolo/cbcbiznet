@@ -81,48 +81,49 @@ public class RecyclerViewAdapter extends
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        // Move the cursor to the appropriate position
-        mCursor.moveToPosition(position);
-
         // Check the type of view to display
         if (holder instanceof ItemViewHolder) {
 
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-            // Get image from the cursor and display it.
-            String image = mCursor.getString(NewsActivity.INDEX_IMAGE_URL);
+            // Move the cursor to the appropriate position
+            if (mCursor != null && mCursor.moveToPosition(position)) {
 
-            if (image.isEmpty()) {//url.isEmpty()
-                Picasso.get()
-                        .load(R.color.colorPrimary)
-                        .placeholder(R.color.colorPrimary)
-                        .resize(126, 78)
-                        .centerCrop()
-                        .into(itemViewHolder.imageView);
-            } else {
-                Picasso.get()
-                        .load(image)
-                        .error(R.color.colorPrimary)
-                        .fit()
-                        .into(itemViewHolder.imageView);//this is our ImageView
+                // Get image from the cursor and display it.
+                String image = mCursor.getString(NewsActivity.INDEX_IMAGE_URL);
+
+                if (image.isEmpty()) {//url.isEmpty()
+                    Picasso.get()
+                            .load(R.color.colorPrimary)
+                            .placeholder(R.color.colorPrimary)
+                            .resize(126, 78)
+                            .centerCrop()
+                            .into(itemViewHolder.imageView);
+                } else {
+                    Picasso.get()
+                            .load(image)
+                            .error(R.color.colorPrimary)
+                            .fit()
+                            .into(itemViewHolder.imageView);//this is our ImageView
+                }
+
+                String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
+                itemViewHolder.headlineView.setText(headline);
+
+                // Get given time in milliseconds
+                long dateTimeInMillis = mCursor.getLong(NewsActivity.INDEX_DATE);
+
+                // Get current time in milliseconds
+                long currentDateLong = System.currentTimeMillis();
+
+                // Convert time to relative time and add it to text view
+                CharSequence relativeDate = DateUtils.getRelativeTimeSpanString(dateTimeInMillis, currentDateLong,
+                        0L, DateUtils.FORMAT_ABBREV_ALL);
+
+                itemViewHolder.dateView.setText(relativeDate);
+
             }
-
-            String headline = mCursor.getString(NewsActivity.INDEX_HEADLINE);
-            itemViewHolder.headlineView.setText(headline);
-
-            // Get given time in milliseconds
-            long dateTimeInMillis = mCursor.getLong(NewsActivity.INDEX_DATE);
-
-            // Get current time in milliseconds
-            long currentDateLong = System.currentTimeMillis();
-
-            // Convert time to relative time and add it to text view
-            CharSequence relativeDate = DateUtils.getRelativeTimeSpanString(dateTimeInMillis, currentDateLong,
-                    0L, DateUtils.FORMAT_ABBREV_ALL);
-
-            itemViewHolder.dateView.setText(relativeDate);
-
-        } // Display footer if instance view is footer.
+        }// Display footer if instance view is footer.
         else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerHolder = (FooterViewHolder) holder;
             footerHolder.footerText.setText(R.string.detail_copyright);

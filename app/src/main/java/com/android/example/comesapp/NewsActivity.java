@@ -36,7 +36,7 @@ import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.sync.NewsSyncUtils;
 
 public class NewsActivity extends AppCompatActivity implements
-        NewsAdapter.NewsAdapterOnClickHandler,
+        RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
@@ -61,7 +61,7 @@ public class NewsActivity extends AppCompatActivity implements
     private static Bundle mBundleState;
     private int mPosition = RecyclerView.NO_POSITION;
 
-    private NewsAdapter mNewsAdapter;
+    private RecyclerViewAdapter mRecyclerViewAdapter;
     private ProgressBar mLoadingIndicator;
 
     private final static int NUM_GRIDS = 4;
@@ -104,11 +104,11 @@ public class NewsActivity extends AppCompatActivity implements
          */
         mRecyclerView.setHasFixedSize(true);
 
-        // The NewsAdapter is responsible for linking our news data with the Views that will end up displaying our news data.
-        mNewsAdapter = new NewsAdapter(this, this);
+        // The RecyclerViewAdapter is responsible for linking our news data with the Views that will end up displaying our news data.
+        mRecyclerViewAdapter = new RecyclerViewAdapter(this, this);
 
-        // Use mRecyclerView.setAdapter and pass in mNewsAdapter.
-        mRecyclerView.setAdapter(mNewsAdapter);
+        // Use mRecyclerView.setAdapter and pass in mRecyclerViewAdapter.
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
 
         showLoading();
 
@@ -206,7 +206,7 @@ public class NewsActivity extends AppCompatActivity implements
     // Called when a previously created loader has finished its load.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mNewsAdapter.swapCursor(data);
+        mRecyclerViewAdapter.swapCursor(data);
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         mRecyclerView.smoothScrollToPosition(mPosition);
         if (data.getCount() != 0) showNewsDataView();
@@ -217,7 +217,7 @@ public class NewsActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
 
         // Since this Loader's data is now invalid, we need to clear the Adapter that is displaying the data.
-        mNewsAdapter.swapCursor(null);
+        mRecyclerViewAdapter.swapCursor(null);
     }
 
     // Inflate the menu for this Activity

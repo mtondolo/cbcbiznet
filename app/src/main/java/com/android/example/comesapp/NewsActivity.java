@@ -64,7 +64,7 @@ public class NewsActivity extends AppCompatActivity implements
     private RecyclerViewAdapter mRecyclerViewAdapter;
     private ProgressBar mLoadingIndicator;
 
-    private final static int NUM_GRIDS = 4;
+    private final static int NUM_GRIDS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +90,12 @@ public class NewsActivity extends AppCompatActivity implements
             @Override
             public int getSpanSize(int position) {
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    return position == 0 ? 4 : 4;
+                    return position == 0 ? 2 : 2;
+                } else if (orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                        position == RecyclerViewAdapter.mCursor.getCount()) {
+                    return 2;
                 } else
-                    return position == 0 ? 4 : 2;
+                    return position == 0 ? 2 : 1;
             }
         });
 

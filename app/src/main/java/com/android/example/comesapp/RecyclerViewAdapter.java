@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 public class RecyclerViewAdapter extends
         RecyclerView.Adapter {
 
-    private Cursor mCursor;
+    public static Cursor mCursor;
 
     // Constant IDs for the ViewType for latest and for past news
     private static final int VIEW_TYPE_LATEST = 0;

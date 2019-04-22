@@ -92,7 +92,8 @@ public class NewsActivity extends AppCompatActivity implements
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     return position == 0 ? 2 : 2;
                 } else if (orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                        position == RecyclerViewAdapter.mCursor.getCount()) {
+                        mRecyclerViewAdapter.mCursor != null &&
+                        position == mRecyclerViewAdapter.mCursor.getCount()) {
                     return 2;
                 } else
                     return position == 0 ? 2 : 1;

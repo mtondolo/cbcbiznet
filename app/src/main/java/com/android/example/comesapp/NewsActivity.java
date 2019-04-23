@@ -253,7 +253,7 @@ public class NewsActivity extends AppCompatActivity implements
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
         intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "MuzPal feedback");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "COMESA News feedback");
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }

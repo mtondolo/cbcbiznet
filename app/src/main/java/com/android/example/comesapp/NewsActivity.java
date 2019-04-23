@@ -236,17 +236,15 @@ public class NewsActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_contact_us) {
-            composeEmail();
-            return true;
-        }
-
         if (id == R.id.action_settings) {
             Intent startSettingsActivity = new Intent(this, SettingsActivity.class);
             startActivity(startSettingsActivity);
             return true;
         }
-
+        if (id == R.id.action_contact_us) {
+            composeEmail();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

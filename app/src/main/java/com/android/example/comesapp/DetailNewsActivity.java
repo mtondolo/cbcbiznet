@@ -92,7 +92,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
                 intent.setAction(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_SUBJECT, detailHeadline);
                 intent.putExtra(Intent.EXTRA_TEXT,
-                        getString(R.string.activity_name) + " - " + detailHeadline + "\n" + detailStoryUrl);
+                        getString(R.string.app_name) + " - " + detailHeadline + "\n" + detailStoryUrl);
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share with"));
             }

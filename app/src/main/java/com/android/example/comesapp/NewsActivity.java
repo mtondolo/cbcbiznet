@@ -18,14 +18,17 @@ package com.android.example.comesapp;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +69,8 @@ public class NewsActivity extends AppCompatActivity implements
 
     private final static int NUM_GRIDS = 2;
 
+    private SwipeRefreshLayout mySwipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +78,23 @@ public class NewsActivity extends AppCompatActivity implements
 
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
+
+        // Lookup the swipe container view
+        mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mySwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mySwipeRefreshLayout.setProgressViewOffset(false, 100, 150);
+
+        /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        mySwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                    }
+                }
+        );
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
         mRecyclerView = findViewById(R.id.recyclerview_news);
@@ -108,7 +130,8 @@ public class NewsActivity extends AppCompatActivity implements
          */
         mRecyclerView.setHasFixedSize(true);
 
-        // The RecyclerViewAdapter is responsible for linking our news data with the Views that will end up displaying our news data.
+        // The RecyclerViewAdapter is responsible for linking our news data with
+        // the Views that will end up displaying our news data.
         mRecyclerViewAdapter = new RecyclerViewAdapter(this, this);
 
         // Use mRecyclerView.setAdapter and pass in mRecyclerViewAdapter.
@@ -220,7 +243,8 @@ public class NewsActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        // Since this Loader's data is now invalid, we need to clear the Adapter that is displaying the data.
+        // Since this Loader's data is now invalid,
+        // we need to clear the Adapter that is displaying the data.
         mRecyclerViewAdapter.swapCursor(null);
     }
 

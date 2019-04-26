@@ -79,7 +79,7 @@ public class NewsActivity extends AppCompatActivity implements
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
 
-        // Lookup the swipe container view
+        // Lookup the swipe container view and set its properties
         mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
         mySwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mySwipeRefreshLayout.setProgressViewOffset(false, 100, 150);
@@ -145,6 +145,7 @@ public class NewsActivity extends AppCompatActivity implements
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
     }
+
 
     @Override
     protected void onPause() {

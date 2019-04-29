@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
 
 public class NewsActivity extends AppCompatActivity implements
@@ -92,6 +93,7 @@ public class NewsActivity extends AppCompatActivity implements
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+                        NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
                     }
                 }
         );

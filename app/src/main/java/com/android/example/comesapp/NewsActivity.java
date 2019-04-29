@@ -240,6 +240,7 @@ public class NewsActivity extends AppCompatActivity implements
         if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
         mRecyclerView.smoothScrollToPosition(mPosition);
         if (data.getCount() != 0) showNewsDataView();
+        mySwipeRefreshLayout.setRefreshing(false);
     }
 
     // Called when a previously created loader is being reset, and thus making its data unavailable.

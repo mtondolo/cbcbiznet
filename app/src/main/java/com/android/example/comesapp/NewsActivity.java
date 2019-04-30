@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
+import com.android.example.comesapp.utils.CheckInternet;
 
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
@@ -93,7 +94,9 @@ public class NewsActivity extends AppCompatActivity implements
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
+                        if (CheckInternet.isNetwork(NewsActivity.this)) {
+                            NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
+                        } else mySwipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );

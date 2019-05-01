@@ -15,10 +15,12 @@
  */
 package com.android.example.comesapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
@@ -28,7 +30,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +39,6 @@ import android.widget.ProgressBar;
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
-import com.android.example.comesapp.utils.CheckInternet;
 
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
@@ -94,7 +94,11 @@ public class NewsActivity extends AppCompatActivity implements
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        if (CheckInternet.isNetwork(NewsActivity.this)) {
+
+                        // Check if device has connectivity
+                        if (isNetworkAvailable()) {
+
+                            // Perform required update
                             NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
                         } else mySwipeRefreshLayout.setRefreshing(false);
                     }
@@ -246,6 +250,7 @@ public class NewsActivity extends AppCompatActivity implements
         mySwipeRefreshLayout.setRefreshing(false);
     }
 
+
     // Called when a previously created loader is being reset, and thus making its data unavailable.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -288,6 +293,13 @@ public class NewsActivity extends AppCompatActivity implements
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null;
     }
 }
 

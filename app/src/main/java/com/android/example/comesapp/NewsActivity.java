@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,12 +39,19 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.data.NewsPreferences;
 import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
+import com.android.example.comesapp.utils.JsonRefreshUtils;
+import com.android.example.comesapp.utils.NetworkUtils;
+
+import java.net.URL;
 
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
+
+    private static final String TAG = NewsActivity.class.getSimpleName();
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
@@ -95,15 +104,15 @@ public class NewsActivity extends AppCompatActivity implements
                     @Override
                     public void onRefresh() {
 
-                        // Check if device has connectivity
+                        // Check if there is connectivity
                         if (isNetworkAvailable()) {
 
-                            // Perform required update
-                            NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
+                            // This method performs the actual data-refresh operation.
+                            // The method calls setRefreshing(false) when it's finished.
+                            loadLatestNewsData();
                         } else mySwipeRefreshLayout.setRefreshing(false);
                     }
-                }
-        );
+                });
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
         mRecyclerView = findViewById(R.id.recyclerview_news);
@@ -154,7 +163,6 @@ public class NewsActivity extends AppCompatActivity implements
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
     }
-
 
     @Override
     protected void onPause() {
@@ -295,12 +303,60 @@ public class NewsActivity extends AppCompatActivity implements
         }
     }
 
+    // This method will check for connectivity
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager)
                 this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null;
     }
+
+    // This method will tell some background method to get the latest news data item
+    // in the background.
+    private void loadLatestNewsData() {
+        new FetchLatestNewsTask().execute();
+    }
+
+    public class FetchLatestNewsTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            URL latestNewsRequestUrl = NetworkUtils.buildUrl(getApplicationContext());
+            try {
+                String jsonLatestNewsResponse = NetworkUtils
+                        .getResponseFromHttpUrl(latestNewsRequestUrl);
+                String simpleJsonLatestNewsData = JsonRefreshUtils
+                        .getNewDataJsonStr(NewsActivity.this, jsonLatestNewsResponse);
+                return simpleJsonLatestNewsData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String latestNewsData) {
+            if (latestNewsData != null) {
+
+                // Save the data in the given variable
+                String currentNewsHeadline = latestNewsData;
+
+                // Get the last news headline from our stored headline in the News Preferences
+                String lastNewsHeadline = NewsPreferences
+                        .getLastNotificationHeadline(getApplicationContext());
+
+                // If last news headline is not the same with current,
+                // perform a swipe refresh data operation.
+                if (!lastNewsHeadline.equalsIgnoreCase(currentNewsHeadline)) {
+                    NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
+                } else mySwipeRefreshLayout.setRefreshing(false);
+
+                // Save the current notification headline so we can check
+                // next time the news is refreshed if we should perform a swipe refresh
+                NewsPreferences.saveLastNotificationHeadline(getApplicationContext(), currentNewsHeadline);
+            }
+        }
+    }
+
 }
 
 

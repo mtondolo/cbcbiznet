@@ -29,7 +29,8 @@ public class DetailNewsActivity extends AppCompatActivity implements
             NewsContract.NewsEntry.COLUMN_HEADLINE,
             NewsContract.NewsEntry.COLUMN_STORY,
             NewsContract.NewsEntry.COLUMN_STORY_URL,
-            NewsContract.NewsEntry.COLUMN_IMAGE_URL
+            NewsContract.NewsEntry.COLUMN_IMAGE_URL,
+            NewsContract.NewsEntry.COLUMN_IMAGE_DESCRIPTION,
     };
 
     // We store the indices of the values in the array of Strings above to quickly access the data from our query.
@@ -38,6 +39,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
     public static final int INDEX_STORY = 2;
     public static final int INDEX_STORY_URL = 3;
     public static final int INDEX_IMAGE_URL = 4;
+    public static final int INDEX_IMAGE_DESCRIPTION = 5;
 
 
     // This ID will be used to identify the Loader responsible for loading the story
@@ -50,6 +52,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
     ImageView shareIcon;
     private String detailHeadline;
     private String detailStoryUrl;
+    private String imageDescription;
     ScrollView mScrollView;
 
     // Declaration for an ActivityDetailNewsBinding field called mActivityDetailNewsBinding
@@ -98,7 +101,7 @@ public class DetailNewsActivity extends AppCompatActivity implements
             }
         });
     }
-    
+
     // Save the current position of scroll view.
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -152,12 +155,14 @@ public class DetailNewsActivity extends AppCompatActivity implements
             return;
         }
 
-        // Read the headline, story, storyUrl, date and image url from the cursor
+        // Read the headline, story, storyUrl, date,
+        // image url and image description from the cursor
         long detailDateTimeInMillis = data.getLong(INDEX_DATE);
         detailHeadline = data.getString(INDEX_HEADLINE);
         String detailStory = data.getString(INDEX_STORY);
         detailStoryUrl = data.getString(INDEX_STORY_URL);
         String detailImage = data.getString(DetailNewsActivity.INDEX_IMAGE_URL);
+        imageDescription = data.getString(INDEX_IMAGE_DESCRIPTION);
 
 
         // Load the image using the given url
@@ -184,10 +189,12 @@ public class DetailNewsActivity extends AppCompatActivity implements
         formattedDetailStory = formattedDetailStory.replace(",", "");
         formattedDetailStory = formattedDetailStory.replace("^", ",");
         formattedDetailStory = formattedDetailStory.replace("\\n", System.getProperty("line.separator"));
+        mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
 
         // Use mActivityDetailNewsBinding to display the data
         mActivityDetailNewsBinding.detailHeadline.setText(detailHeadline);
-
+        mActivityDetailNewsBinding.imageDescription.setText(imageDescription);
+        mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));
 
         // Get current time in milliseconds
         long currentDetailsDateLong = System.currentTimeMillis();
@@ -196,9 +203,6 @@ public class DetailNewsActivity extends AppCompatActivity implements
         CharSequence relativeDetailDate = DateUtils.getRelativeTimeSpanString(detailDateTimeInMillis, currentDetailsDateLong,
                 0L, DateUtils.FORMAT_ABBREV_ALL);
         mActivityDetailNewsBinding.detailDate.setText(relativeDetailDate);
-
-        mActivityDetailNewsBinding.detailStory.setText(formattedDetailStory);
-        mActivityDetailNewsBinding.detailCopyright.setText(getString(R.string.detail_copyright));
     }
 
     @Override

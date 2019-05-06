@@ -33,6 +33,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
                         NewsEntry.COLUMN_STORY + " TEXT NOT NULL, " +
                         NewsEntry.COLUMN_STORY_URL + " TEXT NOT NULL, " +
                         NewsEntry.COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
+                        NewsEntry.COLUMN_IMAGE_DESCRIPTION + " TEXT, " +
 
                         // To ensure this table can only contain one headline per row.
                         " UNIQUE (" + NewsEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";

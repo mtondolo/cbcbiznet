@@ -40,6 +40,7 @@ public class NewsContract {
         public static final String COLUMN_STORY = "story";
         public static final String COLUMN_STORY_URL = "storyUrl";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
+        public static final String COLUMN_IMAGE_DESCRIPTION = "image_description";
 
         // Builds a URI that adds the news date to the end of the news content URI path.
         public static Uri buildNewsUriWithDate(long date) {

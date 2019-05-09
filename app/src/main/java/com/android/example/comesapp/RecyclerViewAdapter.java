@@ -94,15 +94,15 @@ public class RecyclerViewAdapter extends
 
                 if (image.isEmpty()) {//url.isEmpty()
                     Picasso.get()
-                            .load(R.color.colorPrimary)
-                            .placeholder(R.color.colorPrimary)
+                            .load(R.color.grey)
+                            .placeholder(R.color.grey)
                             .resize(126, 78)
                             .centerCrop()
                             .into(itemViewHolder.imageView);
                 } else {
                     Picasso.get()
                             .load(image)
-                            .error(R.color.colorPrimary)
+                            .error(R.color.grey)
                             .fit()
                             .into(itemViewHolder.imageView);//this is our ImageView
                 }

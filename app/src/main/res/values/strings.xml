@@ -22,4 +22,10 @@
     <string name="notification_channel_description">Notification from COMESA News</string>
     <!--Strings related to the notification flag-->
     <string name="pref_last_notification_flag">last_notification_flag</string>
+
+    <string name="Open">NavBar</string>
+    <string name="Close">NavBar</string>
+
+    <string name="events">Upcoming Events</string>
+    <string name="opportunities">Opportunities</string>
 </resources>

@@ -23,20 +23,24 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.data.NewsPreferences;
@@ -50,8 +54,6 @@ import java.net.URL;
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
-
-    private static final String TAG = NewsActivity.class.getSimpleName();
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
@@ -82,6 +84,10 @@ public class NewsActivity extends AppCompatActivity implements
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mActionBarDrawerToggle;
+    private NavigationView mNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +95,33 @@ public class NewsActivity extends AppCompatActivity implements
 
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle
+                (this, mDrawerLayout, topToolbar, R.string.Open, R.string.Close);
+
+        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+
+        mNavigationView = findViewById(R.id.nv);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.events:
+                        Toast.makeText(NewsActivity.this, R.string.events, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.opportunities:
+                        Toast.makeText(NewsActivity.this, R.string.opportunities, Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+
+                return true;
+
+            }
+        });
 
         // Lookup the swipe container view and set its properties
         mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -162,6 +195,12 @@ public class NewsActivity extends AppCompatActivity implements
 
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mActionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -287,6 +326,9 @@ public class NewsActivity extends AppCompatActivity implements
         }
         if (id == R.id.action_contact_us) {
             composeEmail();
+            return true;
+        }
+        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

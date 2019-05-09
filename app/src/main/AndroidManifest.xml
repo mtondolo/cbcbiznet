@@ -47,7 +47,7 @@
             </intent-filter>
         </service>
 
-        <!--The manifest entry for our DetailActivity. Each Activity requires a manifest entry-->
+        <!-- The manifest entry for our DetailActivity. Each Activity requires a manifest entry -->
         <activity
             android:name=".DetailNewsActivity"
             android:label="@string/title_activity_detail"
@@ -56,7 +56,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NewsActivity" />
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/action_settings"
@@ -65,5 +64,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NewsActivity" />
         </activity>
+        <activity android:name=".EventsActivity"></activity>
     </application>
+
 </manifest>

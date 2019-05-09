@@ -109,7 +109,10 @@ public class NewsActivity extends AppCompatActivity implements
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.events:
-                        Toast.makeText(NewsActivity.this, R.string.events, Toast.LENGTH_SHORT).show();
+
+                        // Intent to start events activity
+                        Intent eventsIntent = new Intent(NewsActivity.this, EventsActivity.class);
+                        startActivity(eventsIntent);
                         break;
                     case R.id.opportunities:
                         Toast.makeText(NewsActivity.this, R.string.opportunities, Toast.LENGTH_SHORT).show();

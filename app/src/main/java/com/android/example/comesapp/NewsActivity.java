@@ -103,6 +103,7 @@ public class NewsActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
 
         mNavigationView = findViewById(R.id.nv);
+        mNavigationView.setItemIconTintList(null);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

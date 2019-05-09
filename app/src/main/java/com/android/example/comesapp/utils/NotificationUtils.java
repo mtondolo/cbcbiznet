@@ -88,7 +88,7 @@ public class NotificationUtils {
             NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(currentNotificationHeadline)
-                    .setSmallIcon(R.drawable.ic_android)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentIntent(resultPendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)

@@ -11,6 +11,20 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     private String[] mEventsData;
 
+    // An on-click handler that we've defined to make it easy for an Activity
+    // to interface with our RecyclerView
+    private final EventsAdapterOnClickHandler mClickHandler;
+
+    // The interface that receives onClick messages.
+    public interface EventsAdapterOnClickHandler {
+        void onClick(String eventsItem);
+    }
+
+    // Creates a NewsAdapter.
+    public EventsAdapter(EventsAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+    }
+
     // This gets called when each new ViewHolder is created.
     @Override
     public EventsAdapter.EventsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -44,13 +58,22 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     }
 
     // Cache of the children views for a events list item.
-    public class EventsAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class EventsAdapterViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener {
 
         public final TextView mEventsTextView;
 
         public EventsAdapterViewHolder(View view) {
             super(view);
             mEventsTextView = (TextView) view.findViewById(R.id.tv_events_data);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            String eventsItem = mEventsData[adapterPosition];
+            mClickHandler.onClick(eventsItem);
         }
     }
 

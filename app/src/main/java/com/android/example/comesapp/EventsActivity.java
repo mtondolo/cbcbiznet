@@ -1,5 +1,6 @@
 package com.android.example.comesapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,13 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.example.comesapp.utils.JsonUtils;
 import com.android.example.comesapp.utils.NetworkUtils;
 
 import java.net.URL;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity implements
+        EventsAdapter.EventsAdapterOnClickHandler {
 
     private RecyclerView mRecyclerView;
     private EventsAdapter mEventsAdapter;
@@ -47,7 +50,7 @@ public class EventsActivity extends AppCompatActivity {
 
         // EventsAdapter is responsible for linking our events data with the Views
         // that will end up displaying our events data.
-        mEventsAdapter = new EventsAdapter();
+        mEventsAdapter = new EventsAdapter(this);
 
         // Use mRecyclerView.setAdapter and pass in mLatestNewsAdapter.
         // Setting the adapter attaches it to the RecyclerView in our layout.
@@ -68,6 +71,14 @@ public class EventsActivity extends AppCompatActivity {
     private void showEventsDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    // This method handles RecyclerView item clicks.
+    @Override
+    public void onClick(String eventsItem) {
+        Context context = this;
+        Toast.makeText(context, eventsItem, Toast.LENGTH_SHORT)
+                .show();
     }
 
     public class FetchEventsTask extends AsyncTask<String, Void, String[]> {

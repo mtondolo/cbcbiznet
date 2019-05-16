@@ -3,6 +3,8 @@ package com.android.example.comesapp;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,7 +16,8 @@ import java.net.URL;
 
 public class EventsActivity extends AppCompatActivity {
 
-    private TextView mEventsTextView;
+    private RecyclerView mRecyclerView;
+    private EventsAdapter mEventsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
 
@@ -23,8 +26,8 @@ public class EventsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
 
-        // Using findViewById, we get a reference to our TextView from xml.
-        mEventsTextView = findViewById(R.id.tv_events);
+        // Using findViewById, we get a reference to our RecyclerView from xml.
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_events);
 
         // This TextView is used to display errors and will be hidden if there are no errors
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
@@ -33,24 +36,41 @@ public class EventsActivity extends AppCompatActivity {
         // It will be hidden when no data is loading.
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
+        // LinearLayoutManager can support HORIZONTAL or VERTICAL orientations.
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        // Use setHasFixedSize(true) on mRecyclerView to designate that all items in the list
+        // will have the same size.
+        mRecyclerView.setHasFixedSize(true);
+
+        // EventsAdapter is responsible for linking our events data with the Views
+        // that will end up displaying our events data.
+        mEventsAdapter = new EventsAdapter();
+
+        // Use mRecyclerView.setAdapter and pass in mLatestNewsAdapter.
+        // Setting the adapter attaches it to the RecyclerView in our layout.
+        mRecyclerView.setAdapter(mEventsAdapter);
+
         // Once all of our views are setup, we can load the events.
         loadEventsData();
     }
 
     // This method will tell some background method to get events data in the background.
     private void loadEventsData() {
-        showLatestNewsDataView();
+        showEventsDataView();
         new FetchEventsTask().execute();
     }
 
     // This method will make the View for the events data visible
     // and hide the error message.
-    private void showLatestNewsDataView() {
+    private void showEventsDataView() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        mEventsTextView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    public class FetchEventsTask extends AsyncTask<String, Void, String> {
+    public class FetchEventsTask extends AsyncTask<String, Void, String[]> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -58,12 +78,12 @@ public class EventsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
             URL eventsRequestUrl = NetworkUtils.buildEventUrl();
             try {
                 String jsonEventsResponse = NetworkUtils
                         .getResponseFromHttpUrl(eventsRequestUrl);
-                String simpleJsonEventsData = JsonUtils
+                String[] simpleJsonEventsData = JsonUtils
                         .getEventFromJsonStr(EventsActivity.this, jsonEventsResponse);
                 return simpleJsonEventsData;
             } catch (Exception e) {
@@ -73,13 +93,11 @@ public class EventsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String eventsData) {
+        protected void onPostExecute(String[] eventsData) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (eventsData != null) {
-                showLatestNewsDataView();
-
-                // Append the Strings to the TextView.
-                mEventsTextView.append((eventsData) + "\n\n\n");
+                showEventsDataView();
+                mEventsAdapter.setEventsData(eventsData);
             } else {
                 showErrorMessage();
             }
@@ -88,7 +106,7 @@ public class EventsActivity extends AppCompatActivity {
 
     // This method will make the error message visible and hide the events View.
     private void showErrorMessage() {
-        mEventsTextView.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 }

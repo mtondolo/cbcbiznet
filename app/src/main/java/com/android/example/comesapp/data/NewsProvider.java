@@ -14,12 +14,13 @@ public class NewsProvider extends ContentProvider {
     // These constant will be used to match URIs with the data they are looking for.
     public static final int CODE_NEWS = 100;
     public static final int CODE_NEWS_WITH_DATE = 101;
+    public static final int CODE_EVENTS = 102;
 
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private NewsDBHelper mOpenHelper;
 
-    // Creates the UriMatcher that will match each URI to the CODE_NEWS constant defined above.
+    // Creates the UriMatcher that will match each URI to the CODE_EVENTS constant defined above.
     public static UriMatcher buildUriMatcher() {
 
         // All paths added to the UriMatcher have a corresponding code to return when a match is found.
@@ -31,6 +32,9 @@ public class NewsProvider extends ContentProvider {
 
         // This URI would look something like content://com.android.example.comesapp/news/1472214172
         matcher.addURI(authority, NewsContract.PATH_NEWS + "/#", CODE_NEWS_WITH_DATE);
+
+        // This URI is content://com.android.example.comesapp/events
+        matcher.addURI(authority, NewsContract.PATH_EVENTS, CODE_EVENTS);
 
         return matcher;
     }
@@ -72,7 +76,29 @@ public class NewsProvider extends ContentProvider {
                 // Return the number of rows inserted from our implementation of bulkInsert
                 return rowsInserted;
 
-            // If the URI does match match CODE_NEWS, return the super implementation of bulkInsert
+            case CODE_EVENTS:
+                db.beginTransaction();
+                int eventsInserted = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(NewsContract.NewsEntry.TABLE_EVENTS, null, value);
+                        if (_id != -1) {
+                            eventsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (eventsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+                // Return the number of rows inserted from our implementation of bulkInsert
+                return eventsInserted;
+
+            // If the URI does match match CODE_EVENTS, return the super implementation of bulkInsert
             default:
                 return super.bulkInsert(uri, values);
         }
@@ -123,6 +149,19 @@ public class NewsProvider extends ContentProvider {
                 break;
             }
 
+            // we want to return a cursor that contains every row of news data in our news table
+            case CODE_EVENTS: {
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        NewsContract.NewsEntry.TABLE_EVENTS,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -141,6 +180,12 @@ public class NewsProvider extends ContentProvider {
             case CODE_NEWS:
                 numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
                         NewsContract.NewsEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
+            case CODE_EVENTS:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        NewsContract.NewsEntry.TABLE_EVENTS,
                         selection,
                         selectionArgs);
                 break;

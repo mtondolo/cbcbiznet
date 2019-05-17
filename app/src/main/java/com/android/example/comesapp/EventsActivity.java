@@ -1,8 +1,8 @@
 package com.android.example.comesapp;
 
-import android.support.annotation.Nullable;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -14,20 +14,34 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.example.comesapp.utils.JsonUtils;
-import com.android.example.comesapp.utils.NetworkUtils;
-
-import java.net.URL;
+import com.android.example.comesapp.data.NewsContract;
 
 public class EventsActivity extends AppCompatActivity implements
         EventsAdapter.EventsAdapterOnClickHandler,
-        LoaderCallbacks<String[]> {
+        LoaderCallbacks<Cursor> {
+
+    // The columns of data that we are interested in displaying within our EventsActivity's list of events data.
+    public static final String[] EVENTS_PROJECTION = {
+            NewsContract.NewsEntry.COLUMN_TITLE,
+            NewsContract.NewsEntry.COLUMN_VENUE,
+    };
+
+    // We store the indices of the values in the array of Strings above to more quickly be able to
+    // access the data from our query. If the order of the Strings above changes, these indices
+    // must be adjusted to match the order of the Strings.
+
+    public static final int INDEX_TITLE = 0;
+    public static final int INDEX_VENUE = 1;
+
+    // This ID will be used to identify the Loader responsible for loading our policies.
+    private static final int ID_EVENTS_LOADER = 45;
 
     private RecyclerView mRecyclerView;
     private EventsAdapter mEventsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
-    private static final int EVENTS_LOADER_ID = 1;
+
+    private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +49,14 @@ public class EventsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_events);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_events);
+        mRecyclerView = findViewById(R.id.recyclerview_events);
 
         // This TextView is used to display errors and will be hidden if there are no errors
-        mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
+        mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
 
         // The ProgressBar that will indicate to the user that we are loading data.
         // It will be hidden when no data is loading.
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
         // LinearLayoutManager can support HORIZONTAL or VERTICAL orientations.
         LinearLayoutManager layoutManager
@@ -55,24 +69,24 @@ public class EventsActivity extends AppCompatActivity implements
 
         // EventsAdapter is responsible for linking our events data with the Views
         // that will end up displaying our events data.
-        mEventsAdapter = new EventsAdapter(this);
+        mEventsAdapter = new EventsAdapter(this, this);
 
         // Use mRecyclerView.setAdapter and pass in mEventsAdapter.
         // Setting the adapter attaches it to the RecyclerView in our layout.
         mRecyclerView.setAdapter(mEventsAdapter);
 
-        // This ID will uniquely identify the Loader.
-        int loaderId = EVENTS_LOADER_ID;
-
-        // From EventsActivity, we have implemented the LoaderCallbacks interface with the type of
-        // String array.
-        android.support.v4.app.LoaderManager.LoaderCallbacks<String[]> callback = EventsActivity.this;
-
-        // The second parameter of the initLoader method below is a Bundle.
-        Bundle bundleForLoader = null;
+        showLoading();
 
         // Ensures a loader is initialized and active.
-        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
+        getSupportLoaderManager().initLoader(ID_EVENTS_LOADER, null, this);
+
+    }
+
+    // This method will make the loading indicator visible
+    // and hide the events View and error message.
+    private void showLoading() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
     // This method will make the View for the events data visible
@@ -92,70 +106,38 @@ public class EventsActivity extends AppCompatActivity implements
 
     // Instantiate and return a new Loader for the given ID.
     @Override
-    public Loader<String[]> onCreateLoader(int id, Bundle loaderArgs) {
-        return new AsyncTaskLoader<String[]>(this) {
+    public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
 
-            /* This String array will hold and help cache our events data */
-            String[] mEventsData = null;
-
-            @Override
-            protected void onStartLoading() {
-                if (mEventsData != null) {
-                    deliverResult(mEventsData);
-                } else {
-                    mLoadingIndicator.setVisibility(View.VISIBLE);
-                    forceLoad();
-                }
-            }
-
-            @Nullable
-            @Override
-            public String[] loadInBackground() {
-                URL eventsRequestUrl = NetworkUtils.buildEventUrl();
-                try {
-                    String jsonEventsResponse = NetworkUtils
-                            .getResponseFromHttpUrl(eventsRequestUrl);
-                    String[] simpleJsonEventsData = JsonUtils
-                            .getEventFromJsonStr(EventsActivity.this, jsonEventsResponse);
-                    return simpleJsonEventsData;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            @Override
-            public void deliverResult(@Nullable String[] data) {
-                mEventsData = data;
-                super.deliverResult(data);
-            }
-        };
+        switch (loaderId) {
+            case ID_EVENTS_LOADER:
+                Uri eventsQueryUri = NewsContract.NewsEntry.EVENT_URI;
+                return new android.support.v4.content.CursorLoader(this,
+                        eventsQueryUri,
+                        EVENTS_PROJECTION,
+                        null,
+                        null,
+                        null
+                );
+            default:
+                throw new RuntimeException("Loader Not Implemented: " + loaderId);
+        }
     }
 
     // Called when a previously created loader has finished its load.
     @Override
-    public void onLoadFinished(Loader<String[]> loader, String[] data) {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-        mEventsAdapter.setEventsData(data);
-        if (null == data) {
-            showErrorMessage();
-        } else {
-            showEventsDataView();
-        }
-
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mEventsAdapter.swapCursor(data);
+        if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+        mRecyclerView.smoothScrollToPosition(mPosition);
+        if (data.getCount() != 0) showEventsDataView();
     }
 
     // Called when a previously created loader is being reset, and thus making its data unavailable.
     @Override
-    public void onLoaderReset(Loader<String[]> loader) {
-        // We aren't using this method at the moment, but we are required to Override
-        // it to implement the LoaderCallbacks<String> interface.
-    }
-
-    // This method will make the error message visible and hide the events View.
-    private void showErrorMessage() {
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mErrorMessageDisplay.setVisibility(View.VISIBLE);
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Since this Loader's data is now invalid, we need to clear
+        // the Adapter that is displaying the data.
+        mEventsAdapter.swapCursor(null);
     }
 }
 

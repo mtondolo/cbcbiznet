@@ -1,6 +1,7 @@
 package com.android.example.comesapp;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,11 @@ import android.widget.TextView;
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdapterViewHolder> {
 
     private String[] mEventsData;
+
+    // The context we use to utility methods, app resources and layout inflaters
+    private final Context mContext;
+
+    private Cursor mCursor;
 
     // An on-click handler that we've defined to make it easy for an Activity
     // to interface with our RecyclerView
@@ -21,7 +27,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     }
 
     // Creates a NewsAdapter.
-    public EventsAdapter(EventsAdapterOnClickHandler clickHandler) {
+    public EventsAdapter(Context context, EventsAdapterOnClickHandler clickHandler) {
+        mContext = context;
         mClickHandler = clickHandler;
     }
 
@@ -44,17 +51,39 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     @Override
     public void onBindViewHolder(EventsAdapterViewHolder eventsAdapterViewHolder, int position) {
 
-        // Set the text of the TextView to the policy for this list item's position
+        // Move the cursor to the appropriate position
+        mCursor.moveToPosition(position);
+
+        /*******************
+         * Events Item *
+         *******************/
+
+        // Read title and venue from the cursor
+        String title = mCursor.getString(EventsActivity.INDEX_TITLE);
+        String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
+
+        // Display the summary that we created above
+        String event = title + " - " + venue;
+
+        // Set the text of the TextView to the event for this list item's position
         String eventsItem = mEventsData[position];
         eventsAdapterViewHolder.mEventsTextView.setText(eventsItem);
+
+        eventsAdapterViewHolder.mEventsTextView.setText(event);
 
     }
 
     // This method simply returns the number of items to display.
     @Override
     public int getItemCount() {
-        if (null == mEventsData) return 0;
-        return mEventsData.length;
+        if (null == mCursor) return 0;
+        return mCursor.getCount();
+    }
+
+    // Swaps the cursor used by the EventsAdapter for its events data.
+    void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+        notifyDataSetChanged();
     }
 
     // Cache of the children views for a events list item.

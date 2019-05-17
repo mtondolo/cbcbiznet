@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.example.comesapp.data.NewsContract.NewsEntry;
 
-
 public class NewsDBHelper extends SQLiteOpenHelper {
 
     //This is the name of our database.
@@ -16,7 +15,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 14;
 
     public NewsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,13 +36,20 @@ public class NewsDBHelper extends SQLiteOpenHelper {
 
                         // To ensure this table can only contain one headline per row.
                         " UNIQUE (" + NewsEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
-
         sqLiteDatabase.execSQL(SQL_CREATE_NEWS_TABLE);
+
+        final String SQL_CREATE_EVENTS_TABLE =
+                "CREATE TABLE " + NewsEntry.TABLE_EVENTS + " (" +
+                        NewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        NewsEntry.COLUMN_TITLE + " TEXT, " +
+                        NewsEntry.COLUMN_VENUE + " TEXT" + ");";
+        sqLiteDatabase.execSQL(SQL_CREATE_EVENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + NewsEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + NewsEntry.TABLE_EVENTS);
         onCreate(sqLiteDatabase);
     }
 }

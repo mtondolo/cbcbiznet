@@ -1,7 +1,10 @@
 package com.android.example.comesapp;
 
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,12 +20,14 @@ import com.android.example.comesapp.utils.NetworkUtils;
 import java.net.URL;
 
 public class EventsActivity extends AppCompatActivity implements
-        EventsAdapter.EventsAdapterOnClickHandler {
+        EventsAdapter.EventsAdapterOnClickHandler,
+        LoaderCallbacks<String[]> {
 
     private RecyclerView mRecyclerView;
     private EventsAdapter mEventsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+    private static final int EVENTS_LOADER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +57,22 @@ public class EventsActivity extends AppCompatActivity implements
         // that will end up displaying our events data.
         mEventsAdapter = new EventsAdapter(this);
 
-        // Use mRecyclerView.setAdapter and pass in mLatestNewsAdapter.
+        // Use mRecyclerView.setAdapter and pass in mEventsAdapter.
         // Setting the adapter attaches it to the RecyclerView in our layout.
         mRecyclerView.setAdapter(mEventsAdapter);
 
-        // Once all of our views are setup, we can load the events.
-        loadEventsData();
-    }
+        // This ID will uniquely identify the Loader.
+        int loaderId = EVENTS_LOADER_ID;
 
-    // This method will tell some background method to get events data in the background.
-    private void loadEventsData() {
-        showEventsDataView();
-        new FetchEventsTask().execute();
+        // From EventsActivity, we have implemented the LoaderCallbacks interface with the type of
+        // String array.
+        android.support.v4.app.LoaderManager.LoaderCallbacks<String[]> callback = EventsActivity.this;
+
+        // The second parameter of the initLoader method below is a Bundle.
+        Bundle bundleForLoader = null;
+
+        // Ensures a loader is initialized and active.
+        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
     }
 
     // This method will make the View for the events data visible
@@ -81,38 +90,66 @@ public class EventsActivity extends AppCompatActivity implements
                 .show();
     }
 
-    public class FetchEventsTask extends AsyncTask<String, Void, String[]> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
+    // Instantiate and return a new Loader for the given ID.
+    @Override
+    public Loader<String[]> onCreateLoader(int id, Bundle loaderArgs) {
+        return new AsyncTaskLoader<String[]>(this) {
+
+            /* This String array will hold and help cache our events data */
+            String[] mEventsData = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (mEventsData != null) {
+                    deliverResult(mEventsData);
+                } else {
+                    mLoadingIndicator.setVisibility(View.VISIBLE);
+                    forceLoad();
+                }
+            }
+
+            @Nullable
+            @Override
+            public String[] loadInBackground() {
+                URL eventsRequestUrl = NetworkUtils.buildEventUrl();
+                try {
+                    String jsonEventsResponse = NetworkUtils
+                            .getResponseFromHttpUrl(eventsRequestUrl);
+                    String[] simpleJsonEventsData = JsonUtils
+                            .getEventFromJsonStr(EventsActivity.this, jsonEventsResponse);
+                    return simpleJsonEventsData;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult(@Nullable String[] data) {
+                mEventsData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    // Called when a previously created loader has finished its load.
+    @Override
+    public void onLoadFinished(Loader<String[]> loader, String[] data) {
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mEventsAdapter.setEventsData(data);
+        if (null == data) {
+            showErrorMessage();
+        } else {
+            showEventsDataView();
         }
 
-        @Override
-        protected String[] doInBackground(String... params) {
-            URL eventsRequestUrl = NetworkUtils.buildEventUrl();
-            try {
-                String jsonEventsResponse = NetworkUtils
-                        .getResponseFromHttpUrl(eventsRequestUrl);
-                String[] simpleJsonEventsData = JsonUtils
-                        .getEventFromJsonStr(EventsActivity.this, jsonEventsResponse);
-                return simpleJsonEventsData;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
+    }
 
-        @Override
-        protected void onPostExecute(String[] eventsData) {
-            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (eventsData != null) {
-                showEventsDataView();
-                mEventsAdapter.setEventsData(eventsData);
-            } else {
-                showErrorMessage();
-            }
-        }
+    // Called when a previously created loader is being reset, and thus making its data unavailable.
+    @Override
+    public void onLoaderReset(Loader<String[]> loader) {
+        // We aren't using this method at the moment, but we are required to Override
+        // it to implement the LoaderCallbacks<String> interface.
     }
 
     // This method will make the error message visible and hide the events View.

@@ -71,10 +71,8 @@ public class JsonUtils {
     }
 
     // This method parses JSON from a web response and returns an array of Strings
-    public static String[] getEventFromJsonStr(Context context, String eventJsonStr)
+    public static ContentValues[] getEventFromJsonStr(Context context, String eventJsonStr)
             throws JSONException {
-
-        String[] parsedEventsData = null;
 
         // headline, storyUrl, date and imageUrl are keys for the news item
         final String KEY_TITLE = "title";
@@ -87,7 +85,7 @@ public class JsonUtils {
 
         JSONArray eventsArray = new JSONArray(eventJsonStr);
 
-        parsedEventsData = new String[eventsArray.length()];
+        ContentValues[] eventContentValues = new ContentValues[eventsArray.length()];
 
         for (int i = 0; i < eventsArray.length(); i++) {
 
@@ -103,10 +101,14 @@ public class JsonUtils {
             title = event.getString(KEY_TITLE);
             venue = event.getString(KEY_VENUE);
 
-            parsedEventsData[i] = title + venue;
+            ContentValues eventValues = new ContentValues();
+            eventValues.put(NewsContract.NewsEntry.COLUMN_TITLE, title);
+            eventValues.put(NewsContract.NewsEntry.COLUMN_VENUE, venue);
+
+            eventContentValues[i] = eventValues;
 
         }
-        return parsedEventsData;
+        return eventContentValues;
     }
 }
 

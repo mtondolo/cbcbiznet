@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.sync.EventSyncUtils;
 
 public class EventsActivity extends AppCompatActivity implements
         EventsAdapter.EventsAdapterOnClickHandler,
@@ -80,6 +81,8 @@ public class EventsActivity extends AppCompatActivity implements
         // Ensures a loader is initialized and active.
         getSupportLoaderManager().initLoader(ID_EVENTS_LOADER, null, this);
 
+        EventSyncUtils.startImmediateSync(this);
+
     }
 
     // This method will make the loading indicator visible
@@ -92,7 +95,7 @@ public class EventsActivity extends AppCompatActivity implements
     // This method will make the View for the events data visible
     // and hide the error message.
     private void showEventsDataView() {
-        mErrorMessageDisplay.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 

@@ -37,6 +37,9 @@
         <service
             android:name=".sync.NewsRefreshIntentService"
             android:exported="false" />
+        <service
+            android:name=".sync.EventSyncIntentService"
+            android:exported="false" />
 
         <!-- This is the Service declaration used in conjunction with FirebaseJobDispatcher -->
         <service

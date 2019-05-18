@@ -64,11 +64,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
         // Display the summary that we created above
         String event = title + " - " + venue;
-
-        // Set the text of the TextView to the event for this list item's position
-        String eventsItem = mEventsData[position];
-        eventsAdapterViewHolder.mEventsTextView.setText(eventsItem);
-
         eventsAdapterViewHolder.mEventsTextView.setText(event);
 
     }
@@ -104,12 +99,5 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
             String eventsItem = mEventsData[adapterPosition];
             mClickHandler.onClick(eventsItem);
         }
-    }
-
-    // This method is used to set the event on an EventsAdapter
-    // if we've already created one.
-    public void setEventsData(String[] eventsData) {
-        mEventsData = eventsData;
-        notifyDataSetChanged();
     }
 }

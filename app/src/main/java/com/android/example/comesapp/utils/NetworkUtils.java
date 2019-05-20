@@ -50,7 +50,7 @@ public class NetworkUtils {
     }
 
     // Builds the URL used to query comesaa-api for events
-    public static URL buildEventUrl() {
+    public static URL buildEventUrl(Context context) {
         Uri builtUri = Uri.parse(EVENT_URL).buildUpon()
                 .build();
 

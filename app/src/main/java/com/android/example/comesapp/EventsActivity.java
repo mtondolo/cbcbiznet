@@ -81,7 +81,7 @@ public class EventsActivity extends AppCompatActivity implements
         // Ensures a loader is initialized and active.
         getSupportLoaderManager().initLoader(ID_EVENTS_LOADER, null, this);
 
-        EventSyncUtils.initialize(this);
+        EventSyncUtils.initialize(getApplicationContext());
 
     }
 

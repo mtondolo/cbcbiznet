@@ -25,7 +25,7 @@ public class EventSyncTask {
              * policy.
              *
              */
-            URL eventRequestUrl = NetworkUtils.buildEventUrl();
+            URL eventRequestUrl = NetworkUtils.buildEventUrl(context);
 
             /* Use the URL to retrieve the JSON */
             String jsonEventResponse = NetworkUtils.getResponseFromHttpUrl(eventRequestUrl);

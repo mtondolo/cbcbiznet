@@ -44,6 +44,7 @@ import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.data.NewsPreferences;
+import com.android.example.comesapp.sync.EventSyncUtils;
 import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
 import com.android.example.comesapp.utils.JsonRefreshUtils;

@@ -95,8 +95,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
         @Override
         public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            String eventsItem = mEventsData[adapterPosition];
+            String eventsItem = mEventsTextView.getText().toString();
             mClickHandler.onClick(eventsItem);
         }
     }

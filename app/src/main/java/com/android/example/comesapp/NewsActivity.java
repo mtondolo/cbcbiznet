@@ -44,8 +44,6 @@ import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.data.NewsPreferences;
-import com.android.example.comesapp.sync.EventSyncUtils;
-import com.android.example.comesapp.sync.NewsRefreshUtils;
 import com.android.example.comesapp.sync.NewsSyncUtils;
 import com.android.example.comesapp.utils.JsonRefreshUtils;
 import com.android.example.comesapp.utils.NetworkUtils;
@@ -394,7 +392,7 @@ public class NewsActivity extends AppCompatActivity implements
                 // If last news headline is not the same with current,
                 // perform a swipe refresh data operation.
                 if (!lastNewsHeadline.equalsIgnoreCase(currentNewsHeadline)) {
-                    NewsRefreshUtils.startImmediateRefresh(getApplicationContext());
+                    NewsSyncUtils.startImmediateRefresh(getApplicationContext());
                 } else mySwipeRefreshLayout.setRefreshing(false);
 
                 // Save the current notification headline so we can check

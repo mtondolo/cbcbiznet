@@ -12,6 +12,6 @@ public class NewsRefreshIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        NewsRefreshTask.refreshNews(this);
+        NewsSyncTask.refreshNews(this);
     }
 }

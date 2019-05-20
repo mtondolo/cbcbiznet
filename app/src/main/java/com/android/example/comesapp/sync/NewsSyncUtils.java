@@ -113,4 +113,9 @@ public class NewsSyncUtils {
         Intent intentToSyncImmediately = new Intent(context, NewsSyncIntentService.class);
         context.startService(intentToSyncImmediately);
     }
+
+    public static void startImmediateRefresh(@NonNull final Context context) {
+        Intent intentToRefreshImmediately = new Intent(context, NewsRefreshIntentService.class);
+        context.startService(intentToRefreshImmediately);
+    }
 }

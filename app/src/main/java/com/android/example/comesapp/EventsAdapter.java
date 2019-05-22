@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdapterViewHolder> {
 
-    private String[] mEventsData;
-
     // The context we use to utility methods, app resources and layout inflaters
     private final Context mContext;
 
@@ -62,9 +60,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
         String title = mCursor.getString(EventsActivity.INDEX_TITLE);
         String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
 
-        // Display the summary that we created above
-        String event = title + " - " + venue;
-        eventsAdapterViewHolder.mEventsTextView.setText(event);
+        // Stick the title and venue to their views
+        eventsAdapterViewHolder.mEventsTitleView.setText(title);
+        eventsAdapterViewHolder.mEventsVenueView.setText(venue);
 
     }
 
@@ -85,17 +83,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     public class EventsAdapterViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
 
-        public final TextView mEventsTextView;
+        public final TextView mEventsTitleView;
+        public final TextView mEventsVenueView;
 
         public EventsAdapterViewHolder(View view) {
             super(view);
-            mEventsTextView = (TextView) view.findViewById(R.id.tv_events_data);
+            mEventsTitleView = (TextView) view.findViewById(R.id.events_title);
+            mEventsVenueView = (TextView) view.findViewById(R.id.events_venue);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            String eventsItem = mEventsTextView.getText().toString();
+            String eventsItem = mEventsTitleView.getText().toString();
             mClickHandler.onClick(eventsItem);
         }
     }

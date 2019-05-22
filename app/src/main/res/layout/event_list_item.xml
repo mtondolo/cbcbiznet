@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="132dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginVertical="8dp"
+    android:background="@color/white">
 
-    <!--This TextView holds the events data for one particular events item-->
     <TextView
-        android:id="@+id/tv_events_data"
-        style="@style/TextAppearance.AppCompat.Large"
+        android:id="@+id/events_title"
+        style="@style/TextAppearance.AppCompat.Subhead"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp" />
-
-    <!--This View serves as a visual divider between list items-->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="#dadada" />
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        tools:text="Event Title" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/events_venue"
+        style="@style/TextAppearance.AppCompat.Body2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:fontFamily="sans-serif"
+        tools:text="Event Venue" />
+
+</RelativeLayout>
+

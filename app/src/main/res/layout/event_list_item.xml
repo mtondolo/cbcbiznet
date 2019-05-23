@@ -22,7 +22,6 @@
 
     <TextView
         android:id="@+id/events_venue"
-        style="@style/TextAppearance.AppCompat.Body2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

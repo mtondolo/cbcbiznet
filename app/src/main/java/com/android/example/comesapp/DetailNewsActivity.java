@@ -168,15 +168,15 @@ public class DetailNewsActivity extends AppCompatActivity implements
         // Load the image using the given url
         if (detailImage.isEmpty()) {//url.isEmpty()
             Picasso.get()
-                    .load(R.color.colorPrimary)
-                    .placeholder(R.color.colorPrimary)
+                    .load(R.color.grey)
+                    .placeholder(R.color.grey)
                     .resize(126, 78)
                     .centerCrop()
                     .into(mActivityDetailNewsBinding.detailImage);
         } else {
             Picasso.get()
                     .load(detailImage)
-                    .error(R.color.colorPrimary)
+                    .error(R.color.grey)
                     .fit()
                     .into(mActivityDetailNewsBinding.detailImage);//this is our ImageView
         }

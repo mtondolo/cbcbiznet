@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class EventsActivity extends AppCompatActivity implements
     private EventsAdapter mEventsAdapter;
     private TextView mErrorMessageDisplay;
     private ProgressBar mLoadingIndicator;
+    ImageView backArrow;
 
     private int mPosition = RecyclerView.NO_POSITION;
 
@@ -80,6 +82,15 @@ public class EventsActivity extends AppCompatActivity implements
 
         // Ensures a loader is initialized and active.
         getSupportLoaderManager().initLoader(ID_EVENTS_LOADER, null, this);
+
+        // Set up a listener for the back button in the tool-bar
+        backArrow = findViewById(R.id.ic_arrow_back_event);
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         EventSyncUtils.initialize(getApplicationContext());
 

@@ -164,7 +164,7 @@ public class RecyclerViewAdapter extends
     }
 
     // Cache of the children views for footer item.
-    public class FooterViewHolder extends RecyclerView.ViewHolder {
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView footerText;
 
         public FooterViewHolder(View view) {

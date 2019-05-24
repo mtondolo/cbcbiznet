@@ -15,6 +15,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     private Cursor mCursor;
 
+    // Constant ID for the ViewType for footer
+    private static final int VIEW_TYPE_NORMAL = 0;
+    private static final int VIEW_TYPE_FOOTER = 1;
+
+
     // An on-click handler that we've defined to make it easy for an Activity
     // to interface with our RecyclerView
     private final EventsAdapterOnClickHandler mClickHandler;
@@ -33,16 +38,14 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     // This gets called when each new ViewHolder is created.
     @Override
     public EventsAdapter.EventsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-
-        // Inflate the list item xml into a view
-        Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.event_list_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
-
-        // Return a new PolicyAdapterViewHolder with the above view passed in as a parameter
-        View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
-        return new EventsAdapterViewHolder(view);
+        if (viewType == VIEW_TYPE_NORMAL) {
+            return new EventsAdapterViewHolder(LayoutInflater.from(mContext).
+                    inflate(R.layout.event_list_item, viewGroup, false));
+        } else if (viewType == VIEW_TYPE_FOOTER) {
+            return new EventsAdapterViewHolder(LayoutInflater.
+                    from(mContext).inflate(R.layout.footer_item, viewGroup, false));
+        } else
+            throw new IllegalArgumentException("Invalid view type, value of " + viewType);
     }
 
     // OnBindViewHolder is called by the RecyclerView to display the data at the specified position.
@@ -50,27 +53,34 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     public void onBindViewHolder(EventsAdapterViewHolder eventsAdapterViewHolder, int position) {
 
         // Move the cursor to the appropriate position
-        mCursor.moveToPosition(position);
+        if (mCursor != null && mCursor.moveToPosition(position)) {
 
-        /*******************
-         * Events Item *
-         *******************/
+            String title = mCursor.getString(EventsActivity.INDEX_TITLE);
+            eventsAdapterViewHolder.mEventsTitleView.setText(title);
 
-        // Read title and venue from the cursor
-        String title = mCursor.getString(EventsActivity.INDEX_TITLE);
-        String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
+            String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
+            eventsAdapterViewHolder.mEventsVenueView.setText(venue);
 
-        // Stick the title and venue to their views
-        eventsAdapterViewHolder.mEventsTitleView.setText(title);
-        eventsAdapterViewHolder.mEventsVenueView.setText(venue);
-
+        } else if (mCursor != null && position == mCursor.getCount()) {
+            EventsAdapterViewHolder footerHolder = eventsAdapterViewHolder;
+            footerHolder.mFooterTextView.setText(R.string.detail_copyright);
+        }
     }
 
     // This method simply returns the number of items to display.
     @Override
     public int getItemCount() {
         if (null == mCursor) return 0;
-        return mCursor.getCount();
+        return mCursor.getCount() + 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == mCursor.getCount()) {
+            return VIEW_TYPE_FOOTER;
+        } else {
+            return VIEW_TYPE_NORMAL;
+        }
     }
 
     // Swaps the cursor used by the EventsAdapter for its events data.
@@ -85,11 +95,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
         public final TextView mEventsTitleView;
         public final TextView mEventsVenueView;
+        public final TextView mFooterTextView;
 
         public EventsAdapterViewHolder(View view) {
             super(view);
-            mEventsTitleView = (TextView) view.findViewById(R.id.events_title);
-            mEventsVenueView = (TextView) view.findViewById(R.id.events_venue);
+            mEventsTitleView = view.findViewById(R.id.events_title);
+            mEventsVenueView = view.findViewById(R.id.events_venue);
+            mFooterTextView = view.findViewById(R.id.footer_text);
             view.setOnClickListener(this);
         }
 

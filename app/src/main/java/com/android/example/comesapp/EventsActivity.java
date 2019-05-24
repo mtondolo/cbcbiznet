@@ -50,6 +50,8 @@ public class EventsActivity extends AppCompatActivity implements
     private final static int NUM_GRIDS = 2;
 
     private int mPosition = RecyclerView.NO_POSITION;
+    private final String RECYCLER_POSITION_KEY = "recycler_position";
+    private static Bundle mBundleState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,51 @@ public class EventsActivity extends AppCompatActivity implements
 
         EventSyncUtils.initialize(getApplicationContext());
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Save RecyclerView state
+        mBundleState = new Bundle();
+        mPosition = mLayoutManager.findFirstCompletelyVisibleItemPosition();
+        mBundleState.putInt(RECYCLER_POSITION_KEY, mPosition);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Restore RecyclerView state
+        if (mBundleState != null) {
+            mPosition = mBundleState.getInt(RECYCLER_POSITION_KEY);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+
+            // Scroll the RecyclerView to mPosition
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        // Save RecyclerView state
+        outState.putInt(RECYCLER_POSITION_KEY, mLayoutManager.findFirstCompletelyVisibleItemPosition());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore RecyclerView state
+        if (savedInstanceState.containsKey(RECYCLER_POSITION_KEY)) {
+            mPosition = savedInstanceState.getInt(RECYCLER_POSITION_KEY);
+            if (mPosition == RecyclerView.NO_POSITION) mPosition = 0;
+            // Scroll the RecyclerView to mPosition
+            mRecyclerView.smoothScrollToPosition(mPosition);
+        }
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     // This method will make the loading indicator visible

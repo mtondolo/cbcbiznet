@@ -13,7 +13,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     // The context we use to utility methods, app resources and layout inflaters
     private final Context mContext;
 
-    private Cursor mCursor;
+    public Cursor mCursor;
 
     // Constant ID for the ViewType for footer
     private static final int VIEW_TYPE_NORMAL = 0;

@@ -1,5 +1,6 @@
 package com.android.example.comesapp;
 
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -44,6 +46,9 @@ public class EventsActivity extends AppCompatActivity implements
     private ProgressBar mLoadingIndicator;
     ImageView backArrow;
 
+    GridLayoutManager mLayoutManager;
+    private final static int NUM_GRIDS = 2;
+
     private int mPosition = RecyclerView.NO_POSITION;
 
     @Override
@@ -61,10 +66,27 @@ public class EventsActivity extends AppCompatActivity implements
         // It will be hidden when no data is loading.
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
-        // LinearLayoutManager can support HORIZONTAL or VERTICAL orientations.
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
+        // Get the orientation of the screen
+        final int orientation = this.getResources().getConfiguration().orientation;
+
+        // Set out the layout
+        mLayoutManager
+                = new GridLayoutManager(this, NUM_GRIDS);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    return position == 0 ? 2 : 2;
+                } else if (orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                        mEventsAdapter.mCursor != null &&
+                        position == mEventsAdapter.mCursor.getCount()) {
+                    return 2;
+                } else
+                    return position == 0 ? 1 : 1;
+            }
+        });
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         // Use setHasFixedSize(true) on mRecyclerView to designate that all items in the list
         // will have the same size.

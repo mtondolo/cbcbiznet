@@ -1,8 +1,10 @@
 package com.android.example.comesapp;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.support.v4.content.Loader;

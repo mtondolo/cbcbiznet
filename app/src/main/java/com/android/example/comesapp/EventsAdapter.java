@@ -18,21 +18,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     // Constant ID for the ViewType for footer
     private static final int VIEW_TYPE_NORMAL = 0;
     private static final int VIEW_TYPE_FOOTER = 1;
-
-
-    // An on-click handler that we've defined to make it easy for an Activity
-    // to interface with our RecyclerView
-    private final EventsAdapterOnClickHandler mClickHandler;
-
-    // The interface that receives onClick messages.
-    public interface EventsAdapterOnClickHandler {
-        void onClick(String eventsItem);
-    }
-
+    
     // Creates a NewsAdapter.
-    public EventsAdapter(Context context, EventsAdapterOnClickHandler clickHandler) {
+    public EventsAdapter(Context context) {
         mContext = context;
-        mClickHandler = clickHandler;
     }
 
     // This gets called when each new ViewHolder is created.
@@ -90,8 +79,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     }
 
     // Cache of the children views for a events list item.
-    public class EventsAdapterViewHolder extends RecyclerView.ViewHolder implements
-            View.OnClickListener {
+    public class EventsAdapterViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mEventsTitleView;
         public final TextView mEventsVenueView;
@@ -102,13 +90,6 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
             mEventsTitleView = view.findViewById(R.id.events_title);
             mEventsVenueView = view.findViewById(R.id.events_venue);
             mFooterTextView = view.findViewById(R.id.footer_text);
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            String eventsItem = mEventsTitleView.getText().toString();
-            mClickHandler.onClick(eventsItem);
         }
     }
 }

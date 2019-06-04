@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.sync.EventSyncUtils;
 
 public class EventsActivity extends AppCompatActivity implements
         LoaderCallbacks<Cursor> {
+
+    private static final String TAG = EventsActivity.class.getSimpleName();
 
     // The columns of data that we are interested in displaying within our EventsActivity's list of events data.
     public static final String[] EVENTS_PROJECTION = {
@@ -92,7 +95,15 @@ public class EventsActivity extends AppCompatActivity implements
 
         // EventsAdapter is responsible for linking our events data with the Views
         // that will end up displaying our events data.
-        mEventsAdapter = new EventsAdapter(this);
+        mEventsAdapter = new EventsAdapter(this,
+                new EventsAdapter.OnEnquireTextViewClickListener() {
+                    @Override
+                    public void onEnquireIsClick(View button, int position) {
+                        Toast.makeText(getApplicationContext(),
+                                "Clicking on delete button of item", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                });
 
         // Use mRecyclerView.setAdapter and pass in mEventsAdapter.
         // Setting the adapter attaches it to the RecyclerView in our layout.

@@ -18,10 +18,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     // Constant ID for the ViewType for footer
     private static final int VIEW_TYPE_NORMAL = 0;
     private static final int VIEW_TYPE_FOOTER = 1;
-    
+
+    private final OnEnquireTextViewClickListener mEnquireTextViewListener;
+
+    // The interface that receives onClick messages.
+    public interface OnEnquireTextViewClickListener {
+        void onEnquireIsClick(View button, int position);
+    }
+
     // Creates a NewsAdapter.
-    public EventsAdapter(Context context) {
+    public EventsAdapter(Context context, OnEnquireTextViewClickListener enquireTextViewListener) {
         mContext = context;
+        mEnquireTextViewListener = enquireTextViewListener;
     }
 
     // This gets called when each new ViewHolder is created.
@@ -39,7 +47,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     // OnBindViewHolder is called by the RecyclerView to display the data at the specified position.
     @Override
-    public void onBindViewHolder(EventsAdapterViewHolder eventsAdapterViewHolder, int position) {
+    public void onBindViewHolder(EventsAdapterViewHolder eventsAdapterViewHolder, final int position) {
 
         // Move the cursor to the appropriate position
         if (mCursor != null && mCursor.moveToPosition(position)) {
@@ -49,6 +57,16 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
             String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
             eventsAdapterViewHolder.mEventsVenueView.setText(venue);
+
+            // Check if child text view is clicked
+            if (mEnquireTextViewListener != null) {
+                eventsAdapterViewHolder.getEnquireTextView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mEnquireTextViewListener.onEnquireIsClick(v, position);
+                    }
+                });
+            }
 
         } else if (mCursor != null && position == mCursor.getCount()) {
             EventsAdapterViewHolder footerHolder = eventsAdapterViewHolder;
@@ -84,12 +102,18 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
         public final TextView mEventsTitleView;
         public final TextView mEventsVenueView;
         public final TextView mFooterTextView;
+        public final TextView mEnquireTextView;
 
         public EventsAdapterViewHolder(View view) {
             super(view);
             mEventsTitleView = view.findViewById(R.id.events_title);
             mEventsVenueView = view.findViewById(R.id.events_venue);
             mFooterTextView = view.findViewById(R.id.footer_text);
+            mEnquireTextView = view.findViewById(R.id.events_enquire);
+        }
+
+        public TextView getEnquireTextView() {
+            return mEnquireTextView;
         }
     }
 }

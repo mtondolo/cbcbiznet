@@ -23,7 +23,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     // The interface that receives onClick messages.
     public interface OnEnquireTextViewClickListener {
-        void onEnquireIsClick(View button, int position);
+        void onEnquireIsClick(View button, String enquireText);
     }
 
     // Creates a NewsAdapter.
@@ -58,12 +58,15 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
             String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
             eventsAdapterViewHolder.mEventsVenueView.setText(venue);
 
-            // Check if child text view is clicked
+            // Check if child text view is clicked and implement accordingly
             if (mEnquireTextViewListener != null) {
                 eventsAdapterViewHolder.getEnquireTextView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mEnquireTextViewListener.onEnquireIsClick(v, position);
+                        if (mCursor != null && mCursor.moveToPosition(position)) {
+                            String enquireText = mCursor.getString(EventsActivity.INDEX_TITLE);
+                            mEnquireTextViewListener.onEnquireIsClick(v, enquireText);
+                        }
                     }
                 });
             }

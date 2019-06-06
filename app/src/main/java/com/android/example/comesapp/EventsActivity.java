@@ -98,9 +98,9 @@ public class EventsActivity extends AppCompatActivity implements
         mEventsAdapter = new EventsAdapter(this,
                 new EventsAdapter.OnEnquireTextViewClickListener() {
                     @Override
-                    public void onEnquireIsClick(View button, int position) {
+                    public void onEnquireIsClick(View button, String enquireText) {
                         Toast.makeText(getApplicationContext(),
-                                "Clicking on delete button of item", Toast.LENGTH_SHORT)
+                                enquireText, Toast.LENGTH_SHORT)
                                 .show();
                     }
                 });

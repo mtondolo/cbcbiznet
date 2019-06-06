@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -21,18 +22,21 @@ import com.android.example.comesapp.sync.EventSyncUtils;
 public class EventsActivity extends AppCompatActivity implements
         LoaderCallbacks<Cursor> {
 
+    private static final String TAG = EventsActivity.class.getSimpleName();
+
     // The columns of data that we are interested in displaying within our EventsActivity's list of events data.
     public static final String[] EVENTS_PROJECTION = {
             NewsContract.NewsEntry.COLUMN_TITLE,
             NewsContract.NewsEntry.COLUMN_VENUE,
+            NewsContract.NewsEntry.COLUMN_EMAIL,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to
     // access the data from our query. If the order of the Strings above changes, these indices
     // must be adjusted to match the order of the Strings.
-
     public static final int INDEX_TITLE = 0;
     public static final int INDEX_VENUE = 1;
+    public static final int INDEX_EMAIL = 2;
 
     // This ID will be used to identify the Loader responsible for loading our policies.
     private static final int ID_EVENTS_LOADER = 45;
@@ -96,13 +100,13 @@ public class EventsActivity extends AppCompatActivity implements
         mEventsAdapter = new EventsAdapter(this,
                 new EventsAdapter.OnEnquireTextViewClickListener() {
                     @Override
-                    public void onEnquireIsClick(View button, String enquireText) {
+                    public void onEnquireIsClick(View button, String enquireTitle, String enquireEmail) {
 
-                        // Use an intent to launch an email app.
+                        // Use an intent to launch an email app with data
                         Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
-                        intent.putExtra(Intent.EXTRA_SUBJECT, enquireText);
+                        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{enquireEmail});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, enquireTitle);
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(intent);
                         }

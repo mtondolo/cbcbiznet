@@ -77,6 +77,7 @@ public class JsonUtils {
         // headline, storyUrl, date and imageUrl are keys for the news item
         final String KEY_TITLE = "title";
         final String KEY_VENUE = "venue";
+        final String KEY_EMAIL = "email";
 
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(eventJsonStr)) {
@@ -92,18 +93,21 @@ public class JsonUtils {
             // These are the values that will be collected
             String title;
             String venue;
+            String email;
 
             // Get the JSON object representing the event
             JSONObject event = eventsArray.getJSONObject(i);
 
             // Extract the value for the key called "title",
-            // and "venue"
+            // "venue" and "email".
             title = event.getString(KEY_TITLE);
             venue = event.getString(KEY_VENUE);
+            email = event.getString(KEY_EMAIL);
 
             ContentValues eventValues = new ContentValues();
             eventValues.put(NewsContract.NewsEntry.COLUMN_TITLE, title);
             eventValues.put(NewsContract.NewsEntry.COLUMN_VENUE, venue);
+            eventValues.put(NewsContract.NewsEntry.COLUMN_EMAIL, email);
 
             eventContentValues[i] = eventValues;
 

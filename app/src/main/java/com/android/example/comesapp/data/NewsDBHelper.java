@@ -15,7 +15,7 @@ public class NewsDBHelper extends SQLiteOpenHelper {
      * If we change the database schema, we must increment the database version or the onUpgrade
      * method will not be called.
      */
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
 
     public NewsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,7 +42,8 @@ public class NewsDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + NewsEntry.TABLE_EVENTS + " (" +
                         NewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         NewsEntry.COLUMN_TITLE + " TEXT, " +
-                        NewsEntry.COLUMN_VENUE + " TEXT" + ");";
+                        NewsEntry.COLUMN_VENUE + " TEXT, " +
+                        NewsEntry.COLUMN_EMAIL + " TEXT" + ");";
         sqLiteDatabase.execSQL(SQL_CREATE_EVENTS_TABLE);
     }
 

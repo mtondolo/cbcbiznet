@@ -49,9 +49,10 @@ public class NewsContract {
         public static final String COLUMN_IMAGE_URL = "imageUrl";
         public static final String COLUMN_IMAGE_DESCRIPTION = "image_description";
 
-        // title is stored as string representing event title and venue
+        // title is stored as string representing event title, venue and email.
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_VENUE = "venue";
+        public static final String COLUMN_EMAIL = "email";
 
         // Builds a URI that adds the news date to the end of the news content URI path.
         public static Uri buildNewsUriWithDate(long date) {

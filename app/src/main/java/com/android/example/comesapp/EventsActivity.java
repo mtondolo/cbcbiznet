@@ -1,5 +1,6 @@
 package com.android.example.comesapp;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,15 +14,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.example.comesapp.data.NewsContract;
 import com.android.example.comesapp.sync.EventSyncUtils;
 
 public class EventsActivity extends AppCompatActivity implements
         LoaderCallbacks<Cursor> {
-
-    private static final String TAG = EventsActivity.class.getSimpleName();
 
     // The columns of data that we are interested in displaying within our EventsActivity's list of events data.
     public static final String[] EVENTS_PROJECTION = {
@@ -99,9 +97,15 @@ public class EventsActivity extends AppCompatActivity implements
                 new EventsAdapter.OnEnquireTextViewClickListener() {
                     @Override
                     public void onEnquireIsClick(View button, String enquireText) {
-                        Toast.makeText(getApplicationContext(),
-                                enquireText, Toast.LENGTH_SHORT)
-                                .show();
+
+                        // Use an intent to launch an email app.
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"mtondolo@gmail.com"});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, enquireText);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
                     }
                 });
 

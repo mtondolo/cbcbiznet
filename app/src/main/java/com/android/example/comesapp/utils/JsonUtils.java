@@ -78,7 +78,7 @@ public class JsonUtils {
         final String KEY_TITLE = "title";
         final String KEY_VENUE = "venue";
         final String KEY_EMAIL = "email";
-        final String KEY_START_DATE = "startDate";
+        final String KEY_START_DATE = "startDateInMills";
 
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(eventJsonStr)) {
@@ -95,7 +95,7 @@ public class JsonUtils {
             String title;
             String venue;
             String email;
-            String startDate;
+            long startDateInMills;
 
             // Get the JSON object representing the event
             JSONObject event = eventsArray.getJSONObject(i);
@@ -105,13 +105,13 @@ public class JsonUtils {
             title = event.getString(KEY_TITLE);
             venue = event.getString(KEY_VENUE);
             email = event.getString(KEY_EMAIL);
-            startDate = event.getString(KEY_START_DATE);
+            startDateInMills = event.getLong(KEY_START_DATE);
 
             ContentValues eventValues = new ContentValues();
             eventValues.put(NewsContract.NewsEntry.COLUMN_TITLE, title);
             eventValues.put(NewsContract.NewsEntry.COLUMN_VENUE, venue);
             eventValues.put(NewsContract.NewsEntry.COLUMN_EMAIL, email);
-            eventValues.put(NewsContract.NewsEntry.COLUMN_START_DATE, startDate);
+            eventValues.put(NewsContract.NewsEntry.COLUMN_START_DATE, startDateInMills);
 
             eventContentValues[i] = eventValues;
 

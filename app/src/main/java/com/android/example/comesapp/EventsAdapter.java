@@ -55,8 +55,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
             String title = mCursor.getString(EventsActivity.INDEX_TITLE);
             eventsAdapterViewHolder.mEventsTitleView.setText(title);
 
-            String startDate = mCursor.getString(EventsActivity.INDEX_START_DATE);
-            eventsAdapterViewHolder.mEventsStartDateTextView.setText(startDate);
+            long startDateInMills = mCursor.getLong(EventsActivity.INDEX_START_DATE);
+
+            // Format date in millis to a relative string
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            eventsAdapterViewHolder.mEventsStartDateTextView
+                    .setText(df.format("EEE, MMM d, ''yy", startDateInMills));
 
             String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
             eventsAdapterViewHolder.mEventsVenueView.setText(venue);

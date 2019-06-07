@@ -53,6 +53,7 @@ public class NewsContract {
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_VENUE = "venue";
         public static final String COLUMN_EMAIL = "email";
+        public static final String COLUMN_START_DATE = "startDate";
 
         // Builds a URI that adds the news date to the end of the news content URI path.
         public static Uri buildNewsUriWithDate(long date) {

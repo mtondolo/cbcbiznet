@@ -29,6 +29,7 @@ public class EventsActivity extends AppCompatActivity implements
             NewsContract.NewsEntry.COLUMN_TITLE,
             NewsContract.NewsEntry.COLUMN_VENUE,
             NewsContract.NewsEntry.COLUMN_EMAIL,
+            NewsContract.NewsEntry.COLUMN_START_DATE,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to
@@ -37,6 +38,7 @@ public class EventsActivity extends AppCompatActivity implements
     public static final int INDEX_TITLE = 0;
     public static final int INDEX_VENUE = 1;
     public static final int INDEX_EMAIL = 2;
+    public static final int INDEX_START_DATE = 3;
 
     // This ID will be used to identify the Loader responsible for loading our policies.
     private static final int ID_EVENTS_LOADER = 45;

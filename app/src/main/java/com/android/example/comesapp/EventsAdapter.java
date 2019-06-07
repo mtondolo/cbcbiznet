@@ -55,6 +55,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
             String title = mCursor.getString(EventsActivity.INDEX_TITLE);
             eventsAdapterViewHolder.mEventsTitleView.setText(title);
 
+            String startDate = mCursor.getString(EventsActivity.INDEX_START_DATE);
+            eventsAdapterViewHolder.mEventsStartDateTextView.setText(startDate);
+
             String venue = mCursor.getString(EventsActivity.INDEX_VENUE);
             eventsAdapterViewHolder.mEventsVenueView.setText(venue);
 
@@ -104,6 +107,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     public class EventsAdapterViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mEventsTitleView;
+        public final TextView mEventsStartDateTextView;
         public final TextView mEventsVenueView;
         public final TextView mFooterTextView;
         public final TextView mEnquireTextView;
@@ -111,6 +115,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
         public EventsAdapterViewHolder(View view) {
             super(view);
             mEventsTitleView = view.findViewById(R.id.events_title);
+            mEventsStartDateTextView = view.findViewById(R.id.events_date);
             mEventsVenueView = view.findViewById(R.id.events_venue);
             mFooterTextView = view.findViewById(R.id.footer_text);
             mEnquireTextView = view.findViewById(R.id.events_enquire);

@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,6 +57,8 @@ public class EventsActivity extends AppCompatActivity implements
     GridLayoutManager mLayoutManager;
     private final static int NUM_GRIDS = 2;
 
+    private SwipeRefreshLayout eventsSwipeRefreshLayout;
+
     private int mPosition = RecyclerView.NO_POSITION;
     private final String RECYCLER_POSITION_KEY = "recycler_position";
     private static Bundle mBundleState;
@@ -60,6 +67,9 @@ public class EventsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
+
+        Toolbar eventsTopToolbar = findViewById(R.id.detail_news_toolbar);
+        setSupportActionBar(eventsTopToolbar);
 
         // Using findViewById, we get a reference to our RecyclerView from xml.
         mRecyclerView = findViewById(R.id.recyclerview_events);
@@ -107,7 +117,7 @@ public class EventsActivity extends AppCompatActivity implements
                         // Use an intent to launch an email app with data
                         Intent intent = new Intent(Intent.ACTION_SENDTO);
                         intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{enquireEmail});
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{enquireEmail});
                         intent.putExtra(Intent.EXTRA_SUBJECT, enquireTitle);
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(intent);
@@ -132,6 +142,11 @@ public class EventsActivity extends AppCompatActivity implements
                 finish();
             }
         });
+
+        // Lookup the swipe container view and set its properties
+        eventsSwipeRefreshLayout = findViewById(R.id.swiperefresh_events);
+        eventsSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        eventsSwipeRefreshLayout.setProgressViewOffset(false, 100, 150);
 
         EventSyncUtils.initialize(getApplicationContext());
 

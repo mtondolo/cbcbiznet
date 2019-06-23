@@ -13,4 +13,5 @@
 <resources>
     <bool name="show_notifications_by_default">true</bool>
     <bool name="use_latest_layout">true</bool>
+    <bool name="use_top_layout">true</bool>
 </resources>

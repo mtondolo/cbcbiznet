@@ -16,10 +16,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     public Cursor mCursor;
 
     // Constant ID for the ViewType for footer
-    private static final int VIEW_TYPE_NORMAL = 0;
-    private static final int VIEW_TYPE_FOOTER = 1;
+    private static final int VIEW_TYPE_TOP = 0;
+    private static final int VIEW_TYPE_NORMAL = 1;
+    private static final int VIEW_TYPE_FOOTER = 2;
 
     private final OnEnquireTextViewClickListener mEnquireTextViewListener;
+
+    private boolean mUseTopLayout;
 
     // The interface that receives onClick messages.
     public interface OnEnquireTextViewClickListener {
@@ -30,6 +33,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
     public EventsAdapter(Context context, OnEnquireTextViewClickListener enquireTextViewListener) {
         mContext = context;
         mEnquireTextViewListener = enquireTextViewListener;
+        mUseTopLayout = mContext.getResources().getBoolean(R.bool.use_top_layout);
     }
 
     // This gets called when each new ViewHolder is created.
@@ -41,6 +45,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
         } else if (viewType == VIEW_TYPE_FOOTER) {
             return new EventsAdapterViewHolder(LayoutInflater.
                     from(mContext).inflate(R.layout.footer_item, viewGroup, false));
+        } else if (viewType == VIEW_TYPE_TOP) {
+            return new EventsAdapterViewHolder(LayoutInflater.
+                    from(mContext).inflate(R.layout.top_event_list_item, viewGroup, false));
         } else
             throw new IllegalArgumentException("Invalid view type, value of " + viewType);
     }
@@ -94,7 +101,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     @Override
     public int getItemViewType(int position) {
-        if (position == mCursor.getCount()) {
+        if (mUseTopLayout && position == 0) {
+            return VIEW_TYPE_TOP;
+        } else if (position == mCursor.getCount()) {
             return VIEW_TYPE_FOOTER;
         } else {
             return VIEW_TYPE_NORMAL;

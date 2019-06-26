@@ -59,6 +59,41 @@ public class EventSyncTask {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    // Performs the network request to refresh events, parses the JSON from that request.
+    synchronized public static void refreshEvents(Context context) {
+
+        try {
+
+            // The getUrl method will return the URL that we need to get the JSON for the events.
+            URL eventsRequestUrl = NetworkUtils.buildUrl(context);
+
+            // Use the URL to retrieve the JSON
+            String jsonEventsResponse = NetworkUtils.getResponseFromHttpUrl(eventsRequestUrl);
+
+            // Parse the JSON into a list of events values
+            ContentValues[] eventsValues = JsonUtils.getEventFromJsonStr(context, jsonEventsResponse);
+
+            // In cases where our JSON contained an error code, getEventFromJsonStr would have returned null.
+            if (eventsValues != null && eventsValues.length != 0) {
+
+                // Get a handle on the ContentResolver to delete and insert data
+                ContentResolver eventsContentResolver = context.getContentResolver();
+
+                // Delete old events data because we don't need to keep multiple days' data
+                eventsContentResolver.delete(
+                        NewsContract.NewsEntry.EVENT_URI,
+                        null,
+                        null);
+
+                // Insert our new events data into event's ContentProvider.
+                eventsContentResolver.bulkInsert(
+                        NewsContract.NewsEntry.EVENT_URI,
+                        eventsValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

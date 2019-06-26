@@ -23,6 +23,9 @@
     <!--Strings related to the notification flag-->
     <string name="pref_last_notification_flag">last_notification_flag</string>
 
+    <!--Strings related to the events flag-->
+    <string name="pref_last_event_title_flag">last_event_title_flag</string>
+
     <string name="Open">NavBar</string>
     <string name="Close">NavBar</string>
 

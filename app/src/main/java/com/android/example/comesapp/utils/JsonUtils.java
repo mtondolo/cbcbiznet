@@ -114,7 +114,6 @@ public class JsonUtils {
             eventValues.put(NewsContract.NewsEntry.COLUMN_START_DATE, startDateInMills);
 
             eventContentValues[i] = eventValues;
-
         }
         return eventContentValues;
     }

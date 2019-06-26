@@ -15,12 +15,9 @@
  */
 package com.android.example.comesapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -141,7 +138,7 @@ public class NewsActivity extends AppCompatActivity implements
                     public void onRefresh() {
 
                         // Check if there is connectivity
-                        if (isNetworkAvailable()) {
+                        if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
 
                             // This method performs the actual data-refresh operation.
                             // The method calls setRefreshing(false) when it's finished.
@@ -348,14 +345,6 @@ public class NewsActivity extends AppCompatActivity implements
         }
     }
 
-    // This method will check for connectivity
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null;
-    }
-
     // This method will tell some background method to get the latest news data item
     // in the background.
     private void loadLatestNewsData() {
@@ -401,7 +390,6 @@ public class NewsActivity extends AppCompatActivity implements
             }
         }
     }
-
 }
 
 

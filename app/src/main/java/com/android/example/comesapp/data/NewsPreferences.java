@@ -62,5 +62,22 @@ public class NewsPreferences {
         editor.apply();
     }
 
+    // Returns the title for the last event title
+    public static String getLastEventTitle(Context context) {
+        String lastNotificationKey = context.getString(R.string.pref_last_event_title_flag);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastEventTitle = sp.getString(lastNotificationKey, "");
+        return lastEventTitle;
+    }
+
+    // Saves the title for the the last event.
+    public static void saveLastEventTitle(Context context, String lastEventTitle) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        String lastEventTitleKey = context.getString(R.string.pref_last_event_title_flag);
+        editor.putString(lastEventTitleKey, lastEventTitle);
+        editor.apply();
+    }
+
 }
 

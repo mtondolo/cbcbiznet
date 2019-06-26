@@ -4,25 +4,27 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.design.widget.NavigationView;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.example.comesapp.data.NewsContract;
+import com.android.example.comesapp.data.NewsPreferences;
 import com.android.example.comesapp.sync.EventSyncUtils;
+import com.android.example.comesapp.utils.JsonRefreshUtils;
+import com.android.example.comesapp.utils.NetworkUtils;
+
+import java.net.URL;
 
 public class EventsActivity extends AppCompatActivity implements
         LoaderCallbacks<Cursor> {
@@ -148,6 +150,25 @@ public class EventsActivity extends AppCompatActivity implements
         eventsSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         eventsSwipeRefreshLayout.setProgressViewOffset(false, 100, 150);
 
+        /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        eventsSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+
+                        // Check if there is connectivity
+                        if (NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+
+                            // This method performs the actual data-refresh operation.
+                            // The method calls setRefreshing(false) when it's finished.
+                            loadLatestEventsData();
+                        } else eventsSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+
         EventSyncUtils.initialize(getApplicationContext());
 
     }
@@ -245,6 +266,52 @@ public class EventsActivity extends AppCompatActivity implements
         // Since this Loader's data is now invalid, we need to clear
         // the Adapter that is displaying the data.
         mEventsAdapter.swapCursor(null);
+    }
+
+    // This method will tell some background method to get the latest event data item
+    // in the background.
+    private void loadLatestEventsData() {
+        new FetchLatestEventsTask().execute();
+    }
+
+    public class FetchLatestEventsTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            URL latestEventsRequestUrl = NetworkUtils.buildUrl(getApplicationContext());
+            try {
+                String jsonLatestEventsResponse = NetworkUtils
+                        .getResponseFromHttpUrl(latestEventsRequestUrl);
+                String simpleJsonLatestEventsData = JsonRefreshUtils
+                        .getEventsDataJsonStr(EventsActivity.this, jsonLatestEventsResponse);
+                return simpleJsonLatestEventsData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String latestEventsData) {
+            if (latestEventsData != null) {
+
+                // Save the data in the given variable
+                String currentEventTitle = latestEventsData;
+
+                // Get the last  headline from our stored headline in the News Preferences
+                String lastEventTitle = NewsPreferences
+                        .getLastEventTitle(getApplicationContext());
+
+                // If last title is not the same with current,
+                // perform a swipe refresh data operation.
+                if (!lastEventTitle.equalsIgnoreCase(currentEventTitle)) {
+                    EventSyncUtils.startImmediateRefresh(getApplicationContext());
+                } else eventsSwipeRefreshLayout.setRefreshing(false);
+
+                // Save the current notification title so we can check
+                // next time the event is refreshed if we should perform a swipe refresh
+                NewsPreferences.saveLastEventTitle(getApplicationContext(), currentEventTitle);
+            }
+        }
     }
 }
 

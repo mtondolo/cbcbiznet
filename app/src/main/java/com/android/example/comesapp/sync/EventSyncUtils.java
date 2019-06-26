@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 
 public class EventSyncUtils {
 
-    // Interval at which to sync with the events. This is just for test purposes.
-    private static final int REMINDER_INTERVAL_MINUTES = 1;
-    private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
-    private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
+    // Interval at which to sync with the events.
+    private static final int SYNC_INTERVAL_HOURS = 3;
+    private static final int SYNC_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(SYNC_INTERVAL_HOURS));
+    private static final int SYNC_FLEXTIME_SECONDS = SYNC_INTERVAL_SECONDS / 3;
 
     private static boolean sInitialized;
 
@@ -43,8 +43,8 @@ public class EventSyncUtils {
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(
-                        REMINDER_INTERVAL_SECONDS,
-                        REMINDER_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
+                        SYNC_INTERVAL_SECONDS,
+                        SYNC_INTERVAL_SECONDS + SYNC_FLEXTIME_SECONDS))
                 .setReplaceCurrent(true)
                 .build();
 
@@ -92,5 +92,10 @@ public class EventSyncUtils {
     public static void startImmediateSync(@NonNull final Context context) {
         Intent intentToSyncImmediately = new Intent(context, EventSyncIntentService.class);
         context.startService(intentToSyncImmediately);
+    }
+
+    public static void startImmediateRefresh(@NonNull final Context context) {
+        Intent intentToRefreshEventsImmediately = new Intent(context, EventsRefreshIntentService.class);
+        context.startService(intentToRefreshEventsImmediately);
     }
 }

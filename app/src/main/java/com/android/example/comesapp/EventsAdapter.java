@@ -1,6 +1,7 @@
 package com.android.example.comesapp;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -101,7 +102,12 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
     @Override
     public int getItemViewType(int position) {
-        if (mUseTopLayout && position == 0) {
+
+        // Get the orientation of the screen
+        final int orientation = mContext.getResources().getConfiguration().orientation;
+        if (mUseTopLayout && position == 0 || mUseTopLayout
+                && position == 1
+                && orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return VIEW_TYPE_TOP;
         } else if (position == mCursor.getCount()) {
             return VIEW_TYPE_FOOTER;

@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -195,6 +196,16 @@ public class NewsActivity extends AppCompatActivity implements
 
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

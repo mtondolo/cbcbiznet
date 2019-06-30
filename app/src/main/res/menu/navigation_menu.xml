@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <group tools:checkableBehavior="single" />
     <item
-        android:id="@+id/events"
-        android:icon="@drawable/ic_event_note"
+        android:id="@+id/nav_events"
         android:title="@string/events" />
     <item
-        android:id="@+id/opportunities"
-        android:icon="@drawable/ic_business"
-        android:title="@string/opportunities" />
-
+        android:id="@+id/nav_vacancies"
+        android:title="@string/opportunities"></item>
+    <item android:title="Programs">
+        <menu>
+            <item
+                android:id="@+id/nav_yc"
+                android:title="Yellow Card"
+                tools:icon="@drawable/ic_business" />
+            <item
+                android:id="@+id/nav_dfta"
+                android:title="Digital FTA"
+                tools:icon="@drawable/ic_business" />
+        </menu>
+    </item>
 </menu>

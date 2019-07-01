@@ -115,15 +115,9 @@ public class EventsActivity extends AppCompatActivity implements
                 new EventsAdapter.OnEnquireTextViewClickListener() {
                     @Override
                     public void onEnquireIsClick(View button, String enquireTitle, String enquireEmail) {
-
-                        // Use an intent to launch an email app with data
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{enquireEmail});
-                        intent.putExtra(Intent.EXTRA_SUBJECT, enquireTitle);
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            startActivity(intent);
-                        }
+                        Intent attendEventIntent = new Intent(EventsActivity.this,
+                                AttendEventActivity.class);
+                        startActivity(attendEventIntent);
                     }
                 });
 

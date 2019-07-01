@@ -31,4 +31,14 @@
 
     <string name="events">Events</string>
     <string name="opportunities">Opportunities</string>
+
+    <!-- Hint text display in the empty field for the attendee's name, organization and country [CHAR LIMIT=20] -->
+    <string name="name">Name</string>
+    <!-- Hint text display in the empty field for the attendee's name [CHAR LIMIT=20] -->
+    <string name="org_name">Organization</string>
+    <!-- Hint text display in the empty field for the attendee's name [CHAR LIMIT=20] -->
+    <string name="country_name">Country</string>
+
+    <!-- Text display on the submit button [CHAR LIMIT=20] -->
+    <string name="submit">Submit</string>
 </resources>

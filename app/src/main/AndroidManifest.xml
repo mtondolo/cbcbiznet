@@ -70,7 +70,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NewsActivity" />
         </activity>
-        <activity android:name=".EventsActivity"></activity>
+        <activity android:name=".EventsActivity" />
+        <activity android:name=".AttendEventActivity"></activity>
     </application>
 
 </manifest>

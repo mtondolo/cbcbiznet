@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context=".AttendEventActivity">
+
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:hint="@string/name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/org_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name_field"
+            android:hint="@string/org_name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/country_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/org_field"
+            android:hint="@string/country_name"
+            android:inputType="text" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/country_field"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:layout_centerInParent="true"
+            android:text="@string/submit" />
+</RelativeLayout>

@@ -47,7 +47,17 @@
             android:fontFamily="sans-serif"
             android:textStyle="bold"
             android:text="@string/submit" />
-    
+
+    <TextView
+        android:id="@+id/detail_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="sans-serif"
+        android:paddingBottom="24dp"
+        android:text="@string/detail_copyright"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/detail_news_toolbar"
         android:layout_width="match_parent"

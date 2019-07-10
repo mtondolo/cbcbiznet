@@ -133,7 +133,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsAdap
 
         public EventsAdapterViewHolder(View view) {
             super(view);
-            mEventsTitleView = view.findViewById(R.id.events_title);
+            mEventsTitleView = view.findViewById(R.id.event_title);
             mEventsStartDateTextView = view.findViewById(R.id.events_date);
             mEventsVenueView = view.findViewById(R.id.events_venue);
             mFooterTextView = view.findViewById(R.id.footer_text);

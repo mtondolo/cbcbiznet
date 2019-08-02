@@ -16,7 +16,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * These test demos recylerview scrolling and item selection, options menu item selection and
  * navigation drawer item opening and item selection.
  */
-public class NewsActivityTest {
+public class NewsActivityBasicTest {
+
+    public static final String NEWS_HEADLINE = "COMESA, UNCTAD Launch Deal to Establish " +
+            "Regional Trade Information Portals";
 
     /**
      * The ActivityTestRule tells Android to start up news activity before running any tests inside
@@ -28,20 +31,13 @@ public class NewsActivityTest {
 
     // This method tests the item selection of recylerview items.
     @Test
-    public void selectRecylerviewItem() {
+    public void clickRecylerviewItem_OpenDetailNewsActivity() {
 
-        // Scroll to a given position in a recylerview and select a given item.
+        // Scrolls to a given position in the recylerview and selects a given item.
         onView(withId(R.id.recyclerview_news)).perform(RecyclerViewActions
                 .actionOnItemAtPosition(0, click()));
 
-        String headline = "COMESA, UNCTAD Launch Deal to Establish Regional Trade Information Portals";
-        String imageDescription = "COMESA SG Ms Chileshe Kapwewe with UNCTAD SG Dr Mukhisa Kituyi " +
-                "during the latters visits to the COMES Secretarits on May 2019";
-        String footerText = "Copyright © 2019 COMESA";
-
-        // Get the reference for the textviews and check that they contain the correct text
-        onView(withId(R.id.detail_headline)).check(matches(withText(headline)));
-        onView(withId(R.id.image_description)).check(matches(withText(imageDescription)));
-        onView(withId(R.id.detail_copyright)).check(matches(withText(footerText)));
+        // Checks that the DetailNewsActivity opens with the correct headline displayed.
+        onView(withId(R.id.detail_headline)).check(matches(withText(NEWS_HEADLINE)));
     }
 }

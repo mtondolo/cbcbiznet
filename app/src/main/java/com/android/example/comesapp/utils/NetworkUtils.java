@@ -33,27 +33,9 @@ public class NetworkUtils {
     final static String NEWS_URL =
             "https://beznet-api.herokuapp.com/api/newsitems";
 
-    final static String EVENT_URL =
-            "https://beznet-api.herokuapp.com/api/events";
-
     // Builds the URL used to query comesaa-api for news.
     public static URL buildUrl(Context context) {
         Uri builtUri = Uri.parse(NEWS_URL).buildUpon()
-                .build();
-
-        URL url = null;
-        try {
-            url = new URL(builtUri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return url;
-    }
-
-    // Builds the URL used to query comesaa-api for events
-    public static URL buildEventUrl(Context context) {
-        Uri builtUri = Uri.parse(EVENT_URL).buildUpon()
                 .build();
 
         URL url = null;

@@ -24,7 +24,6 @@ import com.firebase.jobdispatcher.JobService;
 public class NewsFirebaseJobService extends JobService {
 
     private AsyncTask<Void, Void, Void> mFetchNewsTask;
-    private AsyncTask<Void, Void, Void> mFetchEventTask;
 
     // The entry point to our Job.
     @Override
@@ -47,25 +46,6 @@ public class NewsFirebaseJobService extends JobService {
         };
         mFetchNewsTask.execute();
 
-        mFetchEventTask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                Context context = getApplicationContext();
-                EventSyncTask.syncEvent(context);
-                jobFinished(jobParameters, false);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-
-                // Once the events data is sync'd,
-                // call jobFinished with the appropriate arguments
-                jobFinished(jobParameters, false);
-            }
-        };
-        mFetchEventTask.execute();
-
         return true;
     }
 
@@ -74,9 +54,6 @@ public class NewsFirebaseJobService extends JobService {
     public boolean onStopJob(JobParameters jobParameters) {
         if (mFetchNewsTask != null) {
             mFetchNewsTask.cancel(true);
-        }
-        if (mFetchEventTask != null) {
-            mFetchEventTask.cancel(true);
         }
         return true;
     }

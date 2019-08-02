@@ -37,21 +37,11 @@ public class NewsDBHelper extends SQLiteOpenHelper {
                         // To ensure this table can only contain one headline per row.
                         " UNIQUE (" + NewsEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
         sqLiteDatabase.execSQL(SQL_CREATE_NEWS_TABLE);
-
-        final String SQL_CREATE_EVENTS_TABLE =
-                "CREATE TABLE " + NewsEntry.TABLE_EVENTS + " (" +
-                        NewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        NewsEntry.COLUMN_TITLE + " TEXT, " +
-                        NewsEntry.COLUMN_VENUE + " TEXT, " +
-                        NewsEntry.COLUMN_EMAIL + " TEXT, " +
-                        NewsEntry.COLUMN_START_DATE + " INTEGER" + ");";
-        sqLiteDatabase.execSQL(SQL_CREATE_EVENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + NewsEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + NewsEntry.TABLE_EVENTS);
         onCreate(sqLiteDatabase);
     }
 }

@@ -22,7 +22,6 @@ public class NewsContract {
      * can handle. For instance.
      */
     public static final String PATH_NEWS = "news";
-    public static final String PATH_EVENTS = "events";
 
     /* Inner class that defines the table contents of the news table */
     public static final class NewsEntry implements BaseColumns {
@@ -32,14 +31,8 @@ public class NewsContract {
                 .appendPath(PATH_NEWS)
                 .build();
 
-        // The base CONTENT_URI used to query the table from the content provider
-        public static final Uri EVENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_EVENTS)
-                .build();
-
         /* Used internally as the name of our news table. */
         public static final String TABLE_NAME = "news";
-        public static final String TABLE_EVENTS = "events";
 
         // headline, storyUrl, date  and imageUrl are stored as string representing news
         public static final String COLUMN_DATE = "date";
@@ -48,12 +41,6 @@ public class NewsContract {
         public static final String COLUMN_STORY_URL = "storyUrl";
         public static final String COLUMN_IMAGE_URL = "imageUrl";
         public static final String COLUMN_IMAGE_DESCRIPTION = "image_description";
-
-        // title is stored as string representing event title, venue and email.
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_VENUE = "venue";
-        public static final String COLUMN_EMAIL = "email";
-        public static final String COLUMN_START_DATE = "startDate";
 
         // Builds a URI that adds the news date to the end of the news content URI path.
         public static Uri buildNewsUriWithDate(long date) {

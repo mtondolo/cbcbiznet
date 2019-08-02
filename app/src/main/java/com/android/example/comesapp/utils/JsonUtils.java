@@ -69,53 +69,5 @@ public class JsonUtils {
         }
         return newsContentValues;
     }
-
-    // This method parses JSON from a web response and returns an array of Strings
-    public static ContentValues[] getEventFromJsonStr(Context context, String eventJsonStr)
-            throws JSONException {
-
-        // headline, storyUrl, date and imageUrl are keys for the news item
-        final String KEY_TITLE = "title";
-        final String KEY_VENUE = "venue";
-        final String KEY_EMAIL = "email";
-        final String KEY_START_DATE = "startDateInMills";
-
-        // If the JSON string is empty or null, then return early.
-        if (TextUtils.isEmpty(eventJsonStr)) {
-            return null;
-        }
-
-        JSONArray eventsArray = new JSONArray(eventJsonStr);
-
-        ContentValues[] eventContentValues = new ContentValues[eventsArray.length()];
-
-        for (int i = 0; i < eventsArray.length(); i++) {
-
-            // These are the values that will be collected
-            String title;
-            String venue;
-            String email;
-            long startDateInMills;
-
-            // Get the JSON object representing the event
-            JSONObject event = eventsArray.getJSONObject(i);
-
-            // Extract the value for the key called "title",
-            // "venue" and "email".
-            title = event.getString(KEY_TITLE);
-            venue = event.getString(KEY_VENUE);
-            email = event.getString(KEY_EMAIL);
-            startDateInMills = event.getLong(KEY_START_DATE);
-
-            ContentValues eventValues = new ContentValues();
-            eventValues.put(NewsContract.NewsEntry.COLUMN_TITLE, title);
-            eventValues.put(NewsContract.NewsEntry.COLUMN_VENUE, venue);
-            eventValues.put(NewsContract.NewsEntry.COLUMN_EMAIL, email);
-            eventValues.put(NewsContract.NewsEntry.COLUMN_START_DATE, startDateInMills);
-
-            eventContentValues[i] = eventValues;
-        }
-        return eventContentValues;
-    }
 }
 

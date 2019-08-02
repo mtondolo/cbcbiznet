@@ -38,7 +38,7 @@ public class NewsActivityTest {
         String imageDescription = "COMESA SG Ms Chileshe Kapwewe with UNCTAD SG Dr Mukhisa Kituyi " +
                 "during the latters visits to the COMES Secretarits on May 2019";
         String footerText = "Copyright © 2019 COMESA";
-        
+
         // Get the reference for the textviews and check that they contain the correct text
         onView(withId(R.id.detail_headline)).check(matches(withText(headline)));
         onView(withId(R.id.image_description)).check(matches(withText(imageDescription)));

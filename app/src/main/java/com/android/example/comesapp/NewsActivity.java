@@ -81,10 +81,6 @@ public class NewsActivity extends AppCompatActivity implements
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
-    private NavigationView mNavigationView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,55 +88,6 @@ public class NewsActivity extends AppCompatActivity implements
 
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
-
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle
-                (this, mDrawerLayout, topToolbar, R.string.Open, R.string.Close);
-        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
-
-        mNavigationView = findViewById(R.id.nv);
-
-        // Set events option as checked
-        Menu menu = mNavigationView.getMenu();
-        menu.findItem(R.id.nav_events).setChecked(true);
-
-        mNavigationView.setNavigationItemSelectedListener
-                (new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int id = item.getItemId();
-                        switch (id) {
-                            case R.id.nav_events:
-                                // Intent to start events activity
-                                Intent eventsIntent = new Intent
-                                        (NewsActivity.this, EventsActivity.class);
-                                startActivity(eventsIntent);
-
-                                // Set events option as checked
-                                // Set vacancies option as unchecked
-                                Menu menu = mNavigationView.getMenu();
-                                menu.findItem(R.id.nav_vacancies).setChecked(false);
-                                menu.findItem(R.id.nav_events).setChecked(true);
-
-                                break;
-                            case R.id.nav_vacancies:
-                                Toast.makeText
-                                        (NewsActivity.this, R.string.opportunities,
-                                                Toast.LENGTH_SHORT).show();
-
-                                // Set vacancies option as checked
-                                // Set events option as unchecked
-                                Menu menu_vacancies = mNavigationView.getMenu();
-                                menu_vacancies.findItem(R.id.nav_events).setChecked(false);
-                                menu_vacancies.findItem(R.id.nav_vacancies).setChecked(true);
-
-                                break;
-                            default:
-                                return true;
-                        }
-                        return true;
-                    }
-                });
 
         // Lookup the swipe container view and set its properties
         mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -217,19 +164,8 @@ public class NewsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBackPressed() {
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mActionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -355,9 +291,6 @@ public class NewsActivity extends AppCompatActivity implements
         }
         if (id == R.id.action_contact_us) {
             composeEmail();
-            return true;
-        }
-        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);

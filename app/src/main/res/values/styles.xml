@@ -7,7 +7,6 @@
         <item name="colorPrimaryDark">#0064b7</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
-        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <!-- Theme for the preference -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
@@ -16,12 +15,4 @@
         <item name="android:tint">@color/white</item>
     </style>
 
-    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
-        <item name="spinBars">true</item>
-        <item name="color">@android:color/white</item>
-    </style>
-
-    <style name="NavigationDrawerStyle">
-        <item name="android:textSize">14sp</item><!-- text size in menu-->
-    </style>
 </resources>

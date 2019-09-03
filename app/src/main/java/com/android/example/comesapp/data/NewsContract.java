@@ -42,6 +42,19 @@ public class NewsContract {
         public static final String COLUMN_IMAGE_URL = "imageUrl";
         public static final String COLUMN_IMAGE_DESCRIPTION = "image_description";
 
+        public static final String SQL_CREATE_NEWS_TABLE =
+                "CREATE TABLE " + TABLE_NAME + " (" +
+                        _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_DATE + " INTEGER NOT NULL, " +
+                        COLUMN_HEADLINE + " TEXT NOT NULL, " +
+                        COLUMN_STORY + " TEXT NOT NULL, " +
+                        COLUMN_STORY_URL + " TEXT NOT NULL, " +
+                        COLUMN_IMAGE_URL + " TEXT NOT NULL, " +
+                        COLUMN_IMAGE_DESCRIPTION + " TEXT, " +
+
+                        // To ensure this table can only contain one date per row.
+                        " UNIQUE (" + COLUMN_DATE + ") ON CONFLICT REPLACE);";
+
         // Builds a URI that adds the news date to the end of the news content URI path.
         public static Uri buildNewsUriWithDate(long date) {
             return CONTENT_URI.buildUpon()

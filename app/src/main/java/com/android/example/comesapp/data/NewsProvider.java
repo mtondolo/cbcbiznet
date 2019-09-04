@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import static com.android.example.comesapp.data.NewsContract.*;
+
 // This class serves as the ContentProvider for all of news's data.
 public class NewsProvider extends ContentProvider {
 
@@ -24,13 +26,13 @@ public class NewsProvider extends ContentProvider {
 
         // All paths added to the UriMatcher have a corresponding code to return when a match is found.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = NewsContract.CONTENT_AUTHORITY;
+        final String authority = CONTENT_AUTHORITY;
 
         // This URI is content://com.android.example.comesapp/news
-        matcher.addURI(authority, NewsContract.PATH_NEWS, CODE_NEWS);
+        matcher.addURI(authority, PATH_NEWS, CODE_NEWS);
 
         // This URI would look something like content://com.android.example.comesapp/news/1472214172
-        matcher.addURI(authority, NewsContract.PATH_NEWS + "/#", CODE_NEWS_WITH_DATE);
+        matcher.addURI(authority, PATH_NEWS + "/#", CODE_NEWS_WITH_DATE);
 
         return matcher;
     }
@@ -55,7 +57,7 @@ public class NewsProvider extends ContentProvider {
                 int rowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
-                        long _id = db.insert(NewsContract.NewsEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(NewsEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             rowsInserted++;
                         }
@@ -96,13 +98,13 @@ public class NewsProvider extends ContentProvider {
 
                 cursor = mOpenHelper.getReadableDatabase().query(
                         /* Table we are going to query */
-                        NewsContract.NewsEntry.TABLE_NAME,
+                        NewsEntry.TABLE_NAME,
 
                         //A projection designates the columns we want returned in our Cursor.
                         projection,
 
                         // The URI that matches CODE_NEWS_WITH_DATE contains a date at the end of it.
-                        NewsContract.NewsEntry.COLUMN_DATE + " = ? ",
+                        NewsEntry.COLUMN_DATE + " = ? ",
                         selectionArguments,
                         null,
                         null,
@@ -113,7 +115,7 @@ public class NewsProvider extends ContentProvider {
             // we want to return a cursor that contains every row of news data in our news table
             case CODE_NEWS: {
                 cursor = mOpenHelper.getReadableDatabase().query(
-                        NewsContract.NewsEntry.TABLE_NAME,
+                        NewsEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -140,7 +142,7 @@ public class NewsProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case CODE_NEWS:
                 numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
-                        NewsContract.NewsEntry.TABLE_NAME,
+                        NewsEntry.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;

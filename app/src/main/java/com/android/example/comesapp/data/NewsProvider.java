@@ -92,6 +92,8 @@ public class NewsProvider extends ContentProvider {
             // We want to return a cursor that contains one row of weather data for a particular date.
             case CODE_NEWS_WITH_DATE: {
 
+                selection = NewsEntry.COLUMN_DATE + " = ? ";
+
                 String dateString = uri.getLastPathSegment();
 
                 String[] selectionArguments = new String[]{dateString};
@@ -104,7 +106,7 @@ public class NewsProvider extends ContentProvider {
                         projection,
 
                         // The URI that matches CODE_NEWS_WITH_DATE contains a date at the end of it.
-                        NewsEntry.COLUMN_DATE + " = ? ",
+                        selection,
                         selectionArguments,
                         null,
                         null,

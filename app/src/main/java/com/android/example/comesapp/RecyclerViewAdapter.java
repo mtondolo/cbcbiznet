@@ -58,8 +58,7 @@ public class RecyclerViewAdapter extends
     // This method simply returns the number of items to display.
     @Override
     public int getItemCount() {
-        if (null == mCursor) return 0;
-        return mCursor.getCount() + 1;
+        return mCursor == null ? 0 : mCursor.getCount() + 1;
     }
 
     // This gets called when each new ViewHolder is created.

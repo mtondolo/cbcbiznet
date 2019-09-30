@@ -48,15 +48,17 @@ import com.android.example.comesapp.utils.NetworkUtils;
 
 import java.net.URL;
 
+import static com.android.example.comesapp.data.NewsContract.*;
+
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
-            NewsContract.NewsEntry.COLUMN_DATE,
-            NewsContract.NewsEntry.COLUMN_HEADLINE,
-            NewsContract.NewsEntry.COLUMN_IMAGE_URL,
+            NewsEntry.COLUMN_DATE,
+            NewsEntry.COLUMN_HEADLINE,
+            NewsEntry.COLUMN_IMAGE_URL,
     };
 
     // We store the indices of the values in the array of Strings above to more quickly be able to access the data from our query.
@@ -229,7 +231,7 @@ public class NewsActivity extends AppCompatActivity implements
     @Override
     public void onClick(long dateTimeInMillis) {
         Intent newsDetailIntent = new Intent(NewsActivity.this, DetailNewsActivity.class);
-        Uri uriForDateTimeInMillisClicked = NewsContract.NewsEntry.buildNewsUriWithDate(dateTimeInMillis);
+        Uri uriForDateTimeInMillisClicked = NewsEntry.buildNewsUriWithDate(dateTimeInMillis);
         newsDetailIntent.setData(uriForDateTimeInMillisClicked);
         startActivity(newsDetailIntent);
     }
@@ -239,7 +241,7 @@ public class NewsActivity extends AppCompatActivity implements
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
             case ID_NEWS_LOADER:
-                Uri newsQueryUri = NewsContract.NewsEntry.CONTENT_URI;
+                Uri newsQueryUri = NewsEntry.CONTENT_URI;
                 return new android.support.v4.content.CursorLoader(this,
                         newsQueryUri,
                         NEWS_PROJECTION,

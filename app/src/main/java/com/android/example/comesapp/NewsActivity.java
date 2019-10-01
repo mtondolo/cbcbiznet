@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,6 +55,8 @@ import static com.android.example.comesapp.data.NewsContract.*;
 public class NewsActivity extends AppCompatActivity implements
         RecyclerViewAdapter.RecyclerViewAdapterOnClickHandler,
         LoaderCallbacks<Cursor> {
+
+    private final String TAG = NewsActivity.class.getSimpleName();
 
     // The columns of data that we are interested in displaying within our NewsActivity's list of news data.
     public static final String[] NEWS_PROJECTION = {
@@ -334,6 +337,7 @@ public class NewsActivity extends AppCompatActivity implements
     public class FetchLatestNewsTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+            Log.d(TAG, "doInBackground - thread: " + Thread.currentThread().getId());
             URL latestNewsRequestUrl = NetworkUtils.buildUrl(getApplicationContext());
             try {
                 String jsonLatestNewsResponse = NetworkUtils
@@ -349,6 +353,7 @@ public class NewsActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String latestNewsData) {
+            Log.d(TAG, "onPostExecute - thread: " + Thread.currentThread().getId());
             if (latestNewsData != null) {
 
                 // Save the data in the given variable

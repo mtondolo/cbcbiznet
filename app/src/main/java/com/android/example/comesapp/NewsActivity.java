@@ -20,6 +20,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -90,6 +91,8 @@ public class NewsActivity extends AppCompatActivity implements
 
         Toolbar topToolbar = findViewById(R.id.top_toolbar);
         setSupportActionBar(topToolbar);
+
+        enableStrictMode();
 
         // Lookup the swipe container view and set its properties
         mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -163,6 +166,19 @@ public class NewsActivity extends AppCompatActivity implements
 
         // NewsSyncUtils's initialize method instead of startImmediateSync
         NewsSyncUtils.initialize(this);
+    }
+
+    // Set up strict mode thread policy
+    private void enableStrictMode() {
+        // Enable strict mode in debug
+        if (BuildConfig.DEBUG) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build();
+            StrictMode.setThreadPolicy(policy);
+
+        }
     }
 
     @Override
